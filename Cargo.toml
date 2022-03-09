@@ -1,8 +1,22 @@
 [package]
 name = "osmon"
 version = "0.1.0"
-edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+edition = "2018"
+description = "A programming language for Uzbeks"
+authors = ["UwUssimo Robinson <uwussimo@icloud.com>"]
+keywords = ["language", "programming"]
+readme = "readme.md"
+categories = ["language"]
+license = "Apache-2.0"
 
 [dependencies]
+parking_lot = "0.8"
+lazy_static = "1.3"
+colored = "1.8"
+structopt = "0.2"
+clap = "2.33"
+linked-hash-map = "0.5"
+
+[dev-dependencies]
+lang_tester = {git = "https://github.com/softdevteam/lang_tester"}
+tempdir = "0.3"
