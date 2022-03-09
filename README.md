@@ -1,0 +1,2 @@
+# osmon
+Osmon Dasturlash Tili
