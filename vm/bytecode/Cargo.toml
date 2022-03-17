@@ -1,0 +1,11 @@
+[package]
+name = "osmon_bytecode"
+version = "0.1.0"
+authors = ["UwUssimo Robinson <uwussimo@icloud.com>"]
+edition = "2018"
+description = "Library used for encoding/decoding osmon instructions"
+license = "MIT"
+keywords = ["codegen","vm","encoding","decoding"]
+
+[dependencies]
+osmon_vm = { path = "../../vm" }

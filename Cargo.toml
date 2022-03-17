@@ -18,5 +18,7 @@ clap = "2.33"
 linked-hash-map = "0.5"
 
 [dev-dependencies]
-lang_tester = {git = "https://github.com/softdevteam/lang_tester"}
-tempdir = "0.3"
+osmon_vm = { path = "vm" }
+time = "0.1.40"
+structopt = "0.2.13"
+float_duration = "0.3.3"

@@ -21,8 +21,7 @@ static IDGEN: AtomicUsize = AtomicUsize::new(0);
 
 // use std::collections::HashMap;
 
-pub struct Context
-{
+pub struct Context {
     // pub file: File,
     // pub types: HashMap<NodeId, Type>,
     pub opt: u8,

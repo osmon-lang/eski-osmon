@@ -1,0 +1,20 @@
+[package]
+name = "osmon_vm"
+version = "0.2.0"
+edition = "2018"
+authors = ["UwUssimo Robinson <uwussimo@icloud.com> (https://uwussi.moe)"]
+description = "Osmon VM"
+readme = "README.md"
+repository = "https://github.com/osmon-lang/osmon-vm"
+keywords = ["vm","register","register-based"]
+license = "MIT"
+
+[profile.dev]
+
+[profile.release]
+lto = true
+
+[dependencies]
+time = "0.1.40"
+libc = "0.2.43"
+colored = "1.6.1"
