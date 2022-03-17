@@ -1,8 +1,6 @@
 extern crate osmon_bytecode;
 extern crate osmon_vm;
-use osmon_bytecode::opcode::*;
 use osmon_bytecode::parser::Parser;
-use osmon_bytecode::encode;
 use osmon_bytecode::assembler::Assembler;
 use osmon_vm::opcodes::Instruction;
 

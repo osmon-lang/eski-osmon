@@ -21,13 +21,13 @@ impl<'a> Parser<'a> {
 
     pub fn read_next(&mut self) -> u8 {
         if self.ip < self.code.len() {
-            let op = self.code[self.ip].clone();
+            let op = self.code[self.ip];
 
             self.ip += 1;
             op
         } else {
 
-            return 0x0;
+            0x0
         }
     }
     pub fn parse(&mut self) -> Vec<Instruction> {
@@ -42,7 +42,7 @@ impl<'a> Parser<'a> {
 
         }
 
-        return self.parsed_code.clone();
+        self.parsed_code.clone()
     }
 
     pub fn parse_opcode(&mut self) {
