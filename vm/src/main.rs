@@ -1,6 +1,6 @@
-extern crate osmon_vm;
+extern crate bulut;
 
-use osmon_vm::{function::Function, machine::Machine, opcodes::Instruction, value::Value};
+use bulut::{function::Function, machine::Machine, opcodes::Instruction, value::Value};
 
 fn main() {
     let mut machine = Machine::new();

@@ -1,10 +1,10 @@
 #![feature(test)]
 extern crate test;
 
-extern crate osmon_vm;
+extern crate bulut;
 
 use self::opcodes::Instruction;
-use osmon_vm::*;
+use bulut::*;
 
 use self::{function::Function, value::Value};
 

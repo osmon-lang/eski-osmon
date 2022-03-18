@@ -8,4 +8,4 @@ license = "MIT"
 keywords = ["codegen","vm","encoding","decoding"]
 
 [dependencies]
-osmon_vm = { path = "../../vm" }
+bulut = { path = "../../vm" }

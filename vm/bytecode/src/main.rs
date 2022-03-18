@@ -1,8 +1,8 @@
 extern crate osmon_bytecode;
-extern crate osmon_vm;
+extern crate bulut;
 use osmon_bytecode::parser::Parser;
 use osmon_bytecode::assembler::Assembler;
-use osmon_vm::opcodes::Instruction;
+use bulut::opcodes::Instruction;
 
 fn main() {
     let mut assembler = Assembler::new(vec![

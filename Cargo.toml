@@ -10,15 +10,7 @@ categories = ["language"]
 license = "Apache-2.0"
 
 [dependencies]
-parking_lot = "0.8"
-lazy_static = "1.3"
-colored = "1.8"
-structopt = "0.2"
-clap = "2.33"
-linked-hash-map = "0.5"
-
-[dev-dependencies]
-osmon_vm = { path = "vm" }
+bulut = { path = "vm" }
 time = "0.1.40"
 structopt = "0.2.13"
 float_duration = "0.3.3"

@@ -11,3 +11,5 @@ Cargo.lock
 
 # IDEA files should not be synced
 .idea
+
+examples/osmon.exe

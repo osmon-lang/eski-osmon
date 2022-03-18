@@ -1,4 +1,4 @@
-use osmon_vm::opcodes::Instruction;
+use bulut::opcodes::Instruction;
 use crate::opcode::{Opcode,Size};
 use crate::encode;
 

@@ -1,4 +1,4 @@
-use osmon_vm::opcodes::Instruction;
+use bulut::opcodes::Instruction;
 use super::opcode::{Opcode,Size};
 use super::decode;
 

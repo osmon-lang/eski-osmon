@@ -1,0 +1,4 @@
+func main() {
+    Sistema.yoz("Salom Atmosfera!");
+    return "muvaffaqiyat"
+}
