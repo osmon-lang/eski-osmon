@@ -10,7 +10,7 @@ categories = ["language"]
 license = "Apache-2.0"
 
 [dependencies]
-bulut = { path = "vm" }
+bulut = { git = "https://github.com/osmon-lang/bulut" }
 time = "0.1.40"
 structopt = "0.2.13"
 float_duration = "0.3.3"
