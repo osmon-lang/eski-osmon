@@ -1,4 +1,7 @@
-func main() {
-    Sistema.yoz("Salom Atmosfera!");
-    return "muvaffaqiyat"
+funksiya main() {
+    var now = System.time();
+
+    System.write("Ok...");
+
+    System.write(now);
 }

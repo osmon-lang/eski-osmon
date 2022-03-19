@@ -261,6 +261,6 @@ pub fn print(m: &mut Machine, args: Vec<Value>) -> Value {
 pub fn readln(m: &mut Machine, _args: Vec<Value>) -> Value {
     let mut buffer = String::new();
     stdin().read_line(&mut buffer).unwrap();
-    let obj = Value::Object(m.pool.allocate(Box::new(buffer)));
-    obj
+    Value::Object(m.pool.allocate(Box::new(buffer)))
+
 }

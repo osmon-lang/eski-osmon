@@ -545,26 +545,26 @@ impl<'a> TokenIterator<'a> {
 
                     let out: String = result.iter().cloned().collect();
                     match out.as_ref() {
-                        "true" => return Some(Token::True),
-                        "false" => return Some(Token::False),
-                        "var" => return Some(Token::Var),
-                        "if" => return Some(Token::If),
-                        "end" => return Some(Token::End),
-                        "else" => return Some(Token::Else),
-                        "for" => return Some(Token::For),
-                        "while" => return Some(Token::While),
-                        "loop" => return Some(Token::Loop),
-                        "break" => return Some(Token::Break),
-                        "return" => return Some(Token::Return),
-                        "new" => return Some(Token::New),
-                        "func" => return Some(Token::Fn),
-                        "null" => return Some(Token::Null),
+                        "ha" => return Some(Token::True), // true
+                        "yoq" => return Some(Token::False), // false
+                        "joy" => return Some(Token::Var), // var
+                        "agar" => return Some(Token::If), // if
+                        "end" => return Some(Token::End), // end
+                        "yoki" => return Some(Token::Else), // else
+                        "for" => return Some(Token::For), // for
+                        "toki" => return Some(Token::While), // while
+                        "qayta" => return Some(Token::Loop), // loop
+                        "toxta" => return Some(Token::Break), // break
+                        "qaytar" => return Some(Token::Return), // return
+                        "yangi" => return Some(Token::New), // new
+                        "funksiya" => return Some(Token::Fn), // func (function)
+                        "nol" => return Some(Token::Null), // null
 
-                        "enum" => return Some(Token::Enum),
-                        "this" => return Some(Token::This),
-                        "class" => return Some(Token::Class),
-                        "label" => return Some(Token::Label),
-                        "goto" => return Some(Token::Goto),
+                        "tur" => return Some(Token::Enum), // enum
+                        "shu" => return Some(Token::This), // this
+                        "klass" => return Some(Token::Class), // class
+                        "label" => return Some(Token::Label), // label
+                        "goto" => return Some(Token::Goto), // goto
                         x => {
                             return Some(Token::Identifier(x.into()));
                         }

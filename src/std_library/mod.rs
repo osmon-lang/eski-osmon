@@ -17,25 +17,25 @@ pub fn system_class(m: &mut Machine) -> Class {
     let mut fields = HashMap::new();
     let f = Function::from_native(Box::new(print));
     fields.insert(
-        "yoz".to_owned(),
+        "write".to_owned(),
         Value::Object(m.pool.allocate(Box::new(f))),
     );
     fields.insert(
-        "oqi".to_owned(),
+        "readln".to_owned(),
         Value::Object(
             m.pool
                 .allocate(Box::new(Function::from_native(Box::new(readln)))),
         ),
     );
     fields.insert(
-        "vaqt".to_owned(),
+        "time".to_owned(),
         Value::Object(
             m.pool
                 .allocate(Box::new(Function::from_native(Box::new(time)))),
         ),
     );
     Class {
-        name: String::from("Sistema"),
+        name: String::from("System"),
         fields: UnsafeCell::new(fields),
     }
 }
