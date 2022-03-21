@@ -8,9 +8,20 @@ keywords = ["language", "programming"]
 readme = "readme.md"
 categories = ["language"]
 license = "Apache-2.0"
+build = "build.rs"
+
+[target.'cfg(windows)'.build-dependencies]
+winres = "=0.1.11"
+winapi = { version = "=0.3.9", features = ["knownfolders", "mswsock", "objbase", "shlobj", "tlhelp32", "winbase", "winerror", "winsock2"] }
 
 [dependencies]
 bulut = { git = "https://github.com/osmon-lang/bulut" }
 time = "0.1.40"
 structopt = "0.2.13"
 float_duration = "0.3.3"
+
+[package.metadata.winres]
+OriginalFilename = "osmon.exe"
+LegalCopyright = "© Osmon & UwUssio. Apache-2.0"
+ProductName = "Osmon"
+FileDescription = "Osmon: O'zbek tilidagi birinchi dinamik til"
