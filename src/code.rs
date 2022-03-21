@@ -47,10 +47,10 @@ impl FunctionBuilder {
 
     pub fn get_local(&mut self, n: &str) -> usize {
         if self.locals.contains_key(n) {
-            let r = self.locals.get(n).expect("Unknown local").clone();
+            let r = self.locals.get(n).expect("No'malum lokal").clone();
             r
         } else {
-            panic!("Local `{}` doesn't exists", n);
+            panic!("Lokal `{}` mavjud emas", n);
         }
     }
 
@@ -74,7 +74,7 @@ impl FunctionBuilder {
                 return i;
             }
         }
-        println!("No registers available");
+        println!("Registrlar mavjud emas");
         return 0;
     }
 
@@ -112,7 +112,7 @@ impl FunctionBuilder {
 
     pub fn register_pop_context_protect(&mut self, protect: bool) -> usize {
         if self.registers.len() == 0 {
-            panic!("REGISTER ERROR");
+            panic!("REGISTR XATOLIGI");
         }
 
         let value = self.registers.pop().unwrap_or_default();

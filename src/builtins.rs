@@ -162,16 +162,12 @@ impl ObjectAddon for Array {
 
 impl Object for Array {
     fn initialize(&mut self, _: &mut ObjectPool) {}
-    fn as_any(&self) -> &dyn Any {
-        self as &dyn Any
-    }
+    fn store_at(&self, m: &mut Machine, args: Vec<Value>, _rindex: usize) {
+        let idx = args[1];
+        let value = args[2];
 
-    fn as_any_mut(&mut self) -> &mut dyn Any {
-        self as &mut dyn Any
-    }
-
-    fn get_children(&self) -> Vec<usize> {
-        Vec::new()
+        let idx = idx.to_int(m) as usize;
+        self.elements.borrow_mut()[idx] = value;
     }
 
     fn load_at(&self, m: &mut Machine, args: Vec<Value>, rindex: usize) {
@@ -221,12 +217,16 @@ impl Object for Array {
         }
     }
 
-    fn store_at(&self, m: &mut Machine, args: Vec<Value>, _rindex: usize) {
-        let idx = args[1];
-        let value = args[2];
+    fn as_any(&self) -> &dyn Any {
+        self as &dyn Any
+    }
 
-        let idx = idx.to_int(m) as usize;
-        self.elements.borrow_mut()[idx] = value;
+    fn as_any_mut(&mut self) -> &mut dyn Any {
+        self as &mut dyn Any
+    }
+
+    fn get_children(&self) -> Vec<usize> {
+        Vec::new()
     }
 }
 

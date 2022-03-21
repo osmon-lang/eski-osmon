@@ -72,7 +72,7 @@ impl<'a> Compiler<'a> {
         self.gp += 1;
         let class = system_class(self.machine);
         let id = self.machine.pool.allocate(Box::new(class));
-        self.globals.insert("System".to_owned(), self.gp);
+        self.globals.insert("Tizim".to_owned(), self.gp);
         self.machine.globals.insert(self.gp, Value::Object(id));
         self.gp += 1;
         self.globals.insert("__unary_minus__".to_owned(), self.gp);
@@ -194,7 +194,7 @@ impl<'a> Compiler<'a> {
                 let name = if let Expr::Identifier(ref n) = &*fun.name.clone() {
                     n.to_string()
                 } else {
-                    "main".to_string()
+                    "asosiy".to_string()
                 };
 
                 let builder = FunctionBuilder::new(fun.params.len());
@@ -221,8 +221,8 @@ impl<'a> Compiler<'a> {
             }
         }
 
-        let main = self.globals.get("main").expect("main not found").clone();
-        let main = self.machine.globals.get(&main).expect("main not found");
+        let main = self.globals.get("asosiy").expect("asosiy topilmadi").clone();
+        let main = self.machine.globals.get(&main).expect("asosiy topilmadi");
         let start = Instant::now();
         let ret = self.machine.invoke(*main, vec![Value::Null]);
         let end = Instant::now();

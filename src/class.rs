@@ -78,12 +78,12 @@ impl Object for Class {
 
             obj.as_any().downcast_ref::<Class>().unwrap()
         } else {
-            panic!("Expected Value::Object");
+            panic!("Qiymat::Obyekt kutilgandi");
         };
 
         let ret = {
             let fields = unsafe { &mut *class.fields.get() };
-            let field = fields.get("init").expect("Couldn't find initializer");
+            let field = fields.get("init").expect("Initisializatorlar topilmadi");
             let mut args = args.clone();
             args[0] = class.o_clone(m);
             let v = m.invoke(*field, args);
@@ -104,7 +104,7 @@ impl Object for Class {
         if let Value::Object(id) = args[1] {
             let str = m.pool.get(id).to_String(m);
             let fields = unsafe { &*self.fields.get() };
-            let field = fields.get(&str).expect(&format!("No such field {}", str));
+            let field = fields.get(&str).expect(&format!("Ushbu {} topilmadi", str));
 
             m.set(rindex, *field);
         }
@@ -112,7 +112,7 @@ impl Object for Class {
             let fields = unsafe { &*self.fields.get() };
             let field = fields
                 .get("__get__")
-                .expect("Class doesn't have __get__ method");
+                .expect("Ushbu klassda __get__ metodi mavjud emas");
             let v = m.invoke(*field, args);
             m.set(rindex, v);
         }

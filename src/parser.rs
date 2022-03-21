@@ -549,17 +549,16 @@ impl<'a> TokenIterator<'a> {
                         "yoq" => return Some(Token::False), // false
                         "joy" => return Some(Token::Var), // var
                         "agar" => return Some(Token::If), // if
-                        "end" => return Some(Token::End), // end
+                        "tuga" => return Some(Token::End), // end
                         "yoki" => return Some(Token::Else), // else
-                        "for" => return Some(Token::For), // for
-                        "toki" => return Some(Token::While), // while
+                        "toki" => return Some(Token::For), // for
+                        "qachonki" => return Some(Token::While), // while
                         "qayta" => return Some(Token::Loop), // loop
                         "toxta" => return Some(Token::Break), // break
                         "qaytar" => return Some(Token::Return), // return
                         "yangi" => return Some(Token::New), // new
                         "funksiya" => return Some(Token::Fn), // func (function)
                         "nol" => return Some(Token::Null), // null
-
                         "tur" => return Some(Token::Enum), // enum
                         "shu" => return Some(Token::This), // this
                         "klass" => return Some(Token::Class), // class
