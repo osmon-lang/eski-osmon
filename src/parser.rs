@@ -545,25 +545,25 @@ impl<'a> TokenIterator<'a> {
 
                     let out: String = result.iter().cloned().collect();
                     match out.as_ref() {
-                        "ha" => return Some(Token::True),        // true
-                        "yoq" => return Some(Token::False),      // false
-                        "joy" => return Some(Token::Var),        // var
-                        "agar" => return Some(Token::If),        // if
-                        "tuga" => return Some(Token::End),       // end
-                        "yoki" => return Some(Token::Else),      // else
-                        "toki" => return Some(Token::For),       // for
-                        "qachonki" => return Some(Token::While), // while
-                        "qayta" => return Some(Token::Loop),     // loop
-                        "toxta" => return Some(Token::Break),    // break
-                        "qaytar" => return Some(Token::Return),  // return
-                        "yangi" => return Some(Token::New),      // new
-                        "funksiya" => return Some(Token::Fn),    // func (function)
-                        "nol" => return Some(Token::Null),       // null
-                        "tur" => return Some(Token::Enum),       // enum
-                        "shu" => return Some(Token::This),       // this
-                        "klass" => return Some(Token::Class),    // class
-                        "label" => return Some(Token::Label),    // label
-                        "goto" => return Some(Token::Goto),      // goto
+                        "ha" => return Some(Token::True),        // true // ha
+                        "yoq" => return Some(Token::False),      // false // yoq
+                        "joy" => return Some(Token::Var),        // var // joy
+                        "agar" => return Some(Token::If),        // if // agar
+                        "tuga" => return Some(Token::End),       // end // tugal
+                        "unda" => return Some(Token::Else),      // else // unda
+                        "toki" => return Some(Token::For),       // for // toki
+                        "qachonki" => return Some(Token::While), // while // qachonki
+                        "qayta" => return Some(Token::Loop),     // loop // qayta
+                        "toxta" => return Some(Token::Break),    // break // toxta
+                        "qaytar" => return Some(Token::Return),  // return // qaytar
+                        "yangi" => return Some(Token::New),      // new // yangi
+                        "funksiya" => return Some(Token::Fn),    // func (function) // funksiya
+                        "nol" => return Some(Token::Null),       // null // nol
+                        "tur" => return Some(Token::Enum),       // enum // true
+                        "shu" => return Some(Token::This),       // this // shu
+                        "klass" => return Some(Token::Class),    // class // klass
+                        "label" => return Some(Token::Label),    // label // WIP
+                        "goto" => return Some(Token::Goto),      // goto // WIP
                         x => {
                             return Some(Token::Identifier(x.into()));
                         }
