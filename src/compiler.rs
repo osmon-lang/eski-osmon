@@ -45,14 +45,14 @@ impl<'a> Compiler<'a> {
             .machine
             .pool
             .allocate(Box::new(Function::from_native(Box::new(print))));
-        self.globals.insert("print".to_string(), self.gp);
+        self.globals.insert("yoz".to_string(), self.gp);
         self.machine.globals.insert(self.gp, Value::Object(id));
         self.gp += 1;
         let id = self
             .machine
             .pool
             .allocate(Box::new(Function::from_native(Box::new(readln))));
-        self.globals.insert("readln".to_string(), self.gp);
+        self.globals.insert("oqi".to_string(), self.gp);
         self.machine.globals.insert(self.gp, Value::Object(id));
 
         self.gp += 1;
@@ -221,7 +221,11 @@ impl<'a> Compiler<'a> {
             }
         }
 
-        let main = self.globals.get("asosiy").expect("asosiy topilmadi").clone();
+        let main = self
+            .globals
+            .get("asosiy")
+            .expect("asosiy topilmadi")
+            .clone();
         let main = self.machine.globals.get(&main).expect("asosiy topilmadi");
         let start = Instant::now();
         let ret = self.machine.invoke(*main, vec![Value::Null]);
@@ -573,7 +577,7 @@ impl<'a> Compiler<'a> {
             let r2 = self.builder.register_pop();
             let r1 = self.builder.register_push_temp();
             match op {
-                Op::Ne => self.builder.push_op(Instruction::Neq(r1,r2,r3)),
+                Op::Ne => self.builder.push_op(Instruction::Neq(r1, r2, r3)),
                 Op::Add => self.builder.push_op(Instruction::Add(r1, r2, r3)),
                 Op::Sub => self.builder.push_op(Instruction::Sub(r1, r2, r3)),
                 Op::Mul => self.builder.push_op(Instruction::Mul(r1, r2, r3)),

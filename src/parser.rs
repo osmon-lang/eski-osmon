@@ -545,25 +545,25 @@ impl<'a> TokenIterator<'a> {
 
                     let out: String = result.iter().cloned().collect();
                     match out.as_ref() {
-                        "ha" => return Some(Token::True), // true
-                        "yoq" => return Some(Token::False), // false
-                        "joy" => return Some(Token::Var), // var
-                        "agar" => return Some(Token::If), // if
-                        "tuga" => return Some(Token::End), // end
-                        "yoki" => return Some(Token::Else), // else
-                        "toki" => return Some(Token::For), // for
+                        "ha" => return Some(Token::True),        // true
+                        "yoq" => return Some(Token::False),      // false
+                        "joy" => return Some(Token::Var),        // var
+                        "agar" => return Some(Token::If),        // if
+                        "tuga" => return Some(Token::End),       // end
+                        "yoki" => return Some(Token::Else),      // else
+                        "toki" => return Some(Token::For),       // for
                         "qachonki" => return Some(Token::While), // while
-                        "qayta" => return Some(Token::Loop), // loop
-                        "toxta" => return Some(Token::Break), // break
-                        "qaytar" => return Some(Token::Return), // return
-                        "yangi" => return Some(Token::New), // new
-                        "funksiya" => return Some(Token::Fn), // func (function)
-                        "nol" => return Some(Token::Null), // null
-                        "tur" => return Some(Token::Enum), // enum
-                        "shu" => return Some(Token::This), // this
-                        "klass" => return Some(Token::Class), // class
-                        "label" => return Some(Token::Label), // label
-                        "goto" => return Some(Token::Goto), // goto
+                        "qayta" => return Some(Token::Loop),     // loop
+                        "toxta" => return Some(Token::Break),    // break
+                        "qaytar" => return Some(Token::Return),  // return
+                        "yangi" => return Some(Token::New),      // new
+                        "funksiya" => return Some(Token::Fn),    // func (function)
+                        "nol" => return Some(Token::Null),       // null
+                        "tur" => return Some(Token::Enum),       // enum
+                        "shu" => return Some(Token::This),       // this
+                        "klass" => return Some(Token::Class),    // class
+                        "label" => return Some(Token::Label),    // label
+                        "goto" => return Some(Token::Goto),      // goto
                         x => {
                             return Some(Token::Identifier(x.into()));
                         }
@@ -1102,7 +1102,7 @@ fn parse_binop<'a>(
                 }
                 Token::GreaterThanEqual => Expr::Op(Op::Ge, Box::new(lhs_curr), Box::new(rhs)),
                 Token::PowerOf => Expr::Op(Op::Isa, Box::new(lhs_curr), Box::new(rhs)),
-                Token::NotEqualTo => Expr::Op(Op::Ne,Box::new(lhs_curr),Box::new(rhs)),
+                Token::NotEqualTo => Expr::Op(Op::Ne, Box::new(lhs_curr), Box::new(rhs)),
                 /* Token::PlusAssign => {
                     let lhs_copy = lhs_curr.clone();
                     Expr::Assignment(
@@ -1198,9 +1198,9 @@ fn parse_binop<'a>(
                 }*/
                 v =>
                 /*return Err(ParseError::UnknownOperator)*/
-                    {
-                        panic!("Unknown operator {:?}", v)
-                    }
+                {
+                    panic!("Unknown operator {:?}", v)
+                }
             };
         }
     }
@@ -1532,8 +1532,8 @@ fn parse_fn<'a>(input: &mut Peekable<TokenIterator<'a>>) -> Result<FnDef, ParseE
     let body = parse_block(input)?;
 
     Ok(FnDef {
-        name: name,
-        params: params,
+        name,
+        params,
         body: Box::new(body),
     })
 }

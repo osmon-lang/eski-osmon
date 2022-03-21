@@ -137,10 +137,7 @@ impl Array {
 
 use std::any::Any;
 
-
 impl ObjectAddon for Array {
-
-
     fn to_String(&self, m: &mut Machine) -> String {
         let elements = self.elements.borrow();
 
@@ -262,5 +259,4 @@ pub fn readln(m: &mut Machine, _args: Vec<Value>) -> Value {
     let mut buffer = String::new();
     stdin().read_line(&mut buffer).unwrap();
     Value::Object(m.pool.allocate(Box::new(buffer)))
-
 }

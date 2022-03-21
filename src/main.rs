@@ -1,11 +1,11 @@
-extern crate osmon;
 extern crate bulut;
+extern crate osmon;
 extern crate structopt;
+use bulut::machine::Machine;
 use osmon::{
     parser::{lex, parse},
     Compiler,
 };
-use bulut::machine::Machine;
 
 use std::{fs::File, io::prelude::*, path::PathBuf};
 use structopt::StructOpt;

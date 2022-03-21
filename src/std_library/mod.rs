@@ -1,7 +1,7 @@
 use self::float_duration::FloatDuration;
 use crate::{builtins::*, class::Class};
-use float_duration;
 use bulut::{function::Function, machine::Machine, value::Value};
+use float_duration;
 use std::{cell::UnsafeCell, collections::HashMap, time::Instant};
 
 pub fn time(m: &mut Machine, _: Vec<Value>) -> Value {

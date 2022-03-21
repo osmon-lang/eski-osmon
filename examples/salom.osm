@@ -1,5 +1,0 @@
-funksiya asosiy() {
-    joy hozir = Tizim.vaqt();
-    Tizim.yoz("Ho'p bo'ladi...");
-    Tizim.yoz(hozir, " ketdi shu narsani ko'rsatish uchun");
-}
