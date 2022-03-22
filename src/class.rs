@@ -40,16 +40,16 @@ impl ObjectAddon for Class {
         v
     }
     fn typename(&self, _: &mut Machine) -> String {
-        return self.name.clone();
+        self.name.clone()
     }
 
     fn to_String(&self, _m: &mut Machine) -> String {
         let fields: &HashMap<String, Value> = unsafe { &*self.fields.get() };
         let mut string = String::new();
-        string.push_str(&format!("class {} {{ \n", self.name));
+        string.push_str(&format!("klass {} {{ \n", self.name));
         for (k, v) in fields.iter() {
             string.push_str(&format!(
-                "\tvar {} = {};\n",
+                "\tjoy {} = {};\n",
                 k.to_String(_m),
                 v.to_String(_m)
             ));
@@ -83,7 +83,7 @@ impl Object for Class {
 
         let ret = {
             let fields = unsafe { &mut *class.fields.get() };
-            let field = fields.get("init").expect("Initisializatorlar topilmadi");
+            let field = fields.get("yarat").expect("Initisializatorlar topilmadi");
             let mut args = args.clone();
             args[0] = class.o_clone(m);
             let v = m.invoke(*field, args);

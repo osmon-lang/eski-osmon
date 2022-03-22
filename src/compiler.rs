@@ -67,7 +67,7 @@ impl<'a> Compiler<'a> {
             .machine
             .pool
             .allocate(Box::new(Function::from_native(Box::new(concat))));
-        self.globals.insert("concat".to_owned(), self.gp);
+        self.globals.insert("tahrirla".to_owned(), self.gp);
         self.machine.globals.insert(self.gp, Value::Object(id));
         self.gp += 1;
         let class = system_class(self.machine);
