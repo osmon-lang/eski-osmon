@@ -47,7 +47,7 @@ impl FunctionBuilder {
 
     pub fn get_local(&mut self, n: &str) -> usize {
         if self.locals.contains_key(n) {
-            let r = self.locals.get(n).expect("No'malum lokal").clone();
+            let r = *self.locals.get(n).expect("No'malum lokal");
             r
         } else {
             panic!("Lokal `{}` mavjud emas", n);
@@ -69,13 +69,13 @@ impl FunctionBuilder {
 
     pub fn register_new(&mut self) -> usize {
         for i in 0..MAX_REGISTERS {
-            if self.state[i] == false {
+            if !self.state[i] {
                 self.state[i] = true;
                 return i;
             }
         }
         println!("Registrlar mavjud emas");
-        return 0;
+        0
     }
 
     pub fn register_push(&mut self, nreg: usize) -> usize {
@@ -83,16 +83,16 @@ impl FunctionBuilder {
         if self.register_is_temp(nreg) {
             self.ntemps += 1;
         }
-        return nreg;
+        nreg
     }
 
     pub fn register_first_temp_available(&mut self) -> usize {
         for i in 0..MAX_REGISTERS {
-            if self.state[i] == false {
+            if !self.state[i] {
                 return i;
             }
         }
-        return 0;
+        0
     }
 
     pub fn register_push_temp(&mut self) -> usize {
@@ -103,7 +103,7 @@ impl FunctionBuilder {
             self.ntemps += 1;
         }
 
-        return value;
+        value
     }
 
     pub fn get_insts(&mut self) -> Vec<Instruction> {
@@ -111,7 +111,7 @@ impl FunctionBuilder {
     }
 
     pub fn register_pop_context_protect(&mut self, protect: bool) -> usize {
-        if self.registers.len() == 0 {
+        if self.registers.is_empty() {
             panic!("REGISTR XATOLIGI");
         }
 
@@ -128,31 +128,31 @@ impl FunctionBuilder {
             ctx[value] = true;
         }
 
-        return value;
+        value
     }
 
     pub fn int_const(&mut self, int: i32) -> usize {
         let register = self.register_push_temp();
         self.list.push(Instruction::LoadInt(register, int));
-        return register;
+        register
     }
 
     pub fn long_const(&mut self, long: i64) -> usize {
         let register = self.register_push_temp();
         self.list.push(Instruction::LoadLong(register, long));
-        return register;
+        register
     }
 
     pub fn float_const(&mut self, float: f32) -> usize {
         let register = self.register_push_temp();
         self.list.push(Instruction::LoadFloat(register, float));
-        return register;
+        register
     }
 
     pub fn double_const(&mut self, float: f64) -> usize {
         let register = self.register_push_temp();
         self.list.push(Instruction::LoadDouble(register, float));
-        return register;
+        register
     }
     pub fn register_pop(&mut self) -> usize {
         self.register_pop_context_protect(false)
@@ -164,6 +164,6 @@ impl FunctionBuilder {
         }
     }
     pub fn register_is_temp(&self, nreg: usize) -> bool {
-        return nreg >= self.nlocals;
+        nreg >= self.nlocals
     }
 }

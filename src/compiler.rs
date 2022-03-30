@@ -183,7 +183,7 @@ impl<'a> Compiler<'a> {
                     }
                 }
 
-                let ptr = self.globals.get(&name).unwrap().clone();
+                let ptr = *self.globals.get(&name).unwrap();
 
                 let cls = self.machine.pool.allocate(Box::new(class));
                 self.machine.globals.insert(ptr, Value::Object(cls));
@@ -215,17 +215,13 @@ impl<'a> Compiler<'a> {
 
                 let function = Function::from_instructions(code, fun.params.len());
                 let func = self.machine.pool.allocate(Box::new(function));
-                let ptr = self.globals.get(&name).unwrap().clone();
+                let ptr = *self.globals.get(&name).unwrap();
                 self.machine.globals.insert(ptr, Value::Object(func));
                 self.globals.insert(name, ptr);
             }
         }
 
-        let main = self
-            .globals
-            .get("asosiy")
-            .expect("asosiy topilmadi")
-            .clone();
+        let main = *self.globals.get("asosiy").expect("asosiy topilmadi");
         let main = self.machine.globals.get(&main).expect("asosiy topilmadi");
         let start = Instant::now();
         let ret = self.machine.invoke(*main, vec![Value::Null]);
@@ -296,8 +292,8 @@ impl<'a> Compiler<'a> {
                 let name = name.to_string();
                 let expr = expr.clone();
 
-                if expr.is_some() {
-                    self.translate_expr(*expr.unwrap().clone());
+                if let Some(..) = expr {
+                    self.translate_expr(*expr.unwrap());
                     let r = self.builder.register_pop();
                     self.builder.new_local(name, r);
                 } else {
@@ -320,7 +316,7 @@ impl<'a> Compiler<'a> {
                 }
             }
             Stmt::Expr(expr) => {
-                self.translate_expr(*expr.clone());
+                self.translate_expr(*expr);
             }
             v => panic!("{:?}", v),
         }
@@ -356,7 +352,7 @@ impl<'a> Compiler<'a> {
                     let idx = self
                         .globals
                         .get(fname)
-                        .expect(&format!("Function not found `{}`", fname));
+                        .unwrap_or_else(|| panic!("Function not found `{}`", fname));
                     let register = self.builder.register_push_temp();
                     self.builder
                         .push_op(Instruction::LoadGlobal(register, *idx));
@@ -374,7 +370,7 @@ impl<'a> Compiler<'a> {
             }
 
             Expr::New(name, args) => {
-                let mut args = args.clone();
+                let mut args = args;
                 args.reverse();
                 for arg in args.iter() {
                     self.translate_expr(arg.clone());
@@ -390,7 +386,7 @@ impl<'a> Compiler<'a> {
                     let idx = self
                         .globals
                         .get(&name)
-                        .expect(&format!("Function not found `{}`", name));
+                        .unwrap_or_else(|| panic!("Function not found `{}`", name));
                     let register = self.builder.register_first_temp_available();
                     self.builder
                         .push_op(Instruction::LoadGlobal(register, *idx));
@@ -466,7 +462,7 @@ impl<'a> Compiler<'a> {
                         panic!("");
                     };
 
-                    self.translate_expr(e2.clone());
+                    self.translate_expr(e2);
                     let value = self.builder.register_pop();
                     self.builder.register_push_temp();
                     self.translate_expr(*this);
@@ -521,7 +517,7 @@ impl<'a> Compiler<'a> {
                     self.builder.register_clear(r2);
                 }
                 (this, Expr::FnCall(fname, args)) => {
-                    let mut args = args.clone();
+                    let mut args = args;
                     args.reverse();
                     for arg in args.iter() {
                         self.translate_expr(arg.clone());

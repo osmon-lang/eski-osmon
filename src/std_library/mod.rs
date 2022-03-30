@@ -10,7 +10,7 @@ pub fn time(m: &mut Machine, _: Vec<Value>) -> Value {
 
     let str = format!("{}", duration);
     let obj = Value::Object(m.pool.allocate(Box::new(str)));
-    return obj;
+    obj
 }
 
 pub fn system_class(m: &mut Machine) -> Class {

@@ -1,7 +1,6 @@
 #![warn(rust_2018_idioms)]
-#[allow(deprecated)]
-#[allow(mutable_borrow_reservation_conflict)]
-
+#![allow(mutable_borrow_reservation_conflict)]
+#![allow(deprecated)]
 pub mod builtins;
 pub mod class;
 pub mod code;

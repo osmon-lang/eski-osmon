@@ -24,7 +24,7 @@ pub fn array_pop(m: &mut Machine, args: Vec<Value>) -> Value {
         };
 
         let v = array.pop();
-        return v;
+        v
     } else {
         panic!("Array::pop expects Array as argument!");
     }
@@ -42,7 +42,7 @@ pub fn array_push(m: &mut Machine, args: Vec<Value>) -> Value {
 
         let v = args[1];
         array.push(v);
-        return Value::Null;
+        Value::Null
     } else {
         panic!("Array::push expects Array as argument!");
     }
@@ -76,7 +76,7 @@ pub fn array_get(m: &mut Machine, args: Vec<Value>) -> Value {
         } else {
             panic!("Not a Array object!");
         };
-        return array.get(idx);
+        array.get(idx)
     } else {
         panic!("Array::get expects Array as argument!");
     }
@@ -96,7 +96,7 @@ pub fn array_set(m: &mut Machine, args: Vec<Value>) -> Value {
             panic!("Not a Array object!");
         };
 
-        return array.get(idx);
+        array.get(idx)
     } else {
         panic!("Array::set expects Array as argument!");
     }
@@ -117,7 +117,7 @@ impl Array {
         let mut elements = self.elements.borrow_mut();
         let value = {
             let value = elements.pop();
-            if value.is_some() {
+            if let Some(..) = value {
                 value.unwrap()
             } else {
                 Value::Null
@@ -142,16 +142,16 @@ impl ObjectAddon for Array {
         let elements = self.elements.borrow();
 
         let mut string = String::new();
-        string.push_str("[");
+        string.push('[');
         let mut i = 0;
         while i < elements.len() {
             string.push_str(&elements[i].to_String(m));
             if i != elements.len() - 1 {
-                string.push_str(",");
+                string.push(',');
             }
             i += 1;
         }
-        string.push_str("]");
+        string.push(']');
 
         string
     }
@@ -206,11 +206,11 @@ impl Object for Array {
         if let Value::Int(int) = &args[1] {
             let v = elements.get(*int as usize).unwrap();
 
-            m.set(rindex, v.clone());
+            m.set(rindex, *v);
         }
         if let Value::Long(long) = &args[1] {
             let v = elements.get(*long as usize).unwrap();
-            m.set(rindex, v.clone());
+            m.set(rindex, *v);
         }
     }
 

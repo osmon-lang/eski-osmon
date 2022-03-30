@@ -33,14 +33,14 @@ impl Class {
 }
 
 impl ObjectAddon for Class {
+    fn typename(&self, _: &mut Machine) -> String {
+        self.name.clone()
+    }
     fn o_clone(&self, m: &mut Machine) -> Value {
         let c = self.clone();
 
         let v = Value::Object(m.pool.allocate(Box::new(c)));
         v
-    }
-    fn typename(&self, _: &mut Machine) -> String {
-        self.name.clone()
     }
 
     fn to_String(&self, _m: &mut Machine) -> String {
@@ -54,24 +54,13 @@ impl ObjectAddon for Class {
                 v.to_String(_m)
             ));
         }
-        string.push_str("}");
+        string.push('}');
 
         string
     }
 }
 impl Object for Class {
-    fn as_any(&self) -> &dyn Any {
-        self as &dyn Any
-    }
-    fn as_any_mut(&mut self) -> &mut dyn Any {
-        self as &mut dyn Any
-    }
     fn initialize(&mut self, _p: &mut ObjectPool) {}
-
-    fn get_children(&self) -> Vec<usize> {
-        Vec::new()
-    }
-
     fn call(&self, m: &mut Machine, args: Vec<Value>) -> Value {
         let class = if let Value::Object(id) = args[0] {
             let obj = m.pool.get(id);
@@ -84,7 +73,7 @@ impl Object for Class {
         let ret = {
             let fields = unsafe { &mut *class.fields.get() };
             let field = fields.get("yarat").expect("Initisializatorlar topilmadi");
-            let mut args = args.clone();
+            let mut args = args;
             args[0] = class.o_clone(m);
             let v = m.invoke(*field, args);
             m.stack.pop();
@@ -92,7 +81,6 @@ impl Object for Class {
         };
         ret
     }
-
     fn store_at(&self, m: &mut Machine, args: Vec<Value>, _: usize) {
         let fname = args[1].to_String(m);
         let fields = unsafe { &mut *self.fields.get() };
@@ -104,7 +92,9 @@ impl Object for Class {
         if let Value::Object(id) = args[1] {
             let str = m.pool.get(id).to_String(m);
             let fields = unsafe { &*self.fields.get() };
-            let field = fields.get(&str).expect(&format!("Ushbu {} topilmadi", str));
+            let field = fields
+                .get(&str)
+                .unwrap_or_else(|| panic!("Ushbu {} topilmadi", str));
 
             m.set(rindex, *field);
         }
@@ -116,5 +106,17 @@ impl Object for Class {
             let v = m.invoke(*field, args);
             m.set(rindex, v);
         }
+    }
+
+    fn as_any(&self) -> &dyn Any {
+        self as &dyn Any
+    }
+
+    fn as_any_mut(&mut self) -> &mut dyn Any {
+        self as &mut dyn Any
+    }
+
+    fn get_children(&self) -> Vec<usize> {
+        Vec::new()
     }
 }
