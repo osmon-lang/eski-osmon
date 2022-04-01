@@ -2,13 +2,17 @@
 name = "osmon"
 version = "0.2.0"
 edition = "2018"
+homepage = "https://osmon.dev"
+documentation = "https://wiki.osmon.dev"
+repository = "https://github.com/osmon-lang/osmon/"
 description = "A programming language for Uzbeks"
 authors = ["UwUssimo Robinson <uwussimo@icloud.com>"]
-keywords = ["language", "programming"]
+keywords = ["programming language", "interpreter", "uzbek"]
 readme = "readme.md"
 categories = ["language"]
 license = "Apache-2.0"
 build = "build.rs"
+exclude = ["target", ".github", "release.ps1", "release.sh"]
 
 [target.'cfg(windows)'.build-dependencies]
 winres = "=0.1.11"
