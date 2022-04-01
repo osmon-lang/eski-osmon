@@ -12,7 +12,7 @@ readme = "readme.md"
 categories = ["language"]
 license = "Apache-2.0"
 build = "build.rs"
-exclude = ["target", ".github", "release.ps1", "release.sh"]
+exclude = ["target", ".github"]
 
 [target.'cfg(windows)'.build-dependencies]
 winres = "=0.1.11"
