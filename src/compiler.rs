@@ -352,7 +352,7 @@ impl<'a> Compiler<'a> {
                     let idx = self
                         .globals
                         .get(fname)
-                        .unwrap_or_else(|| panic!("Function not found `{}`", fname));
+                        .unwrap_or_else(|| panic!("Ushbu `{}` funksiya topilmadi", fname));
                     let register = self.builder.register_push_temp();
                     self.builder
                         .push_op(Instruction::LoadGlobal(register, *idx));
@@ -386,7 +386,7 @@ impl<'a> Compiler<'a> {
                     let idx = self
                         .globals
                         .get(&name)
-                        .unwrap_or_else(|| panic!("Function not found `{}`", name));
+                        .unwrap_or_else(|| panic!("Ushbu `{}` funksiya topilmadi", name));
                     let register = self.builder.register_first_temp_available();
                     self.builder
                         .push_op(Instruction::LoadGlobal(register, *idx));

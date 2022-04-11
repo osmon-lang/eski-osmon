@@ -12,7 +12,7 @@ pub enum LexError {
 impl Error for LexError {
     fn description(&self) -> &str {
         match *self {
-            LexError::UnexpectedChar => "Unexpected character in input",
+            LexError::UnexpectedChar => "Kiritilgan faylda kutilmagan belgi mavjud",
             LexError::MalformedEscapeSequence => "Unexpected values in escape sequence",
             LexError::MalformedNumber => "Unexpected characters in number",
             LexError::MalformedChar => "Char constant not a single character",
@@ -49,21 +49,21 @@ pub enum ParseError {
 impl Error for ParseError {
     fn description(&self) -> &str {
         match *self {
-            ParseError::BadInput => "Unparseable characters in the input stream",
-            ParseError::InputPastEndOfFile => "Input past end of file",
-            ParseError::UnknownOperator => "Unknown operator",
-            ParseError::MissingRParen => "Expected ')'",
-            ParseError::MissingSemicolon => "Expected ';'",
-            ParseError::MissingLParen => "Expected  '('",
-            ParseError::MissingLCurly => "Expected '{'",
-            ParseError::MissingRCurly => "Expected '}'",
-            ParseError::MissingRSquare => "Expected ']'",
-            ParseError::MalformedCallExpr => "Call contains bad expression",
+            ParseError::BadInput => "Kiritilgan faylda o'qib bo'lmas belgilar mavjud",
+            ParseError::InputPastEndOfFile => "Faylning oxirini kiriting",
+            ParseError::UnknownOperator => "No'malum operator",
+            ParseError::MissingRParen => "')' kutilgandi",
+            ParseError::MissingSemicolon => "';' kutilgandi",
+            ParseError::MissingLParen => "'(' kutilgandi",
+            ParseError::MissingLCurly => "'{' kutilgandi",
+            ParseError::MissingRCurly => "'}' kutilgandi",
+            ParseError::MissingRSquare => "']' kutilgandi",
+            ParseError::MalformedCallExpr => "Ushbu chaqiruvda noto'g'ri ifodalar mavjud",
             ParseError::MalformedIndexExpr => "Indexing expression missing correct index",
-            ParseError::VarExpectsIdentifier => "'var' expects the name of a variable",
-            ParseError::FnMissingName => "Function declaration is missing name",
-            ParseError::FnMissingParams => "Function declaration is missing parameters",
-            ParseError::ClassMissingName => "Class missing name",
+            ParseError::VarExpectsIdentifier => "'joy' uchun ma'lum nom kutilgandi",
+            ParseError::FnMissingName => "E'lon qilingan funksiya nomi kiritilmadi",
+            ParseError::FnMissingParams => "E'lon qilingan funksiya parametrlari kiritilmadi",
+            ParseError::ClassMissingName => "Ushbu klass nomi kiritilmadi",
         }
     }
 
@@ -1133,7 +1133,7 @@ fn parse_binop(
                 Token::PowerOf => Expr::Op(Op::Isa, Box::new(lhs_curr), Box::new(rhs)),
                 Token::NotEqualTo => Expr::Op(Op::Ne, Box::new(lhs_curr), Box::new(rhs)),
                 v => {
-                    panic!("Unknown operator {:?}", v)
+                    panic!("No'malum {:?} operator", v)
                 }
             };
         }
@@ -1473,7 +1473,7 @@ fn parse_top_level(input: &mut Peekable<TokenIterator<'_>>) -> Result<Vec<Global
             Some(&Token::Fn) => globals.push(Global::FnDefenition(parse_fn(input)?)),
             Some(&Token::NewLine) => {}
             Some(&Token::Var) => globals.push(Global::Variable(parse_var(input)?)),
-            _ => panic!("Expected top level element"),
+            _ => panic!("Yuqori darajadagi element kutilgandi"),
         }
 
         if let Some(&Token::Semicolon) = input.peek() {
