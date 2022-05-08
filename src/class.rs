@@ -46,7 +46,7 @@ impl ObjectAddon for Class {
     fn to_String(&self, _m: &mut Machine) -> String {
         let fields: &HashMap<String, Value> = unsafe { &*self.fields.get() };
         let mut string = String::new();
-        string.push_str(&format!("klass {} {{ \n", self.name));
+        string.push_str(&format!("guruh {} {{ \n", self.name));
         for (k, v) in fields.iter() {
             string.push_str(&format!(
                 "\tjoy {} = {};\n",
@@ -102,7 +102,7 @@ impl Object for Class {
             let fields = unsafe { &*self.fields.get() };
             let field = fields
                 .get("__get__")
-                .expect("Ushbu klassda __get__ metodi mavjud emas");
+                .expect("Ushbu guruhda __get__ metodi mavjud emas");
             let v = m.invoke(*field, args);
             m.set(rindex, v);
         }
