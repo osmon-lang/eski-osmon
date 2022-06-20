@@ -13,10 +13,10 @@ impl Error for LexError {
     fn description(&self) -> &str {
         match *self {
             LexError::UnexpectedChar => "Kiritilgan faylda kutilmagan belgi mavjud",
-            LexError::MalformedEscapeSequence => "Unexpected values in escape sequence",
-            LexError::MalformedNumber => "Unexpected characters in number",
-            LexError::MalformedChar => "Char constant not a single character",
-            LexError::Nothing => "This error is for internal use only",
+            LexError::MalformedEscapeSequence => "Escape ketma-ketligidagi kutilmagan qiymatlar",
+            LexError::MalformedNumber => "Raqamda kutilmagan belgilar mavjud",
+            LexError::MalformedChar => "Belgi o'zgaruvchisida bittadan oshiq belgi ta'qiqlanadi",
+            LexError::Nothing => "Xatolik yuz berdi",
         }
     }
 }
