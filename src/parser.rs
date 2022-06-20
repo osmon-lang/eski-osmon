@@ -256,6 +256,8 @@ impl Token {
             // RParen           | (expr) - expr not unary & is closing
             LSquare          | // [-expr] - is unary
             // RSquare          | [expr] - expr not unary & is closing
+            // FloorDiv         |
+            // FloorDivAssign   |
             Plus             |
             UnaryPlus        |
             Minus            |
