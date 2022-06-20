@@ -59,7 +59,7 @@ impl Error for ParseError {
             ParseError::MissingRCurly => "'}' kutilgandi",
             ParseError::MissingRSquare => "']' kutilgandi",
             ParseError::MalformedCallExpr => "Ushbu chaqiruvda noto'g'ri ifodalar mavjud",
-            ParseError::MalformedIndexExpr => "Indexing expression missing correct index",
+            ParseError::MalformedIndexExpr => "Tog'ri indeks mavjud emas.",
             ParseError::VarExpectsIdentifier => "'joy' uchun ma'lum nom kutilgandi",
             ParseError::FnMissingName => "E'lon qilingan funksiya nomi kiritilmadi",
             ParseError::FnMissingParams => "E'lon qilingan funksiya parametrlari kiritilmadi",
