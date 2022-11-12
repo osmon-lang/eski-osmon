@@ -1,0 +1,35 @@
+name: ci
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: lint
+        if: matrix.os == 'macOS-latest'
+        run: |
+          brew install shfmt shellcheck
+          shfmt -d .
+          shellcheck -s sh *.sh
+      - name: tests shell
+        shell: bash
+        run: chmod a+x install_test.sh install.sh && ./install_test.sh
+
+      - name: tests powershell
+        if: matrix.os == 'windows-latest'
+        shell: powershell
+        run: ./install_test.ps1
+
+      - name: tests powershell core
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: ./install_test.ps1
