@@ -1,0 +1,23 @@
+[package]
+name = "bulut"
+version = "0.3.0"
+edition = "2018"
+homepage = "https://osmon.dev"
+documentation = "https://wiki.osmon.dev/bulut"
+repository = "https://github.com/osmon-lang/osmon-vm"
+description = "Lightweight and fast Virtual Machine built for Osmon Programming Language"
+authors = ["UwUssimo Robinson <uwussimo@icloud.com> (https://uwussi.moe)"]
+readme = "readme.md"
+keywords = ["vm","register","register-based", "uzbek"]
+license = "Apache-2.0"
+exclude = ["target"]
+
+[profile.dev]
+
+[profile.release]
+lto = true
+
+[dependencies]
+time = "0.1.40"
+libc = "0.2.43"
+colored = "1.6.1"
