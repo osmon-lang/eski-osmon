@@ -1,0 +1,75 @@
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator on Osmonscript</title>
+    <link rel="stylesheet" href="style.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet"> 
+
+</head>
+<body>
+    <section>
+        <div class="container">
+            <h2 style="text-align: center; color: aquamarine;">Osmonscript calculator</h2>
+            <div id="display"></div>
+            <div class="buttons">
+                <div class="button">C</div>
+                <div class="button">/</div>
+                <div class="button">*</div>
+                <div class="button">&larr;</div>
+                <div class="button">7</div>
+                <div class="button">8</div>
+                <div class="button">9</div>
+                <div class="button">-</div>
+                <div class="button">4</div>
+                <div class="button">5</div>
+                <div class="button">6</div>
+                <div class="button">+</div>
+                <div class="button">1</div>
+                <div class="button">2</div>
+                <div class="button">3</div>
+                <div class="button">.</div>
+                <div id="lbracket" class="button">(</div>
+                <div class="button">0</div>
+                <div class="button">)</div>
+                <div id="equal" class="button">=</div>
+            </div>
+        </div>
+    </section>
+
+	<script language="osmonscript">
+		joy display = dokument.idDanElementOl('display');
+
+		joy tugmalar = massiv.dan(dokument.klassdanElementOl('button'));
+
+tugmalar.toplam( button => {
+    button.ishlovQosh('click', (e) => {
+        ozgarish(e.target.innerText){
+            holat 'C':
+                display.innerText = '';
+                toxtash;
+            holat '=':
+                urin{
+                    display.innerText = qil(display.innerText);
+                } tut {
+                    display.innerText = "Xatolik yuz berdi!"
+                }
+                toxtash;
+            holat '←':
+                agar (display.innerText){
+                   display.innerText = display.innerText.kesish(0, -1);
+                }
+                toxtash;
+            oddiy:
+                display.innerText += e.target.innerText;
+        }
+    });
+});
+	</script>
+
+
+	<script type="text/javascript" src="osmon/osmonscript.js"></script>
+</body>
+</html>

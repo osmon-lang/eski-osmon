@@ -1,0 +1,85 @@
+html {
+	font-family: 'Poppins', sans-serif;
+    background: linear-gradient(270deg, #4b52ff, #ff1589, #b83877, #5d28d1, #1983f4, #00592d, #444444, #ab4a00);
+    background-size: 1600% 1600%;
+
+    -webkit-animation: AnimationName 59s ease infinite;
+    -moz-animation: AnimationName 59s ease infinite;
+    animation: AnimationName 59s ease infinite;
+}
+
+.container {
+    max-width: 400px;
+    margin: 10vh auto 0 auto;
+    border: rgb(190, 190, 190);
+    border-style: solid;
+    border-width: 0.5px;
+	border-radius: 16px;
+}
+
+#display {
+    text-align: right;
+    height: 70px;
+    /* line-height: 70px; */
+    padding: 16px 8px;
+    font-size: 25px;
+    color: white;
+}
+
+.buttons {
+    display: grid;
+    /* border-bottom: 1px solid rgb(255, 0, 0); */
+    border-left: 1px solidrgb(255, 0, 0);
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    border-radius: 16px;
+}
+
+.buttons > div {
+    border-top: 1px solid #999;
+    border-right: 1px solid#999;
+}
+
+.button {
+    /* border: 0.5px solid rgb(255, 0, 0); */
+    line-height: 100px;
+    text-align: center;
+    font-size: 25px;
+    cursor: pointer;
+    color: white;
+}
+
+#equal {
+    background-color: rgb(85, 85, 255);
+    color: white;
+    border-bottom-right-radius: 16px;;
+}
+#lbracket {
+    border-bottom-left-radius: 16px;
+}
+
+.button:hover {
+    background-color: #323330;
+    color: white;
+    transition: 0.1s ease-in-out;
+}
+
+
+.css-selector {
+
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}

@@ -1,0 +1,27 @@
+joy display = dokument.idElementOlish('display');
+
+joy tugmalar = massiv.dan(dokument.klassdanElementOlish('button'));
+
+tugmalar.toplam( button => {
+    button.ishlovQoshish('click', (e) => {
+        almashtirish(e.target.innerText){
+            holat 'C':
+                display.innerText = '';
+                toxtash;
+            holat '=':
+                sinabkorish{
+                    display.innerText = bajarish(display.innerText);
+                } tutish {
+                    display.innerText = "Error"
+                }
+                toxtash;
+            holat '←':
+                agar (display.innerText){
+                   display.innerText = display.innerText.kesish(0, -1);
+                }
+                toxtash;
+            oddiy:
+                display.innerText += e.target.innerText;
+        }
+    });
+});
