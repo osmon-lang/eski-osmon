@@ -31,7 +31,8 @@ const Container = styled('div', {
         }
       }
     }
-  }
+  },
+  length: 0
 })
 
 export default Container

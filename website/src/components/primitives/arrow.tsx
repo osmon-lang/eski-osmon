@@ -5,7 +5,8 @@ import IconArrowUp from 'logos/arrow-up.svg'
 const ArrowDown = styled(IconArrowDown, {
   $$size: 'max(20px, 1.389vw)',
   width: '$$size',
-  height: '$$size'
+  height: '$$size',
+  length: 0
 })
 
 const ArrowUp = styled(IconArrowUp, {
@@ -16,7 +17,8 @@ const ArrowUp = styled(IconArrowUp, {
 
   '@bp2': {
     fill: 'none'
-  }
+  },
+  length: 0
 })
 
 export { ArrowDown, ArrowUp }

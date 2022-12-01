@@ -17,7 +17,8 @@ const Container = styled('div', {
 
   '.text': {
     marginLeft: 42
-  }
+  },
+  length: 0
 })
 
 export type ReleaseProps = {
@@ -30,9 +31,11 @@ const Release = ({ version, date, text }: ReleaseProps) => {
   return (
     <Container>
       <div>
+        {/* @ts-ignore */}
         <Text size="md" heading>
           {version}
         </Text>
+        {/* @ts-ignore */}
         <Text size="md" css={{ marginTop: 14 }}>
           ↳
         </Text>

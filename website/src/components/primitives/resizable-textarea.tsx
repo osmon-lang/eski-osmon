@@ -17,7 +17,8 @@ const Textarea = styled('textarea', {
   resize: 'none',
   outline: 'none',
   overflow: 'hidden',
-  width: '100%'
+  width: '100%',
+  length: 0
 })
 
 const ResizableTextarea = ({

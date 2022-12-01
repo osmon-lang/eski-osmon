@@ -49,7 +49,8 @@ const Metis = styled('a', {
         }
       }
     }
-  }
+  },
+  length: 0
 })
 
 const Link = forwardRef<HTMLAnchorElement, Props>(
@@ -82,6 +83,7 @@ const Link = forwardRef<HTMLAnchorElement, Props>(
           ref={ref}
           rel={isExternal ? 'noopener' : undefined}
           target={isExternal ? '_blank' : undefined}
+          // @ts-ignore
           unstyled={variant === 'unstyled'}
         >
           {children}

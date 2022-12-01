@@ -86,7 +86,8 @@ const CursorFollower = styled('div', {
         }
       }
     }
-  }
+  },
+  length: 0
 })
 
 type CursorType = 'pointer' | 'text' | 'grab' | 'grabbing' | undefined
@@ -164,6 +165,7 @@ const Cursor = ({ children }: { children?: React.ReactNode }) => {
   return (
     <>
       {isMobile === false && (
+        // @ts-ignore
         <CursorFollower ref={cursorRef} type={type}>
           <div className="outer" />
           <div className="inner" />

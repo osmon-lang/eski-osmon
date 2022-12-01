@@ -41,7 +41,8 @@ const Title = styled('h1', {
     fontKerning: 'none',
     fontStyle: 'normal',
     transform: 'translateY(-38%)'
-  }
+  },
+  length: 0
 })
 
 const Outlined = styled('span', {
@@ -58,7 +59,8 @@ const Outlined = styled('span', {
 
   '@bp1': {
     letterSpacing: '-0.694vw'
-  }
+  },
+  length: 0
 })
 
 const Subtitle = styled(Button, {
@@ -75,7 +77,8 @@ const Subtitle = styled(Button, {
 
   svg: {
     marginLeft: '$2'
-  }
+  },
+  length: 0
 })
 
 const Wrapper = styled('div', {
@@ -88,14 +91,16 @@ const Wrapper = styled('div', {
   flexDirection: 'column',
   height: '100vh',
   justifyContent: 'center',
-  paddingTop: '$3'
+  paddingTop: '$3',
+  length: 0
 })
 
 const ImageContainer = styled('div', {
   bottom: 0,
   left: '50%',
   position: 'absolute',
-  transform: 'translate(-50%, 50%)'
+  transform: 'translate(-50%, 50%)',
+  length: 0
 })
 
 const Hero = () => {

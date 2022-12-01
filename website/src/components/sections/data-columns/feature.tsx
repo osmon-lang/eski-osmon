@@ -17,7 +17,8 @@ const Container = styled('div', {
 
   '&:not(:last-child)': {
     paddingBottom: 32
-  }
+  },
+  length: 0
 })
 
 const Score = styled('div', {
@@ -42,12 +43,14 @@ const Score = styled('div', {
         maxWidth: 50
       }
     }
-  }
+  },
+  length: 0
 })
 
 const Head = styled('div', {
   display: 'flex',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
+  length: 0
 })
 
 const StarSvg = () => (
@@ -78,10 +81,12 @@ const Feature = ({ title, score }: FeatureProps) => {
   return (
     <Container>
       <Head>
+        {/* @ts-ignore */}
         <Text size="md" heading>
           {title}
         </Text>
         <Text
+          // @ts-ignore
           size="xs"
           css={{ opacity: 0.5, display: 'flex', alignItems: 'center' }}
         >
@@ -89,6 +94,7 @@ const Feature = ({ title, score }: FeatureProps) => {
         </Text>
       </Head>
       <Score css={{ marginTop: 14 }} data-cursor="undefined">
+        {/* @ts-ignore */}
         <Text
           as="span"
           size="md"

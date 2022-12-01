@@ -12,13 +12,15 @@ const Label = styled('label', {
   fontSize: '18px',
   '@bp2': {
     fontSize: '24px'
-  }
+  },
+  length: 0
 })
 
 const Flex = styled('div', {
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
+  length: 0
 })
 
 const Value = styled('div', {
@@ -27,7 +29,8 @@ const Value = styled('div', {
   fontSize: '18px',
   '@bp2': {
     fontSize: '24px'
-  }
+  },
+  length: 0
 })
 
 export type RangeProps = {

@@ -51,7 +51,8 @@ const StyledButton = styled('button', {
         }
       }
     }
-  }
+  },
+  length: 0
 })
 
 const Button = forwardRef(
@@ -65,6 +66,7 @@ const Button = forwardRef(
         className={clsx(className)}
         disabled={isLoading || disabled}
         ref={ref}
+        // @ts-ignore
         underlined={variant === 'underlined'}
         hasIcon={!!icon}
       >

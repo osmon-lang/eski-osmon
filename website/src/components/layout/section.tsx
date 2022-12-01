@@ -26,7 +26,8 @@ const StyledSection = styled('div', {
         my: 0
       }
     }
-  }
+  },
+  length: 0
 })
 
 type SectionProps = React.ComponentPropsWithoutRef<typeof StyledSection>

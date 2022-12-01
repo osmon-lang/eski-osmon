@@ -28,7 +28,8 @@ const SectionInner = styled('div', {
   '@bp3': {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr 1fr'
-  }
+  },
+  length: 0
 })
 
 const Column = styled(NativeScrollContainer, {
@@ -44,7 +45,8 @@ const Column = styled(NativeScrollContainer, {
     '&:not(:first-child)': {
       borderLeft: '1px solid $white'
     }
-  }
+  },
+  length: 0
 })
 
 export const Text = styled(TextPrimitive, {
@@ -68,7 +70,8 @@ export const Text = styled(TextPrimitive, {
         fontSize: '$7'
       }
     }
-  }
+  },
+  length: 0
 })
 
 const SectionPicker = styled('div', {
@@ -90,11 +93,11 @@ const SectionPicker = styled('div', {
   // option: {
   //   textTransform: 'uppercase'
   // },
-
   svg: {
     position: 'absolute',
     right: 0
-  }
+  },
+  length: 0
 })
 
 const LoadMore = styled('button', {
@@ -111,7 +114,8 @@ const LoadMore = styled('button', {
 
   '&:disabled': {
     opacity: 0.5
-  }
+  },
+  length: 0
 })
 
 type DataColumnsProps = {
@@ -139,8 +143,15 @@ const DataColumns = ({ tweets: initialTweets, releases }: DataColumnsProps) => {
   const [activeSection, setActiveSection] = useState<Sections>('releases')
 
   return (
-    <Section background="black" noMargin>
-      <Container maxWidth>
+    <Section
+      // @ts-ignore
+      background="black"
+      noMargin
+    >
+      <Container
+        // @ts-ignore
+        maxWidth
+      >
         <SectionInner
           css={{
             display: 'none',
@@ -152,7 +163,11 @@ const DataColumns = ({ tweets: initialTweets, releases }: DataColumnsProps) => {
         >
           <Column>
             <Text css={{ fontSize: '$3' }}>o'zgarishlar</Text>
-            <Text css={{ fontSize: '$7' }} heading>
+            <Text
+              css={{ fontSize: '$7' }}
+              // @ts-ignore
+              heading
+            >
               nashrlar tarixi
             </Text>
             <div>
@@ -163,6 +178,7 @@ const DataColumns = ({ tweets: initialTweets, releases }: DataColumnsProps) => {
           </Column>
           <Column>
             <Text css={{ fontSize: '$3' }}>progreslar</Text>
+            {/* @ts-ignore */}
             <Text css={{ fontSize: '$7' }} heading>
               hozirgi natijalar
             </Text>
@@ -175,6 +191,7 @@ const DataColumns = ({ tweets: initialTweets, releases }: DataColumnsProps) => {
           </Column>
           <Column>
             <Text css={{ fontSize: '$3' }}>biz haqimizdagi</Text>
+            {/* @ts-ignore */}
             <Text css={{ fontSize: '$7' }} heading>
               fikrlar
             </Text>
@@ -191,6 +208,7 @@ const DataColumns = ({ tweets: initialTweets, releases }: DataColumnsProps) => {
               })}
               {hasNextPage && (
                 <LoadMore onClick={() => fetchNextPage()} disabled={isFetching}>
+                  {/* @ts-ignore */}
                   <Text uppercase heading>
                     Load more
                   </Text>
@@ -280,6 +298,7 @@ const DataColumns = ({ tweets: initialTweets, releases }: DataColumnsProps) => {
             })}
             {hasNextPage && (
               <LoadMore onClick={() => fetchNextPage()} disabled={isFetching}>
+                {/* @ts-ignore */}
                 <Text uppercase heading>
                   ko'proq yuklash
                 </Text>

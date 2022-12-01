@@ -17,7 +17,8 @@ const Container = styled('div', {
 
   '&:not(:last-child)': {
     paddingBottom: 50
-  }
+  },
+  length: 0
 })
 
 const UserData = styled('div', {
@@ -26,7 +27,8 @@ const UserData = styled('div', {
   '.tweetImage': {
     borderRadius: '50%',
     filter: 'grayscale(100%)'
-  }
+  },
+  length: 0
 })
 
 const Text = styled('p', {
@@ -61,7 +63,8 @@ const Text = styled('p', {
         fontFamily: '$body'
       }
     }
-  }
+  },
+  length: 0
 })
 
 const Tweet = ({ tweet }: TweetProps) => {
@@ -88,7 +91,11 @@ const Tweet = ({ tweet }: TweetProps) => {
             marginLeft: '$space$3'
           }}
         >
-          <Text css={{ fontSize: 16, '@bp2': { fontSize: 18 } }} type="heading">
+          <Text
+            css={{ fontSize: 16, '@bp2': { fontSize: 18 } }}
+            // @ts-ignore
+            type="heading"
+          >
             {tweet?.user?.name ?? ''}
           </Text>
           <Text
@@ -104,6 +111,7 @@ const Tweet = ({ tweet }: TweetProps) => {
         </Box>
       </UserData>
       <Text
+        // @ts-ignore
         type="body"
         css={{
           marginTop: '$space$3',
@@ -114,6 +122,7 @@ const Tweet = ({ tweet }: TweetProps) => {
         {tweet.text}
       </Text>
       <Text
+        // @ts-ignore
         type="body"
         css={{ marginTop: '$space$3', opacity: '50%', fontSize: 14 }}
       >

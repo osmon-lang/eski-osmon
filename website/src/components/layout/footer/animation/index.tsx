@@ -12,7 +12,8 @@ const Canvas = styled('div', {
   top: -600,
   right: 0,
   left: 0,
-  bottom: 0
+  bottom: 0,
+  length: 0
 })
 
 const Letter = styled('span', {
@@ -40,7 +41,8 @@ const Letter = styled('span', {
         '-webkit-text-stroke': '1px white'
       }
     }
-  }
+  },
+  length: 0
 })
 
 const LETTERS = ['{', '}', '<', '>', '/']
@@ -56,6 +58,7 @@ const FooterAnimation = () => {
   return (
     <Canvas ref={animContainerRef} id="playground">
       {range(70).map((i) => (
+        // @ts-ignore
         <Letter outlined={gsap.utils.random(-1, 1) < 0} key={i}>
           {LETTERS[gsap.utils.random(0, LETTERS.length - 1, 1)]}
         </Letter>

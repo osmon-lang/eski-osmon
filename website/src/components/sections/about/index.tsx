@@ -35,7 +35,8 @@ const Text = styled('p', {
         }
       }
     }
-  }
+  },
+  length: 0
 })
 
 const AboutSection = () => {
@@ -80,8 +81,19 @@ const AboutSection = () => {
   const chat = 'https://t.me/osmonchat'
 
   return (
-    <Section background="black" css={{ pt: '128px' }} id="about-section">
-      <Container autoPy css={{ pb: 0 }} maxWidth ref={ref}>
+    <Section
+      // @ts-ignore
+      background="black"
+      css={{ pt: '128px' }}
+      id="about-section"
+    >
+      <Container
+        // @ts-ignore
+        autoPy
+        css={{ pb: 0 }}
+        maxWidth
+        ref={ref}
+      >
         <Box
           css={{
             display: 'grid',
@@ -103,6 +115,7 @@ const AboutSection = () => {
           >
             <Text
               className="about__title"
+              // @ts-ignore
               size="bg"
               css={{
                 marginBottom: 48,
