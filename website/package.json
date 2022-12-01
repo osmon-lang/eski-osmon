@@ -41,7 +41,7 @@
     "react-dom": "^18.2.0",
     "react-fast-marquee": "^1.2.1",
     "react-hot-toast": "^2.2.0",
-    "react-intersection-observer": "^8.32.1",
+    "react-intersection-observer": "^9.4.1",
     "react-merge-refs": "^1.1.0",
     "react-query": "^3.27.0",
     "react-use-measure": "^2.1.1",
