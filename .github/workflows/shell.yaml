@@ -12,7 +12,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./install
+        working-directory: ./website/public/install
 
 
     steps:
