@@ -47,6 +47,6 @@
         "dist/**/*"
     ],
     "dependencies": {
-        "globalthis": "^1.0.2"
+        "globalthis": "^1.0.3"
     }
 }
