@@ -275,7 +275,7 @@ const Footer = () => {
             <FooterLink
               target="_blank"
               rel="noopener"
-              href="mailto:madmaids@icloud.com"
+              href="mailto:papa@osmon.dev"
             >
               <Text className="label" as="span" heading>
                 bog'lanish
