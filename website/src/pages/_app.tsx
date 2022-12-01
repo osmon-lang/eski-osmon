@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { AppProps } from 'next/app'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { arches } from "../releases";
+import { arches } from '../releases'
 
 import { LocomotiveScrollProvider } from 'context/locomotive-scroll'
 import { DURATION, gsap, SplitText } from 'lib/gsap'

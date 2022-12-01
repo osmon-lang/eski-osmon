@@ -3,7 +3,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')
 const withTM = require('next-transpile-modules')
 const withSvgr = require('next-svgr')
 
-module.exports = withPlugins(
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = withPlugins(
   [
     withBundleAnalyzer({ enabled: process.env.ANALYZE === 'true' }),
     withTM(['gsap']),
@@ -12,10 +15,12 @@ module.exports = withPlugins(
     })
   ],
   {
-    webpack5: true,
+    // webpack5: true,
     reactStrictMode: true,
     images: {
       domains: ['pbs.twimg.com', 'abs.twimg.com']
     }
   }
 )
+
+module.exports = nextConfig
