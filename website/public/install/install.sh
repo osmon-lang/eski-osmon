@@ -18,9 +18,9 @@ else
 fi
 
 if [ $# -eq 0 ]; then
-	osmon_uri="https://github.com/osmon-lang/osmon/releases/latest/download/osmon-${target}.zip"
+	osmon_uri="https://github.com/uwussimo/osmon/releases/latest/download/osmon-${target}.zip"
 else
-	osmon_uri="https://github.com/osmon-lang/osmon/releases/download/${1}/osmon-${target}.zip"
+	osmon_uri="https://github.com/uwussimo/osmon/releases/download/${1}/osmon-${target}.zip"
 fi
 
 osmon_install="${OSMON_INSTALL:-$HOME/.osmon}"

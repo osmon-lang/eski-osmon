@@ -23,9 +23,9 @@ $Target = 'x86_64-pc-windows-msvc'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $OsmonUri = if (!$Version) {
-  "https://github.com/osmon-lang/osmon/releases/latest/download/osmon-${Target}.zip"
+  "https://github.com/uwussimo/osmon/releases/latest/download/osmon-${Target}.zip"
 } else {
-  "https://github.com/osmon-lang/osmon/releases/download/${Version}/osmon-${Target}.zip"
+  "https://github.com/uwussimo/osmon/releases/download/${Version}/osmon-${Target}.zip"
 }
 
 if (!(Test-Path $BinDir)) {
