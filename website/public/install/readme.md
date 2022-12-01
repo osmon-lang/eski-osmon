@@ -2,20 +2,20 @@
 
 **Bir qatorlik buyruq satrlari o'rnatuvchilari.**
 
-[![Status](https://github.com/osmon-lang/osmon-install/actions/workflows/ci.yaml/badge.svg)](https://github.com/osmon-lang/osmon-install/actions/workflows/ci.yaml)
+[![Test [Shell Scripts]](https://github.com/uwussimo/osmon/actions/workflows/shell.yaml/badge.svg)](https://github.com/uwussimo/osmon/actions/workflows/shell.yaml)
 
 ## Eng oxirgi versiyani o'rnatish
 
 ***NIX/Shell bilan:**
 
 ```sh
-curl -fsSL https://sh.osmon.dev/install.sh | sh
+curl -fsSL https://osmon.dev/install/install.sh | sh
 ```
 
 **PowerShell bilan:**
 
 ```powershell
-iwr https://sh.osmon.dev/install.ps1 -useb | iex
+iwr https://osmon.dev/install/install.ps1 -useb | iex
 ```
 
 ## Istalgan versiyani o'rnatish
@@ -23,11 +23,11 @@ iwr https://sh.osmon.dev/install.ps1 -useb | iex
 ***NIX/Shell bilan:**
 
 ```sh
-curl -fsSL https://sh.osmon.dev/install.sh | sh -s v0.4.0
+curl -fsSL https://osmon.dev/install/install.sh | sh -s v0.4.0
 ```
 
 **PowerShell bilan:**
 
 ```powershell
-$v="0.4.0"; iwr https://sh.osmon.dev/install.ps1 -useb | iex
+$v="0.4.0"; iwr https://osmon.dev/install/install.ps1 -useb | iex
 ```
