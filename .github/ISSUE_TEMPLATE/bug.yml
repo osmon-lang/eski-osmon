@@ -77,9 +77,9 @@ body:
 
   - type: input
     attributes:
-      label: Deno|Node Version
-      description: 'Long form of your Deno version (`deno --version`)'
-      placeholder: 'deno 1.13.0 (release, x86_64-unknown-linux-gnu)'
+      label: Osmon Version
+      description: 'Long form of your Deno version (`osmon --version`)'
+      placeholder: 'osmon 0.5.0'
     validations:
       required: true
 
