@@ -16,9 +16,9 @@ import MobileMenu from './mobile-menu'
 import { useToggleState } from 'hooks/use-toggle-state'
 import { useLocomotiveScroll } from 'context/locomotive-scroll'
 import { useRouter } from 'next/router'
-import { event } from 'lib/ga'
 import { download } from '../../../lib/utils'
 
+// @ts-ignore
 const StyledHeader = styled('header', {
   my: '$4',
   position: 'fixed',
@@ -37,7 +37,8 @@ const StyledTime = styled('time', {
     display: 'inline-flex',
     justifyContent: 'space-between',
     flexGrow: 1
-  }
+  },
+  length: 0
 })
 
 const Time = ({ variant }: { variant?: 'mobile' }) => {
@@ -97,7 +98,8 @@ const Time = ({ variant }: { variant?: 'mobile' }) => {
 
 const StyledButton = styled(Button, {
   fontWeight: '700',
-  textTransform: 'uppercase'
+  textTransform: 'uppercase',
+  length: 0
 })
 
 export const DownloadButton = ({
@@ -120,12 +122,6 @@ export const DownloadButton = ({
   }, [isMobile, variant])
 
   const handleDownload = useCallback(() => {
-    event({
-      category: 'Download',
-      action: 'Download',
-      label: 'Download',
-      value: '1'
-    })
     const encoded = {
       text: encodeURIComponent(
         "Yangi o'zimizning o'zbek dasturchilarimiz tomonidan ishlab chiqilgan dasturlash tili chiqdi. Dasturlash tili Osmon tili deb ataladi va uni shu sahifadan ko'rishingiz mumkin!"
@@ -241,6 +237,7 @@ const Header = ({
           fontWeight: '700',
           color: 'white'
         }}
+        // @ts-ignore
         maxWidth
       >
         <Box

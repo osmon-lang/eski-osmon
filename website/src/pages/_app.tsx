@@ -8,7 +8,6 @@ import { LocomotiveScrollProvider } from 'context/locomotive-scroll'
 import { DURATION, gsap, SplitText } from 'lib/gsap'
 import Cursor from 'components/primitives/cursor'
 import Header from 'components/layout/header'
-import { useAppGA } from 'lib/ga'
 import 'css/global.css'
 
 const Context = createContext<{ fontsLoaded: boolean }>({ fontsLoaded: false })
@@ -18,8 +17,6 @@ const queryClient = new QueryClient()
 
 const App = ({ Component, pageProps }: AppProps) => {
   const [fontsLoaded, setFontsLoaded] = useState(false)
-
-  useAppGA()
 
   useEffect(() => {
     // @ts-ignore

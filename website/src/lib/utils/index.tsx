@@ -1,7 +1,7 @@
 import { monthLabels } from './date'
 
 export function download(url: string) {
-  //iOS devices do not support downloading. We have to inform user about this.
+  //iOS's devices do not support downloading. We have to inform user about this.
   if (/(iP)/g.test(navigator.userAgent)) {
     alert(
       "Sizning qurilmangiz yuklash qobiliyatiga ega emas. Iltimos, kompyuter qurilmalarida qayta urinib ko'ring!."

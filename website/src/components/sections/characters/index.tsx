@@ -13,16 +13,15 @@ import { DURATION, gsap, SplitText } from 'lib/gsap'
 const SectionInner = styled(Container, {
   color: '$white',
   pt: '128px',
-  position: 'relative'
+  position: 'relative',
+  length: 0
 })
 
 const CharactersSection = () => {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 })
   // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [viewAll, setViewAll] = useState(false)
   // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [gridHeight, setGridHeight] = useState<number>()
   const gridRef = useRef<HTMLDivElement>(null)
 
@@ -78,9 +77,13 @@ const CharactersSection = () => {
   }, [inView])
 
   return (
-    <Section background="black">
+    <Section
+      // @ts-ignore
+      background="black"
+    >
       <SectionInner
         id="characters-section"
+        // @ts-ignore
         autoPy
         css={{ pb: viewAll ? '128px' : '0px' }}
         maxWidth

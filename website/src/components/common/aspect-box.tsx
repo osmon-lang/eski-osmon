@@ -31,6 +31,8 @@ const AspectBox = ({
   )
 }
 
-export const StyledAspectBox = styled(AspectBox, {})
+export const StyledAspectBox = styled(AspectBox, {
+  length: 0
+})
 
 export default AspectBox

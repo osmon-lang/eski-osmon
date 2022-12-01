@@ -1,5 +1,4 @@
 /* eslint-disable no-useless-escape */
-import { GAScripts } from 'lib/ga'
 import Document, {
   Html,
   Head,
@@ -41,7 +40,6 @@ class MyDocument extends Document {
         `
             }}
           />
-          <GAScripts />
         </Head>
         <body style={{ opacity: 0 }}>
           <Main />

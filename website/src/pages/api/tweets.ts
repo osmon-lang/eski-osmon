@@ -3,7 +3,7 @@ import { getHashtagTweets } from 'lib/twitter'
 
 import { NextApiRequest, NextApiResponse } from 'next'
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const tweets = async (req: NextApiRequest, res: NextApiResponse) => {
   const { next_token } = req.query
 
   try {
@@ -23,3 +23,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     internalServerError(res, error)
   }
 }
+
+export default tweets
