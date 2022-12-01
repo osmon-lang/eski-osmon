@@ -19,8 +19,7 @@
     "type-check": "tsc --pretty --noEmit",
     "postbuild": "next-sitemap",
     "lint": "eslint . --ext ts --ext tsx --ext js",
-    "lint:fix": "yarn lint --fix",
-    "prepare": "husky install",
+    "lint:fix": "pnpm run lint --fix",
     "fp": "git add . && git commit -m '.' -n && git push -n",
     "test": "jest --watch --env=jsdom"
   },
