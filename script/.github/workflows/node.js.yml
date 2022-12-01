@@ -1,4 +1,4 @@
-name: Build and test Yopta Node.js
+name: Build and test Osmon Script
 
 on:
     push:
