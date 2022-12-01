@@ -23,7 +23,6 @@ jobs:
         if: matrix.os == 'macOS-latest'
         run: |
           brew install shfmt shellcheck
-          cd install
           shfmt -d .
           shellcheck -s sh *.sh
       - name: tests shell
