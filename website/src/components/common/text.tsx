@@ -2,7 +2,6 @@ import { styled } from '../../../stitches.config'
 
 const Text = styled('p', {
   fontFamily: '$body',
-
   variants: {
     centered: {
       true: {
@@ -30,7 +29,8 @@ const Text = styled('p', {
         letterSpacing: -2
       }
     }
-  }
+  },
+  length: 0
 })
 
 export default Text

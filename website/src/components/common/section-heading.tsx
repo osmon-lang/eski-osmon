@@ -19,6 +19,7 @@ const SectionHeading = ({
         }
       }}
     >
+      {/* @ts-ignore */}
       <Text
         as="h2"
         css={{
@@ -31,6 +32,7 @@ const SectionHeading = ({
       >
         {title}
       </Text>
+      {/* @ts-ignore */}
       <Text
         as="p"
         css={{

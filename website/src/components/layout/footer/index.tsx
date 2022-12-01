@@ -74,7 +74,8 @@ const FooterGrid = styled('footer', {
       height: 46,
       borderTop: 'none'
     }
-  }
+  },
+  length: 0
 })
 
 const Social = styled('ul', {
@@ -121,7 +122,8 @@ const Social = styled('ul', {
         }
       }
     }
-  }
+  },
+  length: 0
 })
 
 const FooterLink = styled('a', {
@@ -137,7 +139,8 @@ const FooterLink = styled('a', {
     '.label': {
       color: '$black'
     }
-  }
+  },
+  length: 0
 })
 
 const social = [
@@ -147,7 +150,7 @@ const social = [
   },
   {
     label: 'github',
-    href: 'https://github.com/osmon-lang'
+    href: 'https://github.com/uwussimo/osmon'
   }
 ]
 
@@ -160,10 +163,12 @@ const Footer = () => {
         paddingBottom: 40,
         paddingTop: 48
       }}
+      // @ts-ignore
       background="black"
       data-scroll-section
       noMargin
     >
+      {/* @ts-ignore */}
       <Container maxWidth>
         <FooterGrid>
           <Box
@@ -190,10 +195,11 @@ const Footer = () => {
                   lineHeight: 1,
                   '@bp2': { fontSize: 'min(60px, 2.8vw)' }
                 }}
+                // @ts-ignore
                 heading
                 tight
               >
-                dasturlash insoniyatni{' '}
+                dasturlash insoniyatni{' ' /* @ts-ignore */}
                 <Text
                   css={{ lineHeight: 1.5, display: 'block' }}
                   as="span"
@@ -214,6 +220,7 @@ const Footer = () => {
                         fontSize: '$3',
                         '@bp2': { fontSize: 'min(24px, 1.3vw)' }
                       }}
+                      // @ts-ignore
                       heading
                     >
                       {label}
@@ -256,6 +263,7 @@ const Footer = () => {
                 borderRight: '1px solid $colors$white'
               }}
             >
+              {/* @ts-ignore */}
               <Text className="label" as="span" heading>
                 jamiyat
               </Text>
@@ -268,6 +276,7 @@ const Footer = () => {
                 borderRight: '1px solid $colors$white'
               }}
             >
+              {/* @ts-ignore */}
               <Text className="label" as="span" heading>
                 wiki
               </Text>
@@ -277,6 +286,7 @@ const Footer = () => {
               rel="noopener"
               href="mailto:papa@osmon.dev"
             >
+              {/* @ts-ignore */}
               <Text className="label" as="span" heading>
                 bog'lanish
               </Text>
