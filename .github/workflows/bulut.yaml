@@ -13,12 +13,12 @@ jobs:
         working-directory: ./osmon
     steps:
       - uses: actions/checkout@v3
-      - name: Build
+
       - name: Build
         run: cargo build --verbose
-      - name: Run lint
+
       - name: Run lint
         run: cargo clippy --verbose
-      - name: Run tests
+
       - name: Run tests
         run: cargo test --verbose
