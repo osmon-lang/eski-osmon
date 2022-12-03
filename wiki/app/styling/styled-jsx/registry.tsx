@@ -7,7 +7,7 @@ import { StyleRegistry, createStyleRegistry } from 'styled-jsx';
 export default function StyledJsxRegistry({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   const [jsxStyleRegistry] = useState(() => createStyleRegistry());
 

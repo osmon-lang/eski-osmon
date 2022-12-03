@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from 'next/image';
 
 export function UwULogo() {
   return (
@@ -7,7 +7,7 @@ export function UwULogo() {
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        marginTop: "0.5rem",
+        marginTop: '0.5rem',
       }}
     >
       <defs>
@@ -22,8 +22,10 @@ export function UwULogo() {
         <g clipPath="url(#i0)">
           <g transform="translate(946.9999999999999 620.9687442304564)">
             <g clipPath="url(#i1)">
-              <polygon points="0,1.83186799e-14 615.646919,1.83186799e-14 615.646919,216.327609 0,216.327609 0,1.83186799e-14" stroke="none">
-              </polygon>
+              <polygon
+                points="0,1.83186799e-14 615.646919,1.83186799e-14 615.646919,216.327609 0,216.327609 0,1.83186799e-14"
+                stroke="none"
+              ></polygon>
             </g>
           </g>
         </g>
