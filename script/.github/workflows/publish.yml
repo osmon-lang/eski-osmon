@@ -1,4 +1,4 @@
-name: Publish yopta package
+name: Publish osmon package
 on:
     release:
         types: [published]
