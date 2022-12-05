@@ -66,7 +66,7 @@
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "lint-staged": "^11.1.2",
+    "lint-staged": "^13.1.0",
     "next-compose-plugins": "^2.2.1",
     "next-sitemap": "^1.6.162",
     "next-transpile-modules": "^9.0.0",
