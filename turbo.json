@@ -11,5 +11,6 @@
     "dev": {
       "cache": false
     }
-  }
+  },
+  "globalEnv": ["GITHUB_TOKEN"]
 }

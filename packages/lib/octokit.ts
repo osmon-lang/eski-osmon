@@ -1,4 +1,4 @@
 import * as React from "react";
-export const Button = () => {
+export const Octokit = () => {
   return <button>Boop</button>;
 };
