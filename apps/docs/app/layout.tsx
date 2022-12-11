@@ -1,4 +1,4 @@
-import "#/styles/globals.css";
+import "ui/styles/docs/globals.css";
 import { AddressBar } from "ui/docs/AddressBar";
 import { GlobalNav } from "ui/docs/GlobalNav";
 import { UwULogo } from "ui/docs/UwULogo";

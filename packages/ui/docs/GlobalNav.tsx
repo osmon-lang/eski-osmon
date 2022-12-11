@@ -1,7 +1,7 @@
 "use client";
 
 import { demos, type Item } from "lib/docs/demos";
-import "#/styles/globals.css";
+import "../styles/docs/globals.css";
 import { NextLogo } from "./NextLogo";
 import Link from "next/link";
 import { useSelectedLayoutSegment } from "next/navigation";
