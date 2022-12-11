@@ -1,7 +1,7 @@
 ---
 name: 📚 Documentation Revision
 about: Fixe a documentation related issue
-labels: 'documentation, needs triage'
+labels: "documentation, needs triage"
 ---
 
 <!-- NOTE: The title must follow Conventional Commit format -->

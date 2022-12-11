@@ -23,13 +23,16 @@ function osmonReplaceAll(str: string, search: string, replacement: string) {
 function iterateText(text: string, to: 'js' | 'osm' = 'osm') {
     const langCol = to === 'osm' ? 1 : 0;
     const dicta = dictionary;
-    dicta.sort((a, b) => {
-        const al = a[langCol].length;
-        const bl = b[langCol].length;
-        return bl - al;
-    }).forEach(
-        (pair) => (text = osmonReplaceAll(text, pair[langCol], pair[+!langCol]))
-    );
+    dicta
+        .sort((a, b) => {
+            const al = a[langCol].length;
+            const bl = b[langCol].length;
+            return bl - al;
+        })
+        .forEach(
+            (pair) =>
+                (text = osmonReplaceAll(text, pair[langCol], pair[+!langCol]))
+        );
 
     return text;
 }

@@ -52,4 +52,4 @@ export const Footer = () => {
       </a>
     </footer>
   );
-}
+};

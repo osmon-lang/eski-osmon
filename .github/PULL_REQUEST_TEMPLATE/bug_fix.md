@@ -1,7 +1,7 @@
 ---
 name: 🐛 Bug Fix
 about: Submit a bug fix
-labels: 'bug report, needs triage'
+labels: "bug report, needs triage"
 ---
 
 <!-- NOTE: The title must follow Conventional Commit format -->

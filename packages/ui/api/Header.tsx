@@ -23,4 +23,4 @@ export const Header = () => {
       <meta name="twitter:image:alt" content="Osmon Lang Open Graph" />
     </Head>
   );
-}
+};

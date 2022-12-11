@@ -335,4 +335,4 @@ export const Card = () => {
       <use href="#react-logo" width={120} x={500} mask="url(#mask)" />
     </svg>
   );
-}
+};
