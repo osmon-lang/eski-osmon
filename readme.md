@@ -1,4 +1,4 @@
-<a href="https://osmon.dev"><img src="./profile/banners.png" alt="Osmon's Hero Image"></a>
+<a href="https://osmon.dev"><img src=".github/ASSETS/Banner.png" alt="Osmon's Hero Image"></a>
 
 <p align="center"><h1 align="center">Osmon</h1></p>
 
