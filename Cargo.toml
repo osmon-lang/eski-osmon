@@ -2,5 +2,6 @@
 
 members = [
     "osmon",
-    "bulut"
+    "bulut",
+    "havo",
 ]
