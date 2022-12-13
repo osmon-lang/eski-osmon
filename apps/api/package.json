@@ -10,7 +10,7 @@
     "format": "prettier --check --write ."
   },
   "dependencies": {
-    "next": "12.2.5",
+    "next": "13.0.6",
     "octokit": "^2.0.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
