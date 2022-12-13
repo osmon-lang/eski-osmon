@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-type Props = { id?: string; onMount?: () => void }
+type Props = { id?: string; onMount?: () => void; children: any }
 
 const Portal: React.FC<Props> = ({
   children,

@@ -6,7 +6,7 @@
 
 ## Eng oxirgi versiyani o'rnatish
 
-***NIX/Shell bilan:**
+**\*NIX/Shell bilan:**
 
 ```sh
 curl -fsSL https://osmon.dev/install/install.sh | sh
@@ -20,7 +20,7 @@ iwr https://osmon.dev/install/install.ps1 -useb | iex
 
 ## Istalgan versiyani o'rnatish
 
-***NIX/Shell bilan:**
+**\*NIX/Shell bilan:**
 
 ```sh
 curl -fsSL https://osmon.dev/install/install.sh | sh -s v0.4.0

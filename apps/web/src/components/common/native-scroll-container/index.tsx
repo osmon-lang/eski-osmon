@@ -7,6 +7,7 @@ import s from './native-scroll-container.module.css'
 
 type NativeScrollContainerProps = {
   className?: string
+  children: any
 }
 
 const NativeScrollContainer: FC<NativeScrollContainerProps> = ({

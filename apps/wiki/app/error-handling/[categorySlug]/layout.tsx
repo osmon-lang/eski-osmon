@@ -15,7 +15,7 @@ export default async function Layout({ children, params }: PageProps) {
               {
                 text: 'All',
               },
-              ...category.items.map((x) => ({
+              ...category.items.map((x: any) => ({
                 text: x.name,
                 slug: x.slug,
               })),

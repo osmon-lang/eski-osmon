@@ -1,3 +1,4 @@
+// @ts-ignore
 import { cache } from 'react';
 
 export type PageProps = {
@@ -46,7 +47,9 @@ export const getCategories = cache((): Category[] => [
 
 export async function fetchCategoryBySlug(slug: string | undefined) {
   // Assuming it always return expected categories
-  return getCategories().find((category) => category.slug === slug);
+  return getCategories().find(
+    (category: { slug: string | undefined }) => category.slug === slug,
+  );
 }
 
 export async function fetchCategories(): Promise<Category[]> {
