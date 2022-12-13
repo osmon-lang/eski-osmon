@@ -2,22 +2,22 @@
 version: 2
 
 updates:
-  - package-ecosystem: 'pnpm'
+  - package-ecosystem: 'npm'
     directory: '/script'
     schedule:
       interval: 'daily'
 
-#  - package-ecosystem: "pnpm"
+#  - package-ecosystem: "npm"
 #    directory: "/apps/web"
 #    schedule:
 #      interval: "daily"
 
-  - package-ecosystem: "pnpm"
+  - package-ecosystem: "npm"
     directory: "/apps/api"
     schedule:
       interval: "daily"
 
-  - package-ecosystem: "pnpm"
+  - package-ecosystem: "npm"
     directory: "/apps/docs"
     schedule:
       interval: "daily"
