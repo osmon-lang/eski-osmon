@@ -15,7 +15,6 @@ const nextConfig = withPlugins(
     })
   ],
   {
-    // webpack5: true,
     reactStrictMode: true,
     images: {
       domains: ['pbs.twimg.com', 'abs.twimg.com']

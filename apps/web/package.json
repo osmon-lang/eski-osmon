@@ -14,14 +14,10 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "build:analyze": "cross-env ANALYZE=true npm run build",
+    "build:analyze": "cross-env ANALYZE=true pnpm run build",
     "start": "next start",
-    "type-check": "tsc --pretty --noEmit",
     "postbuild": "next-sitemap",
-    "lint": "eslint . --ext ts --ext tsx --ext js",
-    "lint:fix": "pnpm run lint --fix",
-    "fp": "git add . && git commit -m '.' -n && git push -n",
-    "test": "jest --watch --env=jsdom"
+    "lint": "next lint"
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.3.1",

@@ -5,23 +5,7 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "lint-staged": "lint-staged",
-    "prettier": "prettier --write --ignore-unknown .",
-    "prettier:check": "prettier --check --ignore-unknown .",
-    "start": "next start",
-    "test": "yarn prettier:check && yarn lint"
-  },
-  "git": {
-    "pre-commit": "lint-staged"
-  },
-  "lint-staged": {
-    "*": "prettier --write --ignore-unknown"
-  },
-  "prettier": {
-    "arrowParens": "always",
-    "semi": true,
-    "trailingComma": "all",
-    "singleQuote": true
+    "start": "next start"
   },
   "dependencies": {
     "@heroicons/react": "1.0.6",
