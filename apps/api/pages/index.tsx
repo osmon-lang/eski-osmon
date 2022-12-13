@@ -1,6 +1,8 @@
 import useSWR from "swr";
 import type { NextPage } from "next";
-import { Header, Footer, Card } from "ui/api";
+import Header from "../components/Header";
+import Card from "../components/Card";
+import Footer from "../components/Footer";
 
 // @ts-ignore
 const fetcher = (...args) => fetch(...args).then((res) => res.json());

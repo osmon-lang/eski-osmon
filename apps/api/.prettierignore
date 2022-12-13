@@ -1,0 +1,6 @@
+node_modules
+.next
+.idea
+pnpm-lock.yaml
+public
+.git

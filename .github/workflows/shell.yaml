@@ -12,8 +12,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./website/public/install
-
+        working-directory: ./apps/web/public/install
 
     steps:
       - name: Checkout
