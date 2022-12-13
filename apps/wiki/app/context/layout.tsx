@@ -1,9 +1,9 @@
-import { fetchCategories } from '#/lib/getCategories';
-import { Boundary } from '#/ui/Boundary';
-import { TabGroup } from '#/ui/TabGroup';
-import { CounterProvider } from 'app/context/CounterContext';
-import React from 'react';
-import ContextClickCounter from './ContextClickCounter';
+import { fetchCategories } from "#/lib/getCategories";
+import { Boundary } from "#/ui/Boundary";
+import { TabGroup } from "#/ui/TabGroup";
+import { CounterProvider } from "app/context/CounterContext";
+import React from "react";
+import ContextClickCounter from "./ContextClickCounter";
 
 export default async function Layout({
   children,
@@ -13,19 +13,19 @@ export default async function Layout({
   const categories = await fetchCategories();
   return (
     <Boundary
-      labels={['Server Component Boundary']}
+      labels={["Server Component Boundary"]}
       size="small"
       animateRerendering={false}
     >
       <Boundary
-        labels={['Counter Context Provider [Client Component]']}
+        labels={["Counter Context Provider [Client Component]"]}
         color="blue"
         size="small"
         animateRerendering={false}
       >
         <CounterProvider>
           <Boundary
-            labels={['Server Component Boundary']}
+            labels={["Server Component Boundary"]}
             size="small"
             animateRerendering={false}
           >
@@ -35,7 +35,7 @@ export default async function Layout({
                   path="/context"
                   items={[
                     {
-                      text: 'Home',
+                      text: "Home",
                     },
                     ...categories.map((x) => ({
                       text: x.name,

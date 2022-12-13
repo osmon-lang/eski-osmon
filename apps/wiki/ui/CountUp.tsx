@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useCountUp } from 'use-count-up';
+import { useCountUp } from "use-count-up";
 
 const CountUp = ({
   start,

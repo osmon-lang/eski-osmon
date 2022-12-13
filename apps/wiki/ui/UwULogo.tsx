@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from "next/image";
 
 export function UwULogo() {
   return (
@@ -7,7 +7,7 @@ export function UwULogo() {
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        marginTop: '0.5rem',
+        marginTop: "0.5rem",
       }}
     >
       <defs>

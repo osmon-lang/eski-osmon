@@ -1,38 +1,38 @@
-'use client';
+"use client";
 
-import { Boundary } from '#/ui/Boundary';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Boundary } from "#/ui/Boundary";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const getMetaContent = (name: string) =>
   document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`)?.content ||
-  '';
+  "";
 
 const getHeadTags = () => {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     // Basic initial server state to avoid content layout shift
     return {
-      title: '',
-      description: '',
-      viewport: '',
-      favicon: '',
+      title: "",
+      description: "",
+      viewport: "",
+      favicon: "",
     };
   }
 
   return {
-    title: document.title || '',
-    description: getMetaContent('description'),
-    viewport: getMetaContent('viewport'),
+    title: document.title || "",
+    description: getMetaContent("description"),
+    viewport: getMetaContent("viewport"),
     favicon:
       document.querySelector<HTMLLinkElement>(`link[rel="shortcut icon"]`)
-        ?.href || '',
+        ?.href || "",
   };
 };
 
 export function HeadInfo() {
   const [tags, setTags] = useState(
     // Avoid a content layout shift by returning tags in the initial render
-    getHeadTags,
+    getHeadTags
   );
   const pathname = usePathname();
 
@@ -44,7 +44,7 @@ export function HeadInfo() {
   return (
     <Boundary
       size="small"
-      labels={['Configured <head> tags']}
+      labels={["Configured <head> tags"]}
       color="blue"
       animateRerendering={false}
     >

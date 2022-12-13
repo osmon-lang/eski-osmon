@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 const CounterContext = React.createContext<
   [number, React.Dispatch<React.SetStateAction<number>>] | undefined
@@ -18,7 +18,7 @@ export function CounterProvider({ children }: { children: React.ReactNode }) {
 export function useCounter() {
   const context = React.useContext(CounterContext);
   if (context === undefined) {
-    throw new Error('useCounter must be used within a CounterProvider');
+    throw new Error("useCounter must be used within a CounterProvider");
   }
   return context;
 }

@@ -1,10 +1,10 @@
-import { fetchCategories } from '#/lib/getCategories';
-import { Boundary } from '#/ui/Boundary';
-import { ClickCounter } from '#/ui/ClickCounter';
-import HooksClient from '#/ui/HooksClient';
-import HooksServer from '#/ui/HooksServer';
-import { TabGroup } from '#/ui/TabGroup';
-import React from 'react';
+import { fetchCategories } from "#/lib/getCategories";
+import { Boundary } from "#/ui/Boundary";
+import { ClickCounter } from "#/ui/ClickCounter";
+import HooksClient from "#/ui/HooksClient";
+import HooksServer from "#/ui/HooksServer";
+import { TabGroup } from "#/ui/TabGroup";
+import React from "react";
 
 export default async function Layout({
   children,
@@ -20,7 +20,7 @@ export default async function Layout({
           path="/hooks"
           items={[
             {
-              text: 'Home',
+              text: "Home",
             },
             ...categories.map((x) => ({
               text: x.name,
@@ -34,10 +34,10 @@ export default async function Layout({
         </div>
       </div>
 
-      <Boundary labels={['Client Component Hooks']}>
+      <Boundary labels={["Client Component Hooks"]}>
         <HooksClient />
       </Boundary>
-      <Boundary labels={['Server Component Hooks']}>
+      <Boundary labels={["Server Component Hooks"]}>
         <HooksServer />
       </Boundary>
 

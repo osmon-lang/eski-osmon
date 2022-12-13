@@ -1,6 +1,6 @@
-import { fetchCategoryBySlug, PageProps } from '#/lib/getCategories';
-import { ClickCounter } from '#/ui/ClickCounter';
-import { TabGroup } from '#/ui/TabGroup';
+import { fetchCategoryBySlug, PageProps } from "#/lib/getCategories";
+import { ClickCounter } from "#/ui/ClickCounter";
+import { TabGroup } from "#/ui/TabGroup";
 
 export default async function Layout({ children, params }: PageProps) {
   const category = await fetchCategoryBySlug(params.categorySlug);
@@ -13,7 +13,7 @@ export default async function Layout({ children, params }: PageProps) {
           path={`/route-groups/${category.slug}`}
           items={[
             {
-              text: 'All',
+              text: "All",
             },
             ...category.items.map((x) => ({
               text: x.name,

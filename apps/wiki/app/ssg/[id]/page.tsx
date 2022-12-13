@@ -1,10 +1,10 @@
 export async function generateStaticParams() {
-  return [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }];
+  return [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }];
 }
 
 async function fetchData(params: { id: string }) {
   const res = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${params.id}`,
+    `https://jsonplaceholder.typicode.com/posts/${params.id}`
   );
   const data = await res.json();
   return data;

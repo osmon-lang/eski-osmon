@@ -1,26 +1,26 @@
-import { TabGroup } from '#/ui/TabGroup';
-import React from 'react';
+import { TabGroup } from "#/ui/TabGroup";
+import React from "react";
 
 const items = [
   {
-    text: 'Global CSS',
-    slug: 'global-css',
+    text: "Global CSS",
+    slug: "global-css",
   },
   {
-    text: 'CSS Modules',
-    slug: 'css-modules',
+    text: "CSS Modules",
+    slug: "css-modules",
   },
   {
-    text: 'Styled Components',
-    slug: 'styled-components',
+    text: "Styled Components",
+    slug: "styled-components",
   },
   {
-    text: 'Styled JSX',
-    slug: 'styled-jsx',
+    text: "Styled JSX",
+    slug: "styled-jsx",
   },
   {
-    text: 'Tailwind CSS',
-    slug: 'tailwind',
+    text: "Tailwind CSS",
+    slug: "tailwind",
   },
 ];
 
@@ -31,7 +31,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         path="/styling"
         items={[
           {
-            text: 'Home',
+            text: "Home",
           },
           ...items,
         ]}

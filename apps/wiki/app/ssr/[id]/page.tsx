@@ -1,7 +1,7 @@
 async function fetchData(params: { id: string }) {
   const res = await fetch(
     `https://jsonplaceholder.typicode.com/posts/${params.id}`,
-    { cache: 'no-store' },
+    { cache: "no-store" }
   );
   const data = await res.json();
   return data;

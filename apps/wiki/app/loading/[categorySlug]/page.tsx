@@ -2,11 +2,11 @@ import {
   fetchCategoryBySlug,
   PageProps,
   type Category,
-} from '#/lib/getCategories';
-import { SkeletonCard } from '#/ui/SkeletonCard';
+} from "#/lib/getCategories";
+import { SkeletonCard } from "#/ui/SkeletonCard";
 
 const fetchCategory = async (
-  categorySlug: string | undefined,
+  categorySlug: string | undefined
 ): Promise<Category | undefined> => {
   // artificial delay
   await new Promise((resolve) => setTimeout(resolve, 3000));

@@ -1,16 +1,16 @@
-import { IProduct } from '#/lib/data/products';
-import { ProductCurrencySymbol } from '#/ui/ProductCurrencySymbol';
-import { ProductDeal } from '#/ui/ProductDeal';
-import { ProductLighteningDeal } from '#/ui/ProductLighteningDeal';
-import { multiply, toUnit, type Dinero } from 'dinero.js';
+import { IProduct } from "#/lib/data/products";
+import { ProductCurrencySymbol } from "#/ui/ProductCurrencySymbol";
+import { ProductDeal } from "#/ui/ProductDeal";
+import { ProductLighteningDeal } from "#/ui/ProductLighteningDeal";
+import { multiply, toUnit, type Dinero } from "dinero.js";
 
 function isDiscount(obj: any): obj is { percent: number; expires?: number } {
-  return typeof obj?.percent === 'number';
+  return typeof obj?.percent === "number";
 }
 
 function formatDiscount(
   price: Dinero<number>,
-  discountRaw: IProduct['discount'],
+  discountRaw: IProduct["discount"]
 ) {
   return isDiscount(discountRaw)
     ? {
@@ -28,12 +28,12 @@ export const ProductPrice = ({
   discount: discountRaw,
 }: {
   price: Dinero<number>;
-  discount: IProduct['discount'];
+  discount: IProduct["discount"];
 }) => {
   const discount = formatDiscount(price, discountRaw);
 
   if (discount) {
-    if (discount?.expires && typeof discount.expires === 'number') {
+    if (discount?.expires && typeof discount.expires === "number") {
       return <ProductLighteningDeal price={price} discount={discount} />;
     }
     return <ProductDeal price={price} discount={discount} />;

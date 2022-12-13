@@ -1,7 +1,7 @@
-import { fetchCategories } from '#/lib/getCategories';
-import { ClickCounter } from '#/ui/ClickCounter';
-import { TabGroup } from '#/ui/TabGroup';
-import React from 'react';
+import { fetchCategories } from "#/lib/getCategories";
+import { ClickCounter } from "#/ui/ClickCounter";
+import { TabGroup } from "#/ui/TabGroup";
+import React from "react";
 
 export default async function Layout({
   children,
@@ -16,7 +16,7 @@ export default async function Layout({
           path="/error-handling"
           items={[
             {
-              text: 'Home',
+              text: "Home",
             },
             ...categories.map((x) => ({
               text: x.name,

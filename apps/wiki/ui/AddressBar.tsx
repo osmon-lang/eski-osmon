@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { usePathname } from 'next/navigation';
+import React from "react";
+import { usePathname } from "next/navigation";
 
 export function AddressBar() {
   const pathname = usePathname();
@@ -30,7 +30,7 @@ export function AddressBar() {
           <>
             <span className="text-gray-600">/</span>
             {pathname
-              .split('/')
+              .split("/")
               .slice(2)
               .map((segment) => {
                 return (

@@ -1,8 +1,8 @@
-import { TabGroup } from '#/ui/TabGroup';
-import React from 'react';
+import { TabGroup } from "#/ui/TabGroup";
+import React from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const ids = [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }];
+  const ids = [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }];
   if (!ids) return null;
 
   return (
@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           path="/ssg"
           items={[
             {
-              text: 'Home',
+              text: "Home",
             },
             ...ids.map((x) => ({
               text: `Post ${x.id}`,

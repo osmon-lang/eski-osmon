@@ -1,13 +1,13 @@
-import { NextLogo } from '#/ui/NextLogo';
-import { SearchIcon, ShoppingCartIcon } from '@heroicons/react/solid';
-import { cookies } from 'next/headers';
-import Image from 'next/image';
-import React from 'react';
-import { CartCount } from './CartCount';
-import { CartCountProvider } from './CartCountContext';
+import { NextLogo } from "#/ui/NextLogo";
+import { SearchIcon, ShoppingCartIcon } from "@heroicons/react/solid";
+import { cookies } from "next/headers";
+import Image from "next/image";
+import React from "react";
+import { CartCount } from "./CartCount";
+import { CartCountProvider } from "./CartCountContext";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const cartCount = Number(cookies().get('_cart_count')?.value || '0');
+  const cartCount = Number(cookies().get("_cart_count")?.value || "0");
 
   return (
     <CartCountProvider initialCartCount={cartCount}>

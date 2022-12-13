@@ -1,16 +1,16 @@
-import { type IProduct } from '#/lib/data/products';
-import { ExternalLink } from '#/ui/ExternalLink';
-import { ProductEstimatedArrival } from '#/ui/ProductEstimatedArrival';
-import { ProductLowStockWarning } from '#/ui/ProductLowStockWarning';
-import { ProductPrice } from '#/ui/ProductPrice';
-import { ProductRating } from '#/ui/ProductRating';
-import { ProductSplitPayments } from '#/ui/ProductSplitPayments';
-import { ProductUsedPrice } from '#/ui/ProductUsedPrice';
-import { dinero, type DineroSnapshot } from 'dinero.js';
-import Image from 'next/image';
-import { Suspense } from 'react';
-import { AddToCart } from './AddToCart';
-import { delay } from './delay';
+import { type IProduct } from "#/lib/data/products";
+import { ExternalLink } from "#/ui/ExternalLink";
+import { ProductEstimatedArrival } from "#/ui/ProductEstimatedArrival";
+import { ProductLowStockWarning } from "#/ui/ProductLowStockWarning";
+import { ProductPrice } from "#/ui/ProductPrice";
+import { ProductRating } from "#/ui/ProductRating";
+import { ProductSplitPayments } from "#/ui/ProductSplitPayments";
+import { ProductUsedPrice } from "#/ui/ProductUsedPrice";
+import { dinero, type DineroSnapshot } from "dinero.js";
+import Image from "next/image";
+import { Suspense } from "react";
+import { AddToCart } from "./AddToCart";
+import { delay } from "./delay";
 
 const shimmer = `relative overflow-hidden rounded-xl before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent`;
 

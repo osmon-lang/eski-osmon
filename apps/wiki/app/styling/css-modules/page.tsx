@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import styles from './styles.module.css';
+import styles from "./styles.module.css";
 
 const SkeletonCard = () => (
   <div className={styles.skeleton}>
-    <div className={styles['skeleton-img']} />
-    <div className={styles['skeleton-btn']} />
-    <div className={styles['skeleton-line-one']} />
-    <div className={styles['skeleton-line-two']} />
+    <div className={styles["skeleton-img"]} />
+    <div className={styles["skeleton-btn"]} />
+    <div className={styles["skeleton-line-one"]} />
+    <div className={styles["skeleton-line-two"]} />
   </div>
 );
 

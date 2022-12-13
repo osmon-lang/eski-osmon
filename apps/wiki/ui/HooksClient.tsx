@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 import {
   usePathname,
   useSelectedLayoutSegments,
   useSearchParams,
-} from 'next/navigation';
+} from "next/navigation";
 
 const HooksClient = () => {
   const pathname = usePathname();
   const selectedLayoutSegments = useSelectedLayoutSegments();
   const searchParams = useSearchParams();
-  const searchParam = searchParams.get('key');
+  const searchParam = searchParams.get("key");
 
   return (
     <div className="overflow-x-auto rounded-xl py-4 px-2 text-sm text-white [color-scheme:dark]">
@@ -23,16 +23,16 @@ const HooksClient = () => {
             useSearchParams: Object.fromEntries(searchParams.entries()),
             "useSearchParam('key')": searchParam,
             useRouter: {
-              push: '(string) => void',
-              softPush: '(string) => void',
-              replace: '(string) => void',
-              softReplace: '(string) => void',
-              reload: '() => void',
-              prefetch: '() => Promise<void>',
+              push: "(string) => void",
+              softPush: "(string) => void",
+              replace: "(string) => void",
+              softReplace: "(string) => void",
+              reload: "() => void",
+              prefetch: "() => Promise<void>",
             },
           },
           null,
-          2,
+          2
         )}
       </pre>
     </div>

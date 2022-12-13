@@ -1,7 +1,7 @@
-import '#/styles/globals.css';
-import { AddressBar } from '#/ui/AddressBar';
-import { GlobalNav } from '#/ui/GlobalNav';
-import { UwULogo } from '#/ui/UwULogo';
+import "#/styles/globals.css";
+import { AddressBar } from "#/ui/AddressBar";
+import { GlobalNav } from "#/ui/GlobalNav";
+import { UwULogo } from "#/ui/UwULogo";
 
 export default function RootLayout({
   children,
@@ -57,7 +57,7 @@ function Byline() {
         >
           Ko&lsquo;zdan kechiring
         </a>
-        {' yoki '}
+        {" yoki "}
         <a
           className="underline decoration-dotted underline-offset-4 hover:text-gray-400"
           href="https://github.com/uwussimo/osmon/tree/main/wiki"
