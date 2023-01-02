@@ -1,0 +1,33 @@
+# Havo
+
+JIT/AOT compiled programming language that uses gccjit for emitting machine code.
+
+# Example code
+
+Factorial: 
+```go
+import "std/libc.osmx"
+func factorial(x: i32) i32 {
+    if x == 0 {
+        return 1;
+    } else {
+        return factorial(x - 1) * x;
+    }
+}
+
+pub func main() i32 {
+    printf("%i\n",factorial(5));
+
+    return 0;
+} 
+```
+
+# Building
+
+1. Install libgccjit :
+    ```
+    sudo pacman install libgccjit
+    ```
+
+2. Run `cargo build --release`
+3. Run `cargo install --path .`
