@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Build
-        run: cargo build --verbose
+        run: cargo build --release --verbose
 
       - name: Run lint
         run: cargo clippy --verbose
