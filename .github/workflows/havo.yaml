@@ -7,15 +7,12 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     defaults:
       run:
         working-directory: ./havo
     steps:
       - uses: actions/checkout@v3
-
-      - name: Install required libs
-        run: sudo apt-get install -y build-essential llvm llvm-dev libgccjit-9-dev clang libclang-dev
 
       - name: Build
         run: cargo build --release --verbose
