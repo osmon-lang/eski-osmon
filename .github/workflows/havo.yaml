@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./osmon
+        working-directory: ./havo
     steps:
       - uses: actions/checkout@v3
 
