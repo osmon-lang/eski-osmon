@@ -7,15 +7,15 @@ env:
 
 jobs:
   build:
-    runs-on: macos-12
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./havo
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install required libs
-        run: brew install gcc libgccjit llvm
+      - name: Install required libs (gcc, llvm, clang, libgccjit)
+        run: sudo apt-get install libgccjit-12-dev libgccjit0 build-essential llvm clang
 
       - name: Change rust channel
         run: rustup default nightly
