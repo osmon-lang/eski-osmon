@@ -15,7 +15,10 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install required libs (gcc, llvm, clang, libgccjit)
-        run: sudo apt-get install libgccjit-12-dev libgccjit0 build-essential llvm clang
+        run: sudo apt-get install build-essential llvm clang libgccjit-12-dev
+
+      - name: Include header files of libgccjit
+        run: sudo ln -s /usr/lib/gcc/x86_64-linux-gnu/12/include /usr/include/gccjit
 
       - name: Change rust channel
         run: rustup default nightly
