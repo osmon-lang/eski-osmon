@@ -1,16 +1,12 @@
 use super::const_eval::*;
 use std::{cell::RefCell, rc::Rc};
 
-pub fn __builtin_printf(args: &[Rc<RefCell<Const>>]) -> Rc<RefCell<Const>>
-{
+pub fn __builtin_printf(args: &[Rc<RefCell<Const>>]) -> Rc<RefCell<Const>> {
     let fmt: &Const = &args[0].borrow();
 
-    let fmt: String = if let Const::Str(s) = fmt
-    {
+    let fmt: String = if let Const::Str(s) = fmt {
         s.clone()
-    }
-    else
-    {
+    } else {
         panic!("String expected");
     };
 
@@ -18,54 +14,40 @@ pub fn __builtin_printf(args: &[Rc<RefCell<Const>>]) -> Rc<RefCell<Const>>
     let mut i = 0;
     let mut s = String::new();
     let mut argpc = 1;
-    while i < fmt.len()
-    {
+    while i < fmt.len() {
         let c = chars.nth(i);
         let arg = args.get(argpc);
-        match c
-        {
-            Some('%') => match chars.nth(i)
-            {
-                Some('i') =>
-                {
-                    if arg.is_some()
-                    {
+        match c {
+            Some('%') => match chars.nth(i) {
+                Some('i') => {
+                    if arg.is_some() {
                         let arg: &Const = &arg.as_ref().unwrap().borrow();
-                        if let Const::Imm(i, _, _) = arg
-                        {
+                        if let Const::Imm(i, _, _) = arg {
                             s.push_str(&i.to_string())
                         }
                         argpc += 1;
                         i += 1;
                         continue;
-                    }
-                    else
-                    {
+                    } else {
                         panic!("Not enough arguments");
                     }
                 }
-                Some('s') =>
-                {
-                    if arg.is_some()
-                    {
+                Some('s') => {
+                    if arg.is_some() {
                         let arg: &Const = &arg.as_ref().unwrap().borrow();
-                        if let Const::Str(str) = arg
-                        {
+                        if let Const::Str(str) = arg {
                             s.push_str(str)
                         }
                         argpc += 1;
                         i += 1;
                         continue;
-                    }
-                    else
-                    {
+                    } else {
                         panic!("Not enough arguments")
                     }
                 }
                 Some('%') => s.push('%'),
 
-                None =>
-                {}
+                None => {}
                 Some(c) => s.push(c),
             },
 
@@ -77,13 +59,21 @@ pub fn __builtin_printf(args: &[Rc<RefCell<Const>>]) -> Rc<RefCell<Const>>
     rc(Const::Void)
 }
 
-pub fn __builtin_putc(args: &[Rc<RefCell<Const>>]) -> Rc<RefCell<Const>> { rc(Const::Void) }
+pub fn __builtin_putc(args: &[Rc<RefCell<Const>>]) -> Rc<RefCell<Const>> {
+    rc(Const::Void)
+}
 
-pub fn __builtin_putchar(args: &[Rc<RefCell<Const>>]) -> Rc<RefCell<Const>> { rc(Const::Void) }
+pub fn __builtin_putchar(args: &[Rc<RefCell<Const>>]) -> Rc<RefCell<Const>> {
+    rc(Const::Void)
+}
 
-pub fn __builtin_puts(args: &[Rc<RefCell<Const>>]) -> Rc<RefCell<Const>> { rc(Const::Void) }
+pub fn __builtin_puts(args: &[Rc<RefCell<Const>>]) -> Rc<RefCell<Const>> {
+    rc(Const::Void)
+}
 
-pub fn __builtins_write(args: &[Rc<RefCell<Const>>]) -> Rc<RefCell<Const>> { rc(Const::Void) }
+pub fn __builtins_write(args: &[Rc<RefCell<Const>>]) -> Rc<RefCell<Const>> {
+    rc(Const::Void)
+}
 
 macro_rules! builtin_def {
     ($map: expr,
@@ -99,8 +89,7 @@ macro_rules! builtin_def {
 
 use crate::syntax::interner::Name;
 use std::collections::HashMap;
-pub fn builtins() -> HashMap<Name, *const u8>
-{
+pub fn builtins() -> HashMap<Name, *const u8> {
     let mut map = HashMap::new();
     builtin_def! {
     map,

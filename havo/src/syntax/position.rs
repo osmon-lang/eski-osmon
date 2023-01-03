@@ -5,17 +5,14 @@ use std::{
 };
 
 #[derive(PartialEq, Eq, Debug, Copy, Clone, Hash)]
-pub struct Position
-{
+pub struct Position {
     pub line: u32,
     pub column: u32,
     pub file: Name,
 }
 
-impl Position
-{
-    pub const fn new(name: Name, l: u32, c: u32) -> Position
-    {
+impl Position {
+    pub const fn new(name: Name, l: u32, c: u32) -> Position {
         //assert!(l >= 1);
         //assert!(c >= 1);
 
@@ -27,10 +24,8 @@ impl Position
     }
 }
 
-impl Display for Position
-{
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error>
-    {
+impl Display for Position {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(f, "{}.{}:{}", str(self.file), self.line, self.column)
     }
 }

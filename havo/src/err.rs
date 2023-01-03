@@ -4,8 +4,7 @@ use self::Msg::*;
 use crate::syntax::position::Position;
 
 #[derive(Clone, PartialEq, Eq, Debug)]
-pub enum Msg
-{
+pub enum Msg {
     Unimplemented,
     UnknownClass(String),
     UnknownType(String),
@@ -116,33 +115,27 @@ pub enum Msg
     StructFieldNotInitialized(String, String),
 }
 
-impl Msg
-{
-    pub fn message(&self) -> String
-    {
-        match *self
-        {
+impl Msg {
+    pub fn message(&self) -> String {
+        match *self {
             Unimplemented => format!("feature not implemented yet."),
             UnknownClass(ref name) => format!("class `{}` does not exist.", name),
             UnknownType(ref name) => format!("type `{}` does not exist.", name),
             UnknownIdentifier(ref name) => format!("unknown identifier `{}`.", name),
             UnknownStruct(ref name) => format!("unknown struct `{}`.", name),
             UnknownFunction(ref name) => format!("unknown function `{}`", name),
-            UnknownMethod(ref cls, ref name, ref args) =>
-            {
+            UnknownMethod(ref cls, ref name, ref args) => {
                 let args = args.join(", ");
                 format!(
                     "no method with definition `{}({})` in class `{}`.",
                     name, args, cls
                 )
             }
-            UnknownStaticMethod(ref cls, ref name, ref args) =>
-            {
+            UnknownStaticMethod(ref cls, ref name, ref args) => {
                 let args = args.join(", ");
                 format!("no static method `{}::{}({})`.", cls, name, args)
             }
-            UnknownCtor(ref name, ref args) =>
-            {
+            UnknownCtor(ref name, ref args) => {
                 let args = args.join(", ");
                 format!("no ctor with definition `{}({})`.", name, args)
             }
@@ -151,8 +144,7 @@ impl Msg
                 name, cls, pos
             ),
             IncompatibleWithNil(ref ty) => format!("cannot assign `nil` to type `{}`.", ty),
-            UnknownField(ref field, ref ty) =>
-            {
+            UnknownField(ref field, ref ty) => {
                 format!("unknown field `{}` for type `{}`", field, ty)
             }
             IdentifierExists(ref name) => format!("can not redefine identifier `{}`.", name),
@@ -168,8 +160,7 @@ impl Msg
                 "variable `{}` needs either type declaration or expression.",
                 name
             ),
-            ParamTypesIncompatible(ref name, ref def, ref expr) =>
-            {
+            ParamTypesIncompatible(ref name, ref def, ref expr) => {
                 let def = def.join(", ");
                 let expr = expr.join(", ");
 
@@ -178,12 +169,10 @@ impl Msg
                     name, def, name, expr
                 )
             }
-            WhileCondType(ref ty) =>
-            {
+            WhileCondType(ref ty) => {
                 format!("`while` expects condition of type `bool` but got `{}`.", ty)
             }
-            IfCondType(ref ty) =>
-            {
+            IfCondType(ref ty) => {
                 format!("`if` expects condition of type `bool` but got `{}`.", ty)
             }
             ReturnType(ref def, ref expr) => format!(
@@ -214,8 +203,7 @@ impl Msg
             WrongMainDefinition => "`main` function has wrong definition".into(),
             ThisUnavailable => "`self` can only be used in methods not functions".into(),
             SelfTypeUnavailable => "`Self` can only be used in traits.".into(),
-            SuperUnavailable =>
-            {
+            SuperUnavailable => {
                 "`super` only available in methods of classes with parent class".into()
             }
             SuperNeedsMethodCall => "`super` only allowed in method calls".into(),
@@ -226,29 +214,23 @@ impl Msg
             LetReassigned => "`let` binding cannot be reassigned.".into(),
             UnderivableType(ref name) => format!("type `{}` cannot be used as super class.", name),
             CycleInHierarchy => "cycle in type hierarchy detected.".into(),
-            SuperfluousOverride(_) =>
-            {
+            SuperfluousOverride(_) => {
                 "method `{}` uses modifier `override` without overriding a function.".into()
             }
             MissingOverride(_) => "method `{}` is missing modifier `override`.".into(),
-            SuperfluousOpen(_) =>
-            {
+            SuperfluousOpen(_) => {
                 "method `{}` uses modifier `open` but class allows no subclasses.".into()
             }
-            ThrowsDifference(_) =>
-            {
+            ThrowsDifference(_) => {
                 "use of `throws` in method `{}`needs to match super class".into()
             }
-            MethodNotOverridable(ref name) =>
-            {
+            MethodNotOverridable(ref name) => {
                 format!("method `{}` in super class not overridable.", name)
             }
-            TypesIncompatible(ref na, ref nb) =>
-            {
+            TypesIncompatible(ref na, ref nb) => {
                 format!("types `{}` and `{}` incompatible.", na, nb)
             }
-            ReturnTypeMismatch(ref fct, ref sup) =>
-            {
+            ReturnTypeMismatch(ref fct, ref sup) => {
                 format!("return types `{}` and `{}` do not match.", fct, sup)
             }
             UnresolvedInternal => "unresolved internal.".into(),
@@ -265,8 +247,7 @@ impl Msg
                 "expected function,structure,global variable or constexpr but got {}.",
                 token
             ),
-            ExpectedClassElement(ref token) =>
-            {
+            ExpectedClassElement(ref token) => {
                 format!("field or method expected but got {}.", token)
             }
             RedundantModifier(ref token) => format!("redundant modifier {}.", token),
@@ -289,14 +270,12 @@ impl Msg
             TraitMethodWithBody => "trait method is not allowed to have definition".into(),
             TryNeedsCall => "`try` expects function or method call.".into(),
             TryCallNonThrowing => "given function or method call for `try` does not throw.".into(),
-            ThrowingCallWithoutTry =>
-            {
+            ThrowingCallWithoutTry => {
                 "function or method call that is able to throw, needs `try`.".into()
             }
             TypeParamsExpected => "type params expected.".into(),
             TypeParamNameNotUnique(ref name) => format!("type param `{}` name already used.", name),
-            StaticMethodNotInTrait(ref trait_name, ref mtd_name, ref args) =>
-            {
+            StaticMethodNotInTrait(ref trait_name, ref mtd_name, ref args) => {
                 let args = args.join(", ");
 
                 format!(
@@ -304,8 +283,7 @@ impl Msg
                     trait_name, mtd_name, args
                 )
             }
-            MethodNotInTrait(ref trait_name, ref mtd_name, ref args) =>
-            {
+            MethodNotInTrait(ref trait_name, ref mtd_name, ref args) => {
                 let args = args.join(", ");
 
                 format!(
@@ -313,8 +291,7 @@ impl Msg
                     trait_name, mtd_name, args
                 )
             }
-            StaticMethodMissingFromTrait(ref trait_name, ref mtd_name, ref args) =>
-            {
+            StaticMethodMissingFromTrait(ref trait_name, ref mtd_name, ref args) => {
                 let args = args.join(", ");
 
                 format!(
@@ -322,8 +299,7 @@ impl Msg
                     trait_name, mtd_name, args
                 )
             }
-            MethodMissingFromTrait(ref trait_name, ref mtd_name, ref args) =>
-            {
+            MethodMissingFromTrait(ref trait_name, ref mtd_name, ref args) => {
                 let args = args.join(", ");
 
                 format!(
@@ -331,8 +307,7 @@ impl Msg
                     trait_name, mtd_name, args
                 )
             }
-            WrongNumberTypeParams(exp, actual) =>
-            {
+            WrongNumberTypeParams(exp, actual) => {
                 format!("expected {} type parameters but got {}.", exp, actual)
             }
             ClassExpected(ref name) => format!("`{}` is not a class.", name),
@@ -342,17 +317,14 @@ impl Msg
             NoTypeParamsExpected => "no type params allowed".into(),
             MultipleClassBounds => "multiple class bounds not allowed".into(),
             DuplicateTraitBound => "duplicate trait bound".into(),
-            ClassBoundNotSatisfied(ref name, ref xclass) =>
-            {
+            ClassBoundNotSatisfied(ref name, ref xclass) => {
                 format!("type `{}` not a subclass of `{}`.", name, xclass)
             }
-            TraitBoundNotSatisfied(ref name, ref xtrait) =>
-            {
+            TraitBoundNotSatisfied(ref name, ref xtrait) => {
                 format!("type `{}` does not implement trait `{}`.", name, xtrait)
             }
             AbstractMethodWithImplementation => "abstract methods cannot be implemented.".into(),
-            AbstractMethodNotInAbstractClass =>
-            {
+            AbstractMethodNotInAbstractClass => {
                 "abstract methods only allowed in abstract classes.".into()
             }
             NewAbstractClass => "cannot create object of abstract class.".into(),
@@ -360,24 +332,20 @@ impl Msg
                 "missing override of abstract method `{}` in class `{}`.",
                 cls, name
             ),
-            ModifierNotAllowedForStaticMethod(ref modifier) =>
-            {
+            ModifierNotAllowedForStaticMethod(ref modifier) => {
                 format!("modifier `{}` not allowed for static method.", modifier)
             }
-            GlobalInitializerNotSupported =>
-            {
+            GlobalInitializerNotSupported => {
                 "global variables do no support initial assignment for now.".into()
             }
             MakeIteratorReturnType(ref ty) => format!(
                 "makeIterator() returns `{}` which does not implement Iterator.",
                 ty
             ),
-            UnknownStructField(ref struc, ref field) =>
-            {
+            UnknownStructField(ref struc, ref field) => {
                 format!("struct `{}` does not have field named `{}`.", struc, field)
             }
-            StructFieldNotInitialized(ref struc, ref field) =>
-            {
+            StructFieldNotInitialized(ref struc, ref field) => {
                 format!("field `{}` in struct `{}` not initialized.", field, struc)
             }
         }
@@ -385,18 +353,15 @@ impl Msg
 }
 
 #[derive(Clone, Debug)]
-pub struct MsgWithPos
-{
+pub struct MsgWithPos {
     pub path: String,
     pub src: String,
     pub pos: Position,
     pub msg: Msg,
 }
 
-impl MsgWithPos
-{
-    pub fn new(path: String, src: String, pos: Position, msg: Msg) -> MsgWithPos
-    {
+impl MsgWithPos {
+    pub fn new(path: String, src: String, pos: Position, msg: Msg) -> MsgWithPos {
         MsgWithPos {
             path,
             pos,
@@ -405,11 +370,9 @@ impl MsgWithPos
         }
     }
 
-    pub fn message(&self) -> String
-    {
+    pub fn message(&self) -> String {
         use colored::*;
-        if self.path.is_empty()
-        {
+        if self.path.is_empty() {
             format!(
                 "{} at {}: {}\n| {}",
                 "error".red(),
@@ -418,9 +381,7 @@ impl MsgWithPos
                 &self.src.lines().nth(self.pos.line as usize - 1).unwrap()
                     [self.pos.column as usize - 1..]
             )
-        }
-        else
-        {
+        } else {
             format!(
                 "{} {}: {}\n|\n| {}\n|",
                 "error".red(),
@@ -432,8 +393,7 @@ impl MsgWithPos
         }
     }
 
-    pub fn without_path(pos: Position, msg: Msg) -> MsgWithPos
-    {
+    pub fn without_path(pos: Position, msg: Msg) -> MsgWithPos {
         MsgWithPos {
             path: "".to_string(),
             src: String::new(),
@@ -443,10 +403,8 @@ impl MsgWithPos
     }
 }
 
-impl fmt::Display for MsgWithPos
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error>
-    {
+impl fmt::Display for MsgWithPos {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         write!(f, "{}", self.message())
     }
 }

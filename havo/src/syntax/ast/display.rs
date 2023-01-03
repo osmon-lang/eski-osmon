@@ -5,22 +5,19 @@ use std::fmt;
 
 use std::intrinsics::write_bytes;
 
-impl Display for Expr
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { write!(f, "{}", self.kind) }
+impl Display for Expr {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.kind)
+    }
 }
 
-impl Display for ExprKind
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result
-    {
-        match self
-        {
+impl Display for ExprKind {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
             ExprKind::MacroCall(name, _) => write!(f, "{}!()", name),
             ExprKind::CompTime(e) => write!(f, "constexpr {}", e),
             ExprKind::New(val) => write!(f, "new {}", val),
-            ExprKind::Int(i, base, _) => match base
-            {
+            ExprKind::Int(i, base, _) => match base {
                 IntBase::Hex => write!(f, "{:x}", i),
                 IntBase::Bin => write!(f, "{:b}", i),
                 IntBase::Dec => write!(f, "{}", i),
@@ -35,11 +32,9 @@ impl Display for ExprKind
             ExprKind::Null => write!(f, "null"),
             ExprKind::Ident(name) => write!(f, "{}", name),
             ExprKind::Str(s) => write!(f, "{:?}", s),
-            ExprKind::Struct(path, fields) =>
-            {
+            ExprKind::Struct(path, fields) => {
                 write!(f, "{} {{\n", path.name())?;
-                for field in fields.iter()
-                {
+                for field in fields.iter() {
                     write!(f, "\t    {}: {}\n", field.name, field.expr)?;
                 }
                 write!(f, "\n \t}}")
@@ -51,18 +46,14 @@ impl Display for ExprKind
             ExprKind::Char(c) => write!(f, "{:?}", c),
             ExprKind::ArrayIdx(array, idx) => write!(f, "{}[{}]", array, idx),
             ExprKind::Array(_, _) => write!(f, "unimplemented"),
-            ExprKind::Call(path, this, args) =>
-            {
-                if this.is_some()
-                {
+            ExprKind::Call(path, this, args) => {
+                if this.is_some() {
                     write!(f, "{}.", this.as_ref().unwrap())?;
                 }
                 write!(f, "{}(", path.name())?;
-                for (i, arg) in args.iter().enumerate()
-                {
+                for (i, arg) in args.iter().enumerate() {
                     write!(f, "{}", arg)?;
-                    if i != args.len() - 1
-                    {
+                    if i != args.len() - 1 {
                         write!(f, ",")?;
                     }
                 }
@@ -72,40 +63,33 @@ impl Display for ExprKind
     }
 }
 
-impl Display for Stmt
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { write!(f, "{}", self.kind) }
+impl Display for Stmt {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.kind)
+    }
 }
 
-impl Display for StmtKind
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result
-    {
-        match self
-        {
-            StmtKind::CFor(var, cond, then, body) =>
-            {
+impl Display for StmtKind {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            StmtKind::CFor(var, cond, then, body) => {
                 write!(f, "for {} {} {} {}", var, cond, then, body)
             }
             StmtKind::Continue => write!(f, "continue"),
             StmtKind::Break => write!(f, "break"),
-            StmtKind::Block(block) =>
-            {
+            StmtKind::Block(block) => {
                 write!(f, "{{\n")?;
-                for stmt in block.iter()
-                {
+                for stmt in block.iter() {
                     write!(f, "\t{}", stmt)?
                 }
                 write!(f, "\n}}\n")
             }
             StmtKind::Expr(expr) => write!(f, "{}\n", expr),
-            StmtKind::If(cond, then, or) =>
-            {
+            StmtKind::If(cond, then, or) => {
                 write!(f, "if {} {{\n", cond)?;
                 write!(f, "\t\t{}", then)?;
                 write!(f, "}}")?;
-                if or.is_some()
-                {
+                if or.is_some() {
                     write!(f, " else ")?;
                     write!(f, " \t{} \n", or.as_ref().unwrap())?;
                     write!(f, "}}\n")?;
@@ -115,27 +99,20 @@ impl Display for StmtKind
             StmtKind::CompTime(s) => write!(f, "constexpr {}", s),
             StmtKind::While(cond, body) => write!(f, "while {} \n {{\n {} \n}}", cond, body),
             StmtKind::Loop(body) => write!(f, "{{\n{}\n}}", body),
-            StmtKind::Return(ret) =>
-            {
-                if ret.is_some()
-                {
+            StmtKind::Return(ret) => {
+                if ret.is_some() {
                     write!(f, "return {}", ret.as_ref().unwrap())
-                }
-                else
-                {
+                } else {
                     write!(f, "return")
                 }
             }
 
-            StmtKind::Var(name, _, ty, expr) =>
-            {
+            StmtKind::Var(name, _, ty, expr) => {
                 write!(f, "var {}", name)?;
-                if ty.is_some()
-                {
+                if ty.is_some() {
                     write!(f, ": {}", ty.as_ref().unwrap())?;
                 }
-                if expr.is_some()
-                {
+                if expr.is_some() {
                     write!(f, " = {}", expr.as_ref().unwrap())?;
                 }
                 write!(f, "\n")
@@ -144,97 +121,74 @@ impl Display for StmtKind
     }
 }
 
-impl Display for Function
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result
-    {
-        if self.public
-        {
+impl Display for Function {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if self.public {
             write!(f, "pub ")?;
         }
-        if self.internal
-        {
+        if self.internal {
             write!(f, "internal ")?;
         }
-        if self.external
-        {
+        if self.external {
             write!(f, "external ")?;
         }
-        if self.constant
-        {
+        if self.constant {
             write!(f, "constexpr ")?;
         }
-        if self.static_
-        {
+        if self.static_ {
             write!(f, "static ")?;
         }
         write!(f, "func {}(", self.name)?;
-        for (i, param) in self.params.iter().enumerate()
-        {
+        for (i, param) in self.params.iter().enumerate() {
             write!(f, "{}: {}", param.0, param.1)?;
-            if i != self.params.len() - 1
-            {
+            if i != self.params.len() - 1 {
                 write!(f, ",")?;
             }
         }
         write!(f, ") {} ", self.ret)?;
-        if self.body.is_some()
-        {
+        if self.body.is_some() {
             write!(f, "{}", self.body.as_ref().unwrap())?
         }
         write!(f, "\n")
     }
 }
 
-impl Display for Struct
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result
-    {
+impl Display for Struct {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "struct {} {{\n", self.name)?;
-        for field in self.fields.iter()
-        {
+        for field in self.fields.iter() {
             write!(f, "\t{}: {}\n", field.name, field.data_type)?;
         }
         write!(f, "}}\n")
     }
 }
 
-impl Display for Global
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result
-    {
-        if self.external
-        {
+impl Display for Global {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if self.external {
             write!(f, "external ")?;
         }
         write!(f, "var {}: {}", self.name, self.typ)?;
-        if self.expr.is_some()
-        {
+        if self.expr.is_some() {
             write!(f, " = {}", self.expr.as_ref().unwrap())?;
         }
         write!(f, "\n")
     }
 }
 
-impl Display for Macro
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result
-    {
+impl Display for Macro {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "macro {}!(", self.name)?;
-        for (i, var) in self.args.iter().enumerate()
-        {
+        for (i, var) in self.args.iter().enumerate() {
             write!(f, "{}", var)?;
-            if i != self.args.len() - 1
-            {
+            if i != self.args.len() - 1 {
                 write!(f, ",")?;
             }
         }
         write!(f, ") ")?;
         write!(f, "{{\n")?;
-        for tok in self.body.iter()
-        {
-            match tok
-            {
+        for tok in self.body.iter() {
+            match tok {
                 MacroToken::Token(tok) => write!(f, "   {}", tok.name())?,
                 MacroToken::Var(var) => write!(f, "   ${}", var)?,
                 MacroToken::VarArgs => write!(f, "...")?,
@@ -244,12 +198,9 @@ impl Display for Macro
     }
 }
 
-impl Display for Elem
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result
-    {
-        match self
-        {
+impl Display for Elem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
             Elem::Func(fun) => write!(f, "{}", fun),
             Elem::Struct(s) => write!(f, "{}", s),
             Elem::Import(s) => write!(f, "import {}", s),

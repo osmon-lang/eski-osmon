@@ -26,16 +26,14 @@ use std::{
 fn gccloc_from_loc(
     ctx: &Context,
     loc: &crate::syntax::position::Position,
-) -> gccjit_rs::location::Location
-{
+) -> gccjit_rs::location::Location {
     ctx.new_location(str(loc.file).to_string(), loc.line as _, loc.column as _)
 }
 
 /// This type stores information about function such as gccjit and ast
 /// representation
 #[derive(Clone)]
-pub struct FunctionUnit
-{
+pub struct FunctionUnit {
     /// AST Function
     pub f: Function,
     /// GCCJIT Function
@@ -47,16 +45,14 @@ pub struct FunctionUnit
 
 /// Variable info that stores lvalue,type and gccjit type
 #[derive(Clone)]
-pub struct VarInfo
-{
+pub struct VarInfo {
     pub lval: LValue,
     pub ty: Type,
     pub cty: CType,
 }
 /// GccStruct stores gccjit struct type and information about fields
 #[derive(Clone)]
-pub struct GccStruct
-{
+pub struct GccStruct {
     pub ty: CType,
     pub fields: HashMap<Name, Field>,
     pub types: Vec<Type>,
@@ -68,8 +64,7 @@ use std::{cell::RefCell, rc::Rc};
 ///
 /// This unit performs translating AST into GIMPLE tree,after translation GCC
 /// performs translation to RTL and then optimizes it and outputs machine code
-pub struct Codegen<'a>
-{
+pub struct Codegen<'a> {
     pub ctx: Context,
     context: &'a mut CContext,
     continue_blocks: VecDeque<Block>,
@@ -92,20 +87,15 @@ pub struct Codegen<'a>
     cur_return: Option<Type>,
 }
 
-impl<'a> Codegen<'a>
-{
+impl<'a> Codegen<'a> {
     /// Get type size for sizeof expression
-    pub fn ty_size(&self, ty: &Type) -> usize
-    {
-        match ty
-        {
+    pub fn ty_size(&self, ty: &Type) -> usize {
+        match ty {
             Type::Vector(v) => return self.ty_size(&v.subtype) * v.size,
             Type::Void(_) => 0,
-            Type::Basic(basic) =>
-            {
+            Type::Basic(basic) => {
                 let name: &str = &str(basic.name);
-                match name
-                {
+                match name {
                     "u8" => 1,
                     "i8" => 1,
                     "char" => 1,
@@ -119,29 +109,23 @@ impl<'a> Codegen<'a>
                     "f64" => 8,
                     "bool" => 1,
                     "usize" => 8,
-                    s =>
-                    {
+                    s => {
                         let interned = crate::syntax::interner::intern(s);
-                        if self.structures.contains_key(&interned)
-                        {
+                        if self.structures.contains_key(&interned) {
                             let structure = self.structures.get(&interned).unwrap().clone();
                             let mut size = 0;
-                            for field in structure.types.iter()
-                            {
+                            for field in structure.types.iter() {
                                 size += self.ty_size(field)
                             }
 
                             size
-                        }
-                        else if let Some(ty) = self
+                        } else if let Some(ty) = self
                             .aliases
                             .get(&crate::syntax::interner::intern(s))
                             .clone()
                         {
                             self.ty_size(ty)
-                        }
-                        else
-                        {
+                        } else {
                             panic!("Type {} not found", s);
                         }
                     }
@@ -149,41 +133,31 @@ impl<'a> Codegen<'a>
             }
             Type::Ptr(_ptr) => 8,
             Type::Func(_tyfunc) => 8,
-            Type::Struct(structure) =>
-            {
+            Type::Struct(structure) => {
                 let structure = self.structures.get(&structure.name).unwrap();
                 let mut size = 0;
-                for field in structure.types.iter()
-                {
+                for field in structure.types.iter() {
                     size += self.ty_size(field)
                 }
 
                 size
             }
-            Type::Array(array) =>
-            {
-                if array.len.is_some()
-                {
+            Type::Array(array) => {
+                if array.len.is_some() {
                     self.ty_size(&array.subtype) * array.len.unwrap() as usize
-                }
-                else
-                {
+                } else {
                     8
                 }
             }
         }
     }
     /// Convert AST type into GCC type
-    pub fn ty_to_ctype(&mut self, ty: &Type) -> CType
-    {
+    pub fn ty_to_ctype(&mut self, ty: &Type) -> CType {
         let ctx = self.ctx;
-        match ty
-        {
-            Type::Vector(v) =>
-            {
+        match ty {
+            Type::Vector(v) => {
                 let subname: &str = &str(v.subtype.to_basic().unwrap().name).to_string();
-                match subname
-                {
+                match subname {
                     "u8" => self.ctx.new_vector_type::<u8>(v.size),
                     "i8" => self.ctx.new_vector_type::<i8>(v.size),
                     "char" => self.ctx.new_vector_type::<char>(v.size),
@@ -198,11 +172,9 @@ impl<'a> Codegen<'a>
                 }
             }
             Type::Void(_) => ctx.new_type::<()>(),
-            Type::Basic(basic) =>
-            {
+            Type::Basic(basic) => {
                 let name: &str = &str(basic.name);
-                match name
-                {
+                match name {
                     "u8" => ctx.new_type::<u8>(),
                     "i8" => ctx.new_type::<i8>(),
                     "char" => ctx.new_type::<char>(),
@@ -216,29 +188,23 @@ impl<'a> Codegen<'a>
                     "f64" => ctx.new_type::<f64>(),
                     "bool" => ctx.new_type::<bool>(),
                     "usize" => ctx.new_type::<usize>(),
-                    s =>
-                    {
+                    s => {
                         let interned = crate::syntax::interner::intern(s);
-                        if self.structures.contains_key(&interned)
-                        {
+                        if self.structures.contains_key(&interned) {
                             self.structures.get(&interned).unwrap().ty
-                        }
-                        else if let Some(ty) =
+                        } else if let Some(ty) =
                             self.aliases.get(&crate::syntax::interner::intern(s))
                         {
                             let ty = ty.clone();
                             return self.ty_to_ctype(&ty);
-                        }
-                        else
-                        {
+                        } else {
                             panic!("Unknown type: {} at {}", s, ty.pos())
                         }
                     }
                 }
             }
             Type::Ptr(ptr) => self.ty_to_ctype(&ptr.subtype).make_pointer(),
-            Type::Func(tyfunc) =>
-            {
+            Type::Func(tyfunc) => {
                 let params = tyfunc
                     .params
                     .iter()
@@ -246,22 +212,17 @@ impl<'a> Codegen<'a>
                     .collect::<Vec<_>>();
                 ctx.new_function_pointer_type(None, self.ty_to_ctype(&tyfunc.ret), &params, false)
             }
-            Type::Struct(struct_) =>
-            {
-                if self.structures.contains_key(&struct_.name)
-                {
+            Type::Struct(struct_) => {
+                if self.structures.contains_key(&struct_.name) {
                     self.structures
                         .get(&struct_.name)
                         .expect(&format!("Struct {} not found", str(struct_.name)))
                         .ty
-                }
-                else
-                {
+                } else {
                     let mut fields = vec![];
                     let mut cfields = HashMap::new();
                     let mut types = vec![];
-                    for field in struct_.fields.iter()
-                    {
+                    for field in struct_.fields.iter() {
                         let field: &StructField = field;
                         let cty = self.ty_to_ctype(&field.data_type).clone();
                         types.push(field.data_type.clone());
@@ -274,13 +235,10 @@ impl<'a> Codegen<'a>
                         cfields.insert(field.name, cfield);
                         fields.push(cfield);
                     }
-                    let ty = if struct_.union
-                    {
+                    let ty = if struct_.union {
                         self.ctx
                             .new_union_type(None, &str(struct_.name).to_string(), &fields)
-                    }
-                    else
-                    {
+                    } else {
                         self.ctx
                             .new_struct_type(None, &str(struct_.name).to_string(), &fields)
                             .as_type()
@@ -296,38 +254,28 @@ impl<'a> Codegen<'a>
                     ty
                 }
             }
-            Type::Array(array) =>
-            {
-                if array.len.is_some()
-                {
+            Type::Array(array) => {
+                if array.len.is_some() {
                     let len = *array.len.as_ref().unwrap();
 
                     ctx.new_array_type(None, self.ty_to_ctype(&array.subtype), len as i32)
-                }
-                else
-                {
+                } else {
                     self.ty_to_ctype(&array.subtype).make_pointer()
                 }
             }
         }
     }
     /// assign some value to lvalue
-    fn assign(&mut self, pos: crate::syntax::position::Position, to: &Expr, from: &Expr) -> RValue
-    {
+    fn assign(&mut self, pos: crate::syntax::position::Position, to: &Expr, from: &Expr) -> RValue {
         let lval = self.expr_to_lvalue(to).unwrap();
         let rval = self.gen_expr(from);
         let type_ = self.get_id_type(to.id);
         let _ = self.get_id_type(from.id);
-        let do_cast = match type_
-        {
-            Type::Basic(basic) =>
-            {
-                if self.structures.contains_key(&basic.name)
-                {
+        let do_cast = match type_ {
+            Type::Basic(basic) => {
+                if self.structures.contains_key(&basic.name) {
                     false
-                }
-                else
-                {
+                } else {
                     true
                 }
             }
@@ -337,12 +285,9 @@ impl<'a> Codegen<'a>
             _ => true,
         };
 
-        let val = if do_cast
-        {
+        let val = if do_cast {
             self.ctx.new_cast(None, rval, lval.to_rvalue().get_type())
-        }
-        else
-        {
+        } else {
             rval
         };
         self.cur_block
@@ -357,18 +302,15 @@ impl<'a> Codegen<'a>
         params: &[Type],
         this: Option<&Type>,
         functions: &[FunctionUnit],
-    ) -> Option<(CFunction, Vec<CType>, Vec<Type>)>
-    {
+    ) -> Option<(CFunction, Vec<CType>, Vec<Type>)> {
         let val = None;
 
-        for function in functions.iter()
-        {
+        for function in functions.iter() {
             let function: &FunctionUnit = function;
 
             let mut params_okay = false;
             let mut not_found = false;
-            if function.f.params.len() > params.len()
-            {
+            if function.f.params.len() > params.len() {
                 continue;
             }
 
@@ -379,38 +321,26 @@ impl<'a> Codegen<'a>
             {
                 return Some((function.c, vec![], vec![]));
             }
-            if let Some(ty) = &function.this_ast
-            {
-                if this.is_none()
-                {
+            if let Some(ty) = &function.this_ast {
+                if this.is_none() {
                     continue;
-                }
-                else
-                {
+                } else {
                     let this = this.unwrap();
-                    let this = if this.is_ptr()
-                    {
+                    let this = if this.is_ptr() {
                         this.clone()
-                    }
-                    else
-                    {
+                    } else {
                         this.make_ptr()
                     };
 
-                    if &*ty != &this
-                    {
+                    if &*ty != &this {
                         continue;
-                    }
-                    else
-                    {
+                    } else {
                         let mut sig_params = vec![];
-                        for (_, p) in function.f.params.iter()
-                        {
+                        for (_, p) in function.f.params.iter() {
                             sig_params.push(*p.clone());
                         }
 
-                        if sig_params == params
-                        {
+                        if sig_params == params {
                             return Some((
                                 function.c,
                                 function
@@ -431,41 +361,31 @@ impl<'a> Codegen<'a>
                 }
             }
 
-            for (index, param) in params.iter().enumerate()
-            {
-                if index < function.f.params.len()
-                {
+            for (index, param) in params.iter().enumerate() {
+                if index < function.f.params.len() {
                     params_okay = param == &*function.f.params[index].1;
-                }
-                else
-                {
-                    if function.f.variadic && params_okay
-                    {
+                } else {
+                    if function.f.variadic && params_okay {
                         not_found = false;
                         break;
-                    }
-                    else
-                    {
+                    } else {
                         params_okay = false;
                         not_found = true;
                         break;
                     }
                 }
 
-                if !params_okay
-                {
+                if !params_okay {
                     not_found = true;
                     break;
                 }
             }
 
-            if not_found
-            {
+            if not_found {
                 continue;
             }
 
-            if params_okay
-            {
+            if params_okay {
                 return Some((
                     function.c,
                     function
@@ -481,9 +401,7 @@ impl<'a> Codegen<'a>
                         .map(|(_, typ)| *typ.clone())
                         .collect(),
                 ));
-            }
-            else
-            {
+            } else {
                 continue;
             }
         }
@@ -495,61 +413,47 @@ impl<'a> Codegen<'a>
         params: &[Type],
         this: Option<&Type>,
         functions: &[Function],
-    ) -> Option<(Function, Vec<Type>)>
-    {
+    ) -> Option<(Function, Vec<Type>)> {
         let val = None;
 
-        for function in functions.iter()
-        {
+        for function in functions.iter() {
             let function: &Function = function;
 
             let mut params_okay = false;
             let mut not_found = false;
-            if function.params.len() > params.len()
-            {
+            if function.params.len() > params.len() {
                 continue;
             }
 
-            if function.params.len() == 0 && params.len() == 0 && this.is_none()
-            {
+            if function.params.len() == 0 && params.len() == 0 && this.is_none() {
                 return Some((function.clone(), vec![]));
             }
 
-            for (index, param) in params.iter().enumerate()
-            {
-                if index < function.params.len()
-                {
+            for (index, param) in params.iter().enumerate() {
+                if index < function.params.len() {
                     params_okay = param == &*function.params[index].1;
-                }
-                else
-                {
-                    if function.variadic && params_okay
-                    {
+                } else {
+                    if function.variadic && params_okay {
                         not_found = false;
                         break;
-                    }
-                    else
-                    {
+                    } else {
                         params_okay = false;
                         not_found = true;
                         break;
                     }
                 }
 
-                if !params_okay
-                {
+                if !params_okay {
                     not_found = true;
                     break;
                 }
             }
 
-            if not_found
-            {
+            if not_found {
                 continue;
             }
 
-            if params_okay
-            {
+            if params_okay {
                 return Some((
                     function.clone(),
                     function
@@ -558,17 +462,14 @@ impl<'a> Codegen<'a>
                         .map(|(_, typ)| *typ.clone())
                         .collect(),
                 ));
-            }
-            else
-            {
+            } else {
                 continue;
             }
         }
         val
     }
 
-    pub fn new(context: &'a mut CContext, name: &str) -> Codegen<'a>
-    {
+    pub fn new(context: &'a mut CContext, name: &str) -> Codegen<'a> {
         let ctx = Context::default();
 
         ctx.set_name(name);
@@ -602,37 +503,23 @@ impl<'a> Codegen<'a>
         }
     }
     /// Find struct type
-    pub fn find_struct(&self, ty: &Type) -> Option<GccStruct>
-    {
-        match ty
-        {
-            Type::Basic(basic) =>
-            {
-                if let Some(s) = self.structures.get(&basic.name)
-                {
+    pub fn find_struct(&self, ty: &Type) -> Option<GccStruct> {
+        match ty {
+            Type::Basic(basic) => {
+                if let Some(s) = self.structures.get(&basic.name) {
                     return Some(s.clone());
-                }
-                else if let Some(ty) = self.aliases.get(&basic.name)
-                {
+                } else if let Some(ty) = self.aliases.get(&basic.name) {
                     return self.find_struct(ty);
-                }
-                else
-                {
+                } else {
                     return None;
                 }
             }
-            Type::Struct(basic) =>
-            {
-                if let Some(s) = self.structures.get(&basic.name)
-                {
+            Type::Struct(basic) => {
+                if let Some(s) = self.structures.get(&basic.name) {
                     return Some(s.clone());
-                }
-                else if let Some(ty) = self.aliases.get(&basic.name)
-                {
+                } else if let Some(ty) = self.aliases.get(&basic.name) {
                     return self.find_struct(ty);
-                }
-                else
-                {
+                } else {
                     return None;
                 }
             }
@@ -640,37 +527,27 @@ impl<'a> Codegen<'a>
         }
     }
     /// Convert expression to LValue
-    pub fn expr_to_lvalue(&mut self, expr: &Expr) -> Option<LValue>
-    {
-        match &expr.kind
-        {
-            ExprKind::Ident(name) =>
-            {
-                if self.variables.contains_key(name)
-                {
+    pub fn expr_to_lvalue(&mut self, expr: &Expr) -> Option<LValue> {
+        match &expr.kind {
+            ExprKind::Ident(name) => {
+                if self.variables.contains_key(name) {
                     let value = self.variables.get(name).unwrap().clone();
 
                     Some(value.lval)
-                }
-                else if self.globals.contains_key(name)
-                {
+                } else if self.globals.contains_key(name) {
                     let value = self.globals.get(name).unwrap().0.lval;
 
                     Some(value)
-                }
-                else
-                {
+                } else {
                     None
                 }
             }
-            ExprKind::Binary(op, lhs, rhs) =>
-            {
+            ExprKind::Binary(op, lhs, rhs) => {
                 let _op: &str = op;
                 let t1 = self.get_id_type(lhs.id);
                 let t2 = self.get_id_type(rhs.id);
 
-                if t1.is_ptr() && crate::semantic::ty_is_any_int(&t2)
-                {
+                if t1.is_ptr() && crate::semantic::ty_is_any_int(&t2) {
                     let array = self.gen_expr(lhs);
                     let idx = self.gen_expr(rhs);
 
@@ -679,14 +556,11 @@ impl<'a> Codegen<'a>
                         array,
                         idx,
                     ))
-                }
-                else
-                {
+                } else {
                     None
                 }
             }
-            ExprKind::ArrayIdx(array, index) =>
-            {
+            ExprKind::ArrayIdx(array, index) => {
                 let array = self.gen_expr(array);
                 let index = self.gen_expr(index);
 
@@ -696,15 +570,12 @@ impl<'a> Codegen<'a>
                     index,
                 ))
             }
-            ExprKind::Field(object, name) =>
-            {
+            ExprKind::Field(object, name) => {
                 let ty: Type = self.get_id_type(object.id).clone();
 
-                if ty.is_ptr()
-                {
+                if ty.is_ptr() {
                     let ptr = ty.to_ptr().unwrap();
-                    if ptr.subtype.is_struct()
-                    {
+                    if ptr.subtype.is_struct() {
                         let struct_ = self
                             .structures
                             .get(&ptr.subtype.to_struct().unwrap().name)
@@ -720,9 +591,7 @@ impl<'a> Codegen<'a>
                             Some(gccloc_from_loc(&self.ctx, &expr.pos)),
                             *cfield,
                         ))
-                    }
-                    else if let Type::Basic(basic) = &*ptr.subtype.clone()
-                    {
+                    } else if let Type::Basic(basic) = &*ptr.subtype.clone() {
                         let struct_ = self.structures.get(&basic.name).unwrap().clone();
 
                         let cfield = struct_.fields.get(name).expect("Field not found");
@@ -733,14 +602,10 @@ impl<'a> Codegen<'a>
                             Some(gccloc_from_loc(&self.ctx, &expr.pos)),
                             *cfield,
                         ));
-                    }
-                    else
-                    {
+                    } else {
                         panic!()
                     }
-                }
-                else if ty.is_struct()
-                {
+                } else if ty.is_struct() {
                     let struct_: GccStruct = self
                         .structures
                         .get(&ty.to_struct().unwrap().name)
@@ -751,9 +616,7 @@ impl<'a> Codegen<'a>
                     let lval = self.expr_to_lvalue(object).expect("LValue expected");
 
                     Some(lval.access_field(Some(gccloc_from_loc(&self.ctx, &expr.pos)), *cfield))
-                }
-                else
-                {
+                } else {
                     let s = self.find_struct(&ty).expect("Struct not found");
 
                     let cfield = s.fields.get(name).expect("Field not found");
@@ -762,8 +625,7 @@ impl<'a> Codegen<'a>
                     Some(lval.access_field(Some(gccloc_from_loc(&self.ctx, &expr.pos)), *cfield))
                 }
             }
-            ExprKind::Deref(expr_) =>
-            {
+            ExprKind::Deref(expr_) => {
                 let val = self.gen_expr(expr_);
 
                 Some(val.dereference(Some(gccloc_from_loc(&self.ctx, &expr.pos))))
@@ -773,60 +635,48 @@ impl<'a> Codegen<'a>
         }
     }
     /// Get type by expression Id
-    fn get_id_type(&self, id: NodeId) -> Type { self.context.types.get(&id).unwrap().clone() }
+    fn get_id_type(&self, id: NodeId) -> Type {
+        self.context.types.get(&id).unwrap().clone()
+    }
     /// Create new name for block
-    fn block_name_new(&mut self) -> String
-    {
+    fn block_name_new(&mut self) -> String {
         let name = format!("L{}", self.block_id);
         self.block_id += 1;
         name
     }
     /// Generate GIMPLE from statement
-    pub fn gen_stmt(&mut self, stmt: &Stmt, init: bool)
-    {
-        match &stmt.kind
-        {
+    pub fn gen_stmt(&mut self, stmt: &Stmt, init: bool) {
+        match &stmt.kind {
             StmtKind::CompTime(s) => self.gen_stmt(s, init),
 
-            StmtKind::Expr(expr) =>
-            {
+            StmtKind::Expr(expr) => {
                 let rval = self.gen_expr(expr);
                 self.cur_block
                     .unwrap()
                     .add_eval(Some(gccloc_from_loc(&self.ctx, &expr.pos)), rval);
             }
-            StmtKind::Block(stmts) =>
-            {
-                if !init
-                {
+            StmtKind::Block(stmts) => {
+                if !init {
                     let old_block = self.cur_block;
                     let block_name = self.block_name_new();
                     let block = self.cur_func.unwrap().new_block(&block_name);
                     self.cur_block = Some(block);
 
-                    for stmt in stmts.iter()
-                    {
+                    for stmt in stmts.iter() {
                         self.gen_stmt(stmt, false);
                     }
 
                     self.cur_block = old_block;
-                }
-                else
-                {
-                    for stmt in stmts.iter()
-                    {
+                } else {
+                    for stmt in stmts.iter() {
                         self.gen_stmt(stmt, false);
                     }
                 }
             }
-            StmtKind::Break =>
-            {
-                let break_bb = if let Some(block) = self.break_blocks.back()
-                {
+            StmtKind::Break => {
+                let break_bb = if let Some(block) = self.break_blocks.back() {
                     *block
-                }
-                else
-                {
+                } else {
                     panic!("");
                 };
                 //let dead_block = self.cur_func.unwrap().new_block(self.block_name_new());
@@ -837,14 +687,10 @@ impl<'a> Codegen<'a>
                 self.cur_block = Some(break_bb);
                 *self.terminated.last_mut().unwrap() = true;
             }
-            StmtKind::Continue =>
-            {
-                let continue_bb = if let Some(block) = self.continue_blocks.back()
-                {
+            StmtKind::Continue => {
+                let continue_bb = if let Some(block) = self.continue_blocks.back() {
                     *block
-                }
-                else
-                {
+                } else {
                     panic!("")
                 };
                 let dead_block = self.cur_func.unwrap().new_block(self.block_name_new());
@@ -854,10 +700,8 @@ impl<'a> Codegen<'a>
                     .end_with_jump(Some(gccloc_from_loc(&self.ctx, &stmt.pos)), continue_bb);
                 self.cur_block = Some(dead_block);
             }
-            StmtKind::Return(expr) =>
-            {
-                if expr.is_some()
-                {
+            StmtKind::Return(expr) => {
+                if expr.is_some() {
                     let expr = expr.as_ref().unwrap();
                     let val = self.gen_expr(expr);
                     //let ty = self.cur_return.as_ref().unwrap().clone();
@@ -865,22 +709,18 @@ impl<'a> Codegen<'a>
                     self.cur_block
                         .unwrap()
                         .end_with_return(Some(gccloc_from_loc(&self.ctx, &stmt.pos)), val);
-                }
-                else
-                {
+                } else {
                     self.cur_block.unwrap().end_with_void_return(None);
                 }
 
                 //let dead_block = self.cur_func.unwrap().new_block(self.block_name_new());
                 //self.cur_block = Some(dead_block);
 
-                if self.terminated.last().is_some()
-                {
+                if self.terminated.last().is_some() {
                     *self.terminated.last_mut().unwrap() = true;
                 }
             }
-            StmtKind::Var(name, _, _, init) =>
-            {
+            StmtKind::Var(name, _, _, init) => {
                 let ty = self.get_id_type(stmt.id).clone();
 
                 let cty = self.ty_to_ctype(&ty);
@@ -889,18 +729,14 @@ impl<'a> Codegen<'a>
                     cty,
                     &str(*name).to_string(),
                 );
-                if init.is_some()
-                {
+                if init.is_some() {
                     let expr = init.as_ref().unwrap();
                     let rval = self.gen_expr(expr);
                     let ast_ty = self.get_id_type(expr.id);
                     let cty = self.ty_to_ctype(&ast_ty);
-                    let rval = if !ty.is_struct() && !ty.is_array()
-                    {
+                    let rval = if !ty.is_struct() && !ty.is_array() {
                         self.ctx.new_cast(None, rval, cty)
-                    }
-                    else
-                    {
+                    } else {
                         rval
                     };
                     self.cur_block.unwrap().add_assignment(
@@ -919,8 +755,7 @@ impl<'a> Codegen<'a>
                     },
                 );
             }
-            StmtKind::If(cond, then, otherwise) =>
-            {
+            StmtKind::If(cond, then, otherwise) => {
                 let func: CFunction = self.cur_func.unwrap();
 
                 let then_name = self.block_name_new();
@@ -928,14 +763,11 @@ impl<'a> Codegen<'a>
 
                 let bb_then = func.new_block(&format!("if_true:{}", then_name));
                 let bb_else = func.new_block(&format!("if_false:{}", else_name));
-                let bb_merge: Block = if otherwise.is_some()
-                {
+                let bb_merge: Block = if otherwise.is_some() {
                     let merge_name = self.block_name_new();
 
                     func.new_block(&format!("after:{}", merge_name))
-                }
-                else
-                {
+                } else {
                     bb_else
                 };
 
@@ -951,8 +783,7 @@ impl<'a> Codegen<'a>
                 self.terminated.push(false);
                 self.cur_block = Some(bb_then);
                 self.gen_stmt(then, true);
-                if !*self.terminated.last().unwrap()
-                {
+                if !*self.terminated.last().unwrap() {
                     self.cur_block
                         .unwrap()
                         .end_with_jump(Some(gccloc_from_loc(&self.ctx, &then.pos)), bb_merge);
@@ -961,13 +792,11 @@ impl<'a> Codegen<'a>
 
                 self.terminated.pop();
                 self.terminated.push(false);
-                if let Some(else_branch) = otherwise
-                {
+                if let Some(else_branch) = otherwise {
                     self.cur_block = Some(bb_else);
                     self.gen_stmt(else_branch, true);
 
-                    if !*self.terminated.last().unwrap()
-                    {
+                    if !*self.terminated.last().unwrap() {
                         self.cur_block.unwrap().end_with_jump(
                             Some(gccloc_from_loc(&self.ctx, &else_branch.pos)),
                             bb_merge,
@@ -977,8 +806,7 @@ impl<'a> Codegen<'a>
                 self.terminated.pop();
                 self.cur_block = Some(bb_merge);
             }
-            StmtKind::CFor(var, cond, then, body) =>
-            {
+            StmtKind::CFor(var, cond, then, body) => {
                 let func: CFunction = self.cur_func.unwrap();
 
                 let loop_cond: Block =
@@ -1012,8 +840,7 @@ impl<'a> Codegen<'a>
                 self.cur_block = Some(after_loop);
                 self.terminated.pop();
             }
-            StmtKind::While(cond, block_) =>
-            {
+            StmtKind::While(cond, block_) => {
                 let func: CFunction = self.cur_func.unwrap();
 
                 let loop_cond: Block = func.new_block(self.block_name_new());
@@ -1040,8 +867,7 @@ impl<'a> Codegen<'a>
                 self.break_blocks.pop_back();
                 self.cur_block = Some(after_loop);
             }
-            StmtKind::Loop(body) =>
-            {
+            StmtKind::Loop(body) => {
                 let bb = self.cur_func.unwrap().new_block(self.block_name_new());
                 let after = self.cur_func.unwrap().new_block(self.block_name_new());
                 self.break_blocks.push_back(after);
@@ -1059,39 +885,29 @@ impl<'a> Codegen<'a>
         }
     }
     /// Generate GIMPLE expression from AST expression
-    pub fn gen_expr(&mut self, expr: &Expr) -> RValue
-    {
-        match &expr.kind
-        {
-            ExprKind::ArrayIdx(array, index) =>
-            {
+    pub fn gen_expr(&mut self, expr: &Expr) -> RValue {
+        match &expr.kind {
+            ExprKind::ArrayIdx(array, index) => {
                 let array = self.gen_expr(array);
                 let index = self.gen_expr(index);
 
                 self.ctx.new_array_access(None, array, index).to_rvalue()
             }
-            ExprKind::Ident(name) =>
-            {
-                if self.constants.contains_key(name)
-                {
+            ExprKind::Ident(name) => {
+                if self.constants.contains_key(name) {
                     let constexpr = self.constants.get(name).unwrap().clone();
-                    if let Some(lval) = self.expr_to_lvalue(&constexpr)
-                    {
+                    if let Some(lval) = self.expr_to_lvalue(&constexpr) {
                         return lval.to_rvalue();
-                    }
-                    else
-                    {
+                    } else {
                         return self.gen_expr(&constexpr);
                     }
                 };
                 self.expr_to_lvalue(expr).unwrap().to_rvalue()
             }
-            ExprKind::Float(f, suffix) =>
-            {
+            ExprKind::Float(f, suffix) => {
                 use crate::syntax::lexer::token::FloatSuffix;
                 let float: f64 = *f as _;
-                match suffix
-                {
+                match suffix {
                     FloatSuffix::Float => self
                         .ctx
                         .new_rvalue_from_double(self.ctx.new_type::<f32>(), float),
@@ -1100,8 +916,7 @@ impl<'a> Codegen<'a>
                         .new_rvalue_from_double(self.ctx.new_type::<f64>(), float),
                 }
             }
-            ExprKind::Int(i, _, suffix) =>
-            {
+            ExprKind::Int(i, _, suffix) => {
                 macro_rules! new_basic_ty {
                     ($name: expr) => {
                         Type::create_basic(
@@ -1114,8 +929,7 @@ impl<'a> Codegen<'a>
 
                 use crate::syntax::lexer::token::IntSuffix;
                 let int: i64 = *i as _;
-                let (val, ty) = match suffix
-                {
+                let (val, ty) = match suffix {
                     IntSuffix::Int => (
                         self.ctx
                             .new_rvalue_from_int(self.ctx.new_type::<i32>(), int as i32),
@@ -1148,37 +962,29 @@ impl<'a> Codegen<'a>
                     ),
                 };
 
-                if !self.context.types.contains_key(&expr.id)
-                {
+                if !self.context.types.contains_key(&expr.id) {
                     self.context.types.insert(expr.id, ty);
                 }
                 val
             }
             ExprKind::Str(s) => self.ctx.new_string_literal(s),
-            ExprKind::Deref(expr) =>
-            {
+            ExprKind::Deref(expr) => {
                 let rvalue = self.gen_expr(expr);
                 rvalue.dereference(None).to_rvalue()
             }
-            ExprKind::Unary(op, expr_) =>
-            {
+            ExprKind::Unary(op, expr_) => {
                 let op: &str = op;
                 let rval = self.gen_expr(expr_);
                 let ty = rval.get_type();
 
-                match op
-                {
+                match op {
                     "-" => self.ctx.new_unary_op(None, UnaryOp::Minus, ty, rval),
-                    "!" =>
-                    {
+                    "!" => {
                         let ast_ty = self.get_id_type(expr.id);
-                        if crate::semantic::ty_is_any_int(&ast_ty)
-                        {
+                        if crate::semantic::ty_is_any_int(&ast_ty) {
                             self.ctx
                                 .new_unary_op(None, UnaryOp::BitwiseNegate, ty, rval)
-                        }
-                        else
-                        {
+                        } else {
                             self.ctx
                                 .new_unary_op(None, UnaryOp::LogicalNegate, ty, rval)
                         }
@@ -1187,8 +993,7 @@ impl<'a> Codegen<'a>
                     _ => unreachable!(),
                 }
             }
-            ExprKind::Field(_expr_, _name) =>
-            {
+            ExprKind::Field(_expr_, _name) => {
                 self.expr_to_lvalue(expr).unwrap().to_rvalue()
                 /*let ast_ty = self.get_id_type(expr_.id);
                 let rvalue = self.gen_expr(expr_).clone();
@@ -1244,8 +1049,7 @@ impl<'a> Codegen<'a>
                     rvalue.access_field(None, *field)
                 }*/
             }
-            ExprKind::Assign(lval_, rval_) =>
-            {
+            ExprKind::Assign(lval_, rval_) => {
                 self.assign(expr.pos, lval_, rval_)
                 /*let lval = self.expr_to_lvalue(lval_).unwrap();
                 let val = self.gen_expr(rval_);
@@ -1274,13 +1078,11 @@ impl<'a> Codegen<'a>
             ExprKind::Bool(b) => self
                 .ctx
                 .new_rvalue_from_int(self.ctx.new_type::<bool>(), *b as i32),
-            ExprKind::AddressOf(expr_) =>
-            {
+            ExprKind::AddressOf(expr_) => {
                 let ty = self.get_id_type(expr.id);
                 let _cty = self.ty_to_ctype(&ty);
                 let val = self.expr_to_lvalue(expr_);
-                if val.is_none()
-                {
+                if val.is_none() {
                     let rval = self.gen_expr(expr_);
                     let tmp = self.ctx.new_global(
                         Some(gccloc_from_loc(&self.ctx, &expr_.pos)),
@@ -1298,9 +1100,7 @@ impl<'a> Codegen<'a>
                     let val = tmp.get_address(Some(gccloc_from_loc(&self.ctx, &expr.pos)));
                     //self.ctx.new_cast(None,val,cty)
                     val
-                }
-                else
-                {
+                } else {
                     let val = val
                         .unwrap()
                         .get_address(Some(gccloc_from_loc(&self.ctx, &expr.pos)));
@@ -1308,39 +1108,31 @@ impl<'a> Codegen<'a>
                     val
                 }
             }
-            ExprKind::Conv(val, to) =>
-            {
+            ExprKind::Conv(val, to) => {
                 let cty = self.ty_to_ctype(to);
                 let rval = self.gen_expr(val);
                 self.ctx
                     .new_cast(Some(gccloc_from_loc(&self.ctx, &expr.pos)), rval, cty)
             }
 
-            ExprKind::Call(name, this, args) =>
-            {
+            ExprKind::Call(name, this, args) => {
                 let param_types = args
                     .iter()
                     .map(|expr| self.get_id_type(expr.id).clone())
                     .collect::<Vec<_>>();
 
-                let var = if let Some(functions) = self.functions.get(&name.name())
-                {
+                let var = if let Some(functions) = self.functions.get(&name.name()) {
                     let functions = functions.clone();
-                    let ty = if let Some(this) = this
-                    {
+                    let ty = if let Some(this) = this {
                         Some(self.get_id_type(this.id))
-                    }
-                    else
-                    {
+                    } else {
                         None
                     };
                     let val = self.search_for_func(&param_types, ty.as_ref(), &functions);
 
-                    if val.is_none()
-                    {
+                    if val.is_none() {
                         print!("Function {}(", str(name.name()));
-                        for p in param_types.iter()
-                        {
+                        for p in param_types.iter() {
                             print!(" {} ", p);
                         }
                         print!(") not found\n");
@@ -1349,36 +1141,27 @@ impl<'a> Codegen<'a>
                     let (val, c_types, ast_types) = val.unwrap();
                     let mut params = vec![];
 
-                    for (i, arg) in args.iter().enumerate()
-                    {
-                        if i < ast_types.len()
-                        {
+                    for (i, arg) in args.iter().enumerate() {
+                        if i < ast_types.len() {
                             let val = self.gen_expr(arg);
                             let ty = &ast_types[i];
-                            let implicit_casted = if !ty.is_struct() && !ty.is_array()
-                            {
+                            let implicit_casted = if !ty.is_struct() && !ty.is_array() {
                                 let cty = c_types[i];
                                 self.ctx.new_cast(None, val, cty)
-                            }
-                            else
-                            {
+                            } else {
                                 val
                             };
                             params.push(implicit_casted);
-                        }
-                        else
-                        {
+                        } else {
                             let val = self.gen_expr(arg);
                             params.push(val);
                         }
                     }
 
-                    if this.is_some()
-                    {
+                    if this.is_some() {
                         let expr = this.clone().unwrap().clone();
                         let ty = self.get_id_type(expr.id);
-                        let val = if !ty.is_ptr()
-                        {
+                        let val = if !ty.is_ptr() {
                             let cty = self.ty_to_ctype(&ty).make_pointer();
                             let val = self.gen_expr(&Expr {
                                 pos: expr.pos,
@@ -1387,9 +1170,7 @@ impl<'a> Codegen<'a>
                             });
                             let val = self.ctx.new_cast(None, val, cty);
                             val
-                        }
-                        else
-                        {
+                        } else {
                             self.gen_expr(&expr)
                         };
                         params.push(val);
@@ -1404,18 +1185,14 @@ impl<'a> Codegen<'a>
                         val,
                         &params,
                     );
-                }
-                else if self.const_functions.contains_key(&name.name())
-                {
+                } else if self.const_functions.contains_key(&name.name()) {
                     let functions = self.const_functions.get(&name.name()).unwrap().clone();
 
                     let val = self.search_for_func_const(&param_types, None, &functions);
 
-                    if val.is_none()
-                    {
+                    if val.is_none() {
                         print!("Constant function {}(", str(name.name()));
-                        for p in param_types.iter()
-                        {
+                        for p in param_types.iter() {
                             print!(" {} ", p);
                         }
                         print!(") not found\n");
@@ -1423,26 +1200,20 @@ impl<'a> Codegen<'a>
                     }
 
                     return self.ctx.new_rvalue_from_int(self.ctx.new_type::<i32>(), 0);
-                }
-                else if self.external_functions.contains_key(&name.name())
-                {
+                } else if self.external_functions.contains_key(&name.name()) {
                     let unit: &FunctionUnit =
                         &self.external_functions.get(&name.name()).unwrap().clone();
 
                     let mut params = vec![];
-                    for (i, arg) in args.iter().enumerate()
-                    {
-                        if i < unit.f.params.len()
-                        {
+                    for (i, arg) in args.iter().enumerate() {
+                        if i < unit.f.params.len() {
                             let val = self.gen_expr(arg);
                             let cty = self.ty_to_ctype(&unit.f.params[i].1);
                             let val = if !unit.f.params[i].1.is_struct()
                                 && !unit.f.params[i].1.is_array()
                             {
                                 self.ctx.new_cast(None, val, cty)
-                            }
-                            else
-                            {
+                            } else {
                                 val
                             };
 
@@ -1458,19 +1229,14 @@ impl<'a> Codegen<'a>
                         unit.c,
                         &params,
                     );
-                }
-                else if let Some(var) = self.variables.get(&name.name())
-                {
+                } else if let Some(var) = self.variables.get(&name.name()) {
                     var.lval
-                }
-                else
-                {
+                } else {
                     panic!();
                 };
 
                 let mut params = vec![];
-                for arg in args.iter()
-                {
+                for arg in args.iter() {
                     params.push(self.gen_expr(arg));
                 }
 
@@ -1481,8 +1247,7 @@ impl<'a> Codegen<'a>
                 )
             }
 
-            ExprKind::Struct(name, args) =>
-            {
+            ExprKind::Struct(name, args) => {
                 let name = name.name();
 
                 let struct_: GccStruct = self
@@ -1497,8 +1262,7 @@ impl<'a> Codegen<'a>
                     &tmp_,
                 );
                 //self.cur_block.unwrap().add_assignment(None, tmp, rval);
-                for arg in args.iter()
-                {
+                for arg in args.iter() {
                     let arg: &StructArg = arg;
                     let val = self.gen_expr(&arg.expr);
                     self.cur_block.unwrap().add_assignment(
@@ -1512,24 +1276,19 @@ impl<'a> Codegen<'a>
                 }
                 tmp.to_rvalue()
             }
-            ExprKind::SizeOf(ty) =>
-            {
+            ExprKind::SizeOf(ty) => {
                 let size = self.ty_size(ty);
                 self.ctx
                     .new_rvalue_from_int(self.ctx.new_type::<usize>(), size as i32)
             }
-            ExprKind::GetFunc(name) =>
-            {
-                if self.functions.contains_key(name)
-                {
+            ExprKind::GetFunc(name) => {
+                if self.functions.contains_key(name) {
                     let functions: &Vec<FunctionUnit> = self.functions.get(name).unwrap();
                     let mut v = None;
-                    for unit in functions.iter()
-                    {
+                    for unit in functions.iter() {
                         let unit: &FunctionUnit = unit;
 
-                        if &unit.f.name == name
-                        {
+                        if &unit.f.name == name {
                             v = Some(
                                 unit.c
                                     .get_address(Some(gccloc_from_loc(&self.ctx, &expr.pos))),
@@ -1538,22 +1297,17 @@ impl<'a> Codegen<'a>
                         }
                     }
                     v.expect("Function addr")
-                }
-                else if self.external_functions.contains_key(name)
-                {
+                } else if self.external_functions.contains_key(name) {
                     let func = self.external_functions.get(name).unwrap();
 
                     func.c
                         .get_address(Some(gccloc_from_loc(&self.ctx, &expr.pos)))
-                }
-                else
-                {
+                } else {
                     panic!("Function not found");
                 }
             }
 
-            ExprKind::Binary(op, e1, e2) =>
-            {
+            ExprKind::Binary(op, e1, e2) => {
                 let t1 = self.get_id_type(e1.id);
                 let t2 = self.get_id_type(e2.id);
                 use crate::semantic::{ty_is_any_float, ty_is_any_int};
@@ -1566,8 +1320,7 @@ impl<'a> Codegen<'a>
                     || op.contains("<=")
                 {
                     let op: &str = op;
-                    let comparison = match op
-                    {
+                    let comparison = match op {
                         "==" => ComparisonOp::Equals,
                         ">" => ComparisonOp::GreaterThan,
                         "<" => ComparisonOp::LessThan,
@@ -1590,20 +1343,16 @@ impl<'a> Codegen<'a>
                     );
                 }
 
-                if t1.is_ptr() && crate::semantic::ty_is_any_int(&t2)
-                {
+                if t1.is_ptr() && crate::semantic::ty_is_any_int(&t2) {
                     let array = self.gen_expr(e1);
                     let index = self.gen_expr(e2);
                     self.ctx
                         .new_array_access(Some(gccloc_from_loc(&self.ctx, &expr.pos)), array, index)
                         .to_rvalue()
-                }
-                else if ty_is_any_int(&t1) && ty_is_any_int(&t2)
-                {
+                } else if ty_is_any_int(&t1) && ty_is_any_int(&t2) {
                     let cty = self.ty_to_ctype(&t1);
                     let op: &str = op;
-                    let binary = match op
-                    {
+                    let binary = match op {
                         "+" => BinaryOp::Plus,
                         "-" => BinaryOp::Minus,
                         "*" => BinaryOp::Mult,
@@ -1629,13 +1378,10 @@ impl<'a> Codegen<'a>
                         l,
                         r,
                     )
-                }
-                else if ty_is_any_float(&t1) && ty_is_any_float(&t2)
-                {
+                } else if ty_is_any_float(&t1) && ty_is_any_float(&t2) {
                     let cty = self.ty_to_ctype(&t1);
                     let op: &str = op;
-                    let binary = match op
-                    {
+                    let binary = match op {
                         "+" => BinaryOp::Plus,
                         "-" => BinaryOp::Minus,
                         "*" => BinaryOp::Mult,
@@ -1656,13 +1402,10 @@ impl<'a> Codegen<'a>
                         l,
                         r,
                     )
-                }
-                else if ty_is_any_float(&t1) && ty_is_any_int(&t2)
-                {
+                } else if ty_is_any_float(&t1) && ty_is_any_int(&t2) {
                     let cty = self.ty_to_ctype(&t1);
                     let op: &str = op;
-                    let binary = match op
-                    {
+                    let binary = match op {
                         "+" => BinaryOp::Plus,
                         "-" => BinaryOp::Minus,
                         "*" => BinaryOp::Mult,
@@ -1683,13 +1426,10 @@ impl<'a> Codegen<'a>
                         l,
                         r,
                     )
-                }
-                else if t1.is_vec() && ty_is_any_int(&t2) || ty_is_any_float(&t2)
-                {
+                } else if t1.is_vec() && ty_is_any_int(&t2) || ty_is_any_float(&t2) {
                     let cty = self.ty_to_ctype(&t1);
                     let op: &str = op;
-                    let binary = match op
-                    {
+                    let binary = match op {
                         "+" => BinaryOp::Plus,
                         "-" => BinaryOp::Minus,
                         "*" => BinaryOp::Mult,
@@ -1710,20 +1450,15 @@ impl<'a> Codegen<'a>
                         l,
                         r,
                     )
-                }
-                else
-                {
-                    if t1.is_basic() && t2.is_basic()
-                    {
+                } else {
+                    if t1.is_basic() && t2.is_basic() {
                         let t1 = t1.to_basic().unwrap();
                         let t2 = t2.to_basic().unwrap();
                         let s1: &str = &str(t1.name).to_string();
                         let s2: &str = &str(t2.name).to_string();
-                        if s1 == "bool" && s2 == "bool"
-                        {
+                        if s1 == "bool" && s2 == "bool" {
                             let op: &str = op;
-                            let binary = match op
-                            {
+                            let binary = match op {
                                 "&&" => BinaryOp::LogicalAnd,
                                 "||" => BinaryOp::LogicalOr,
                                 _ => unreachable!(),
@@ -1737,9 +1472,7 @@ impl<'a> Codegen<'a>
                                 l,
                                 r,
                             );
-                        }
-                        else
-                        {
+                        } else {
                             unimplemented!()
                         }
                     }
@@ -1756,20 +1489,15 @@ impl<'a> Codegen<'a>
         }
     }
 
-    pub fn gen_toplevel(&mut self, elems: &mut [Elem])
-    {
-        for elem in elems.iter()
-        {
-            match elem
-            {
-                Elem::Struct(s) =>
-                {
+    pub fn gen_toplevel(&mut self, elems: &mut [Elem]) {
+        for elem in elems.iter() {
+            match elem {
+                Elem::Struct(s) => {
                     let s: &crate::syntax::ast::Struct = s;
                     let mut fields = vec![];
                     let mut cfields = HashMap::new();
                     let mut types = vec![];
-                    for field in s.fields.iter()
-                    {
+                    for field in s.fields.iter() {
                         let field: &StructField = field;
                         let cty = self.ty_to_ctype(&field.data_type).clone();
                         types.push(field.data_type.clone());
@@ -1783,16 +1511,13 @@ impl<'a> Codegen<'a>
                         fields.push(cfield);
                     }
 
-                    let struct_ = if s.union
-                    {
+                    let struct_ = if s.union {
                         self.ctx.new_union_type(
                             Some(gccloc_from_loc(&self.ctx, &s.pos)),
                             &str(s.name).to_string(),
                             &fields,
                         )
-                    }
-                    else
-                    {
+                    } else {
                         self.ctx
                             .new_struct_type(
                                 Some(gccloc_from_loc(&self.ctx, &s.pos)),
@@ -1807,57 +1532,41 @@ impl<'a> Codegen<'a>
                         fields: cfields,
                         types,
                     };
-                    if !self.structures.contains_key(&s.name)
-                    {
+                    if !self.structures.contains_key(&s.name) {
                         self.structures.insert(s.name, cstruct);
                     }
                 }
-                Elem::Link(name) =>
-                {
+                Elem::Link(name) => {
                     self.ctx.add_driver_option(&format!("-l{}", str(*name)));
                 }
-                Elem::ConstExpr { name, expr, .. } =>
-                {
+                Elem::ConstExpr { name, expr, .. } => {
                     self.constants.insert(*name, *expr.clone());
                 }
-                Elem::Alias(name, ty) =>
-                {
+                Elem::Alias(name, ty) => {
                     self.aliases.insert(*name, ty.clone());
                 }
                 _ => (),
             }
         }
 
-        for elem in elems.iter_mut()
-        {
-            match elem
-            {
-                Elem::Func(func) =>
-                {
+        for elem in elems.iter_mut() {
+            match elem {
+                Elem::Func(func) => {
                     let func: &mut Function = func;
-                    let linkage = if func.external
-                    {
+                    let linkage = if func.external {
                         FunctionType::Extern
-                    }
-                    else if func.static_ || !func.public
-                    {
+                    } else if func.static_ || !func.public {
                         FunctionType::Internal
-                    }
-                    else if func.inline
-                    {
+                    } else if func.inline {
                         FunctionType::AlwaysInline
-                    }
-                    else
-                    {
+                    } else {
                         FunctionType::Exported
                     };
 
-                    if func.external || func.internal
-                    {
+                    if func.external || func.internal {
                         let mut params = vec![];
 
-                        for (name, ty) in func.params.iter()
-                        {
+                        for (name, ty) in func.params.iter() {
                             let tyi = self.ty_to_ctype(ty);
                             params.push(self.ctx.new_parameter(
                                 Some(gccloc_from_loc(&self.ctx, &ty.pos())),
@@ -1866,12 +1575,9 @@ impl<'a> Codegen<'a>
                             ));
                         }
 
-                        let f = if func.internal
-                        {
+                        let f = if func.internal {
                             self.ctx.get_builtin_function(&str(func.name).to_string())
-                        }
-                        else
-                        {
+                        } else {
                             let ret = self.ty_to_ctype(&func.ret);
                             self.ctx.new_function(
                                 None,
@@ -1892,18 +1598,14 @@ impl<'a> Codegen<'a>
                         };
 
                         self.external_functions.insert(func.name, unit);
-                    }
-                    else
-                    {
+                    } else {
                         let mut params = vec![];
 
-                        for (name, ty) in func.params.iter()
-                        {
+                        for (name, ty) in func.params.iter() {
                             let ty = self.ty_to_ctype(ty);
                             params.push(self.ctx.new_parameter(None, ty, &str(*name).to_string()));
                         }
-                        if func.this.is_some()
-                        {
+                        if func.this.is_some() {
                             let (name, ty) = func.this.as_ref().unwrap();
                             let ty = self.ty_to_ctype(ty);
                             params.push(self.ctx.new_parameter(None, ty, &str(*name).to_string()));
@@ -1912,36 +1614,27 @@ impl<'a> Codegen<'a>
                         let id = self.fun_id;
 
                         func.ir_temp_id = id;
-                        let name = if name_str == "main"
-                        {
+                        let name = if name_str == "main" {
                             "main".to_owned()
-                        }
-                        else
-                        {
-                            fn ty_to_n(ty: &Type) -> String
-                            {
+                        } else {
+                            fn ty_to_n(ty: &Type) -> String {
                                 let mut s = String::new();
 
-                                match ty
-                                {
-                                    Type::Vector(v) =>
-                                    {
+                                match ty {
+                                    Type::Vector(v) => {
                                         s.push_str(&format!("vec{}{}", v.subtype, v.size))
                                     }
                                     Type::Basic(b) => s.push_str(&str(b.name)),
-                                    Type::Ptr(ptr) =>
-                                    {
+                                    Type::Ptr(ptr) => {
                                         s.push_str("ptr");
                                         s.push_str(&ty_to_n(&ptr.subtype));
                                     }
-                                    Type::Func(_) =>
-                                    {
+                                    Type::Func(_) => {
                                         s.push_str(&format!("{}", ty));
                                     }
                                     Type::Struct(st) => s.push_str(&format!("{}", str(st.name))),
                                     Type::Void(_) => s.push_str("v"),
-                                    Type::Array(array) =>
-                                    {
+                                    Type::Array(array) => {
                                         s.push_str("ptr");
                                         s.push_str(&ty_to_n(&array.subtype));
                                     }
@@ -1950,14 +1643,12 @@ impl<'a> Codegen<'a>
                                 s
                             }
                             let mut name = str(func.name).to_string();
-                            if func.this.is_some()
-                            {
+                            if func.this.is_some() {
                                 name.push_str("this");
                                 let this = *func.this.clone().unwrap().1.clone();
                                 name.push_str(&ty_to_n(&this));
                             }
-                            for (_, param) in func.params.iter()
-                            {
+                            for (_, param) in func.params.iter() {
                                 name.push_str(&ty_to_n(param));
                             }
                             name
@@ -1974,23 +1665,18 @@ impl<'a> Codegen<'a>
                             func.variadic,
                         );
 
-                        let (this_ast, this_ir) = if let Some((_, ty)) = &func.this
-                        {
+                        let (this_ast, this_ir) = if let Some((_, ty)) = &func.this {
                             let ty = *ty.clone();
                             let irty = self.ty_to_ctype(&ty);
 
                             (Some(ty), Some(irty))
-                        }
-                        else
-                        {
+                        } else {
                             (None, None)
                         };
 
-                        if let Some(functions) = self.functions.get_mut(&func.name)
-                        {
+                        if let Some(functions) = self.functions.get_mut(&func.name) {
                             let mut found = false;
-                            for fun in functions.iter_mut()
-                            {
+                            for fun in functions.iter_mut() {
                                 if fun.f.name == func.name
                                     && fun.f.params == func.params
                                     && fun.f.ret == func.ret
@@ -2010,8 +1696,7 @@ impl<'a> Codegen<'a>
                                     break;
                                 }
                             }
-                            if !found
-                            {
+                            if !found {
                                 functions.push(FunctionUnit {
                                     f: func.clone(),
                                     c: f,
@@ -2020,9 +1705,7 @@ impl<'a> Codegen<'a>
                                     irname: name,
                                 });
                             }
-                        }
-                        else
-                        {
+                        } else {
                             self.functions.insert(
                                 func.name,
                                 vec![FunctionUnit {
@@ -2040,25 +1723,17 @@ impl<'a> Codegen<'a>
                 _ => (),
             }
         }
-        for elem in elems.iter()
-        {
-            match elem
-            {
-                Elem::Global(global) =>
-                {
+        for elem in elems.iter() {
+            match elem {
+                Elem::Global(global) => {
                     let global: &crate::syntax::ast::Global = global;
                     let cty = self.ty_to_ctype(&global.typ);
                     let name: &str = &str(global.name).to_string();
-                    let lval = if global.external
-                    {
+                    let lval = if global.external {
                         self.ctx.new_global(None, GlobalKind::External, cty, name)
-                    }
-                    else if global.public
-                    {
+                    } else if global.public {
                         self.ctx.new_global(None, GlobalKind::Exported, cty, name)
-                    }
-                    else
-                    {
+                    } else {
                         self.ctx.new_global(None, GlobalKind::Internal, cty, name)
                     };
 
@@ -2074,44 +1749,32 @@ impl<'a> Codegen<'a>
                 _ => (),
             }
         }
-        for elem in elems.iter()
-        {
-            match elem
-            {
-                Elem::Func(func) =>
-                {
-                    if func.external || func.internal
-                    {
+        for elem in elems.iter() {
+            match elem {
+                Elem::Func(func) => {
+                    if func.external || func.internal {
                         continue;
-                    }
-                    else
-                    {
+                    } else {
                         let func: &Function = func;
 
                         let functions = self.functions.get(&func.name).unwrap().clone();
 
-                        for fun in functions.iter()
-                        {
-                            if fun.f.ir_temp_id == func.ir_temp_id
-                            {
+                        for fun in functions.iter() {
+                            if fun.f.ir_temp_id == func.ir_temp_id {
                                 self.cur_func = Some(fun.c);
                                 self.cur_block = Some(fun.c.new_block("entry"));
                                 let block = self.cur_block.unwrap();
 
-                                if &str(func.name).to_string() == "main"
-                                {
-                                    for (_, (varinfo, expr)) in self.globals.clone().iter()
-                                    {
-                                        if expr.is_some()
-                                        {
+                                if &str(func.name).to_string() == "main" {
+                                    for (_, (varinfo, expr)) in self.globals.clone().iter() {
+                                        if expr.is_some() {
                                             let val = self.gen_expr(expr.as_ref().unwrap());
                                             block.add_assignment(None, varinfo.lval, val);
                                         }
                                     }
                                 }
 
-                                for (i, (name, param)) in func.params.iter().enumerate()
-                                {
+                                for (i, (name, param)) in func.params.iter().enumerate() {
                                     let cty = self.ty_to_ctype(param);
                                     let loc = fun.c.new_local(None, cty, &str(*name).to_string());
                                     let param_ = fun.c.get_param(i as _);
@@ -2126,8 +1789,7 @@ impl<'a> Codegen<'a>
                                     );
                                 }
 
-                                if let Some((name, ty)) = &func.this
-                                {
+                                if let Some((name, ty)) = &func.this {
                                     let cty = self.ty_to_ctype(ty);
                                     let loc = fun.c.new_local(None, cty, &str(*name).to_string());
                                     let param_ = fun.c.get_param(func.params.len() as _);
@@ -2176,10 +1838,8 @@ impl<'a> Codegen<'a>
         }
     }
 
-    pub fn compile(&mut self)
-    {
-        if self.context.emit_asm && self.context.jit
-        {
+    pub fn compile(&mut self) {
+        if self.context.emit_asm && self.context.jit {
             self.ctx.set_dump_code(true);
         }
 
@@ -2190,8 +1850,7 @@ impl<'a> Codegen<'a>
 
         self.gen_toplevel(&mut elems);
 
-        if self.context.jit
-        {
+        if self.context.jit {
             use std::env::args;
 
             let result = self.ctx.compile();
@@ -2205,8 +1864,7 @@ impl<'a> Codegen<'a>
 
             let env = std::env::vars();
             let mut envp = vec![];
-            for (key, val) in env
-            {
+            for (key, val) in env {
                 envp.push(CString::new(format!("{} = {}", key, val)).unwrap().as_ptr());
             }
 
@@ -2214,35 +1872,23 @@ impl<'a> Codegen<'a>
                 unsafe { std::mem::transmute(result.get_function("main")) };
 
             main_fn(argc, argv_c.as_ptr(), envp.as_slice().as_ptr());
-        }
-        else
-        {
+        } else {
             // these two calls needed because by default binary don't linked with libc and
             // libm
             self.ctx.add_driver_option("-lc"); // link libc
             self.ctx.add_driver_option("-lm"); // link libm
-            let out_path = if !self.context.output.is_empty()
-            {
+            let out_path = if !self.context.output.is_empty() {
                 self.context.output.clone()
-            }
-            else
-            {
+            } else {
                 "a.out".to_owned()
             };
-            let kind = if self.context.emit_obj
-            {
+            let kind = if self.context.emit_obj {
                 OutputKind::ObjectFile
-            }
-            else if self.context.shared
-            {
+            } else if self.context.shared {
                 OutputKind::DynamicLibrary
-            }
-            else if self.context.emit_asm
-            {
+            } else if self.context.emit_asm {
                 OutputKind::Assembler
-            }
-            else
-            {
+            } else {
                 OutputKind::Executable
             };
             self.ctx.compile_to_file(kind, out_path);

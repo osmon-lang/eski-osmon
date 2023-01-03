@@ -8,8 +8,7 @@ lazy_static::lazy_static! {
 
 /// Get `Name` from string value
 #[inline]
-pub fn intern(name: &str) -> Name
-{
+pub fn intern(name: &str) -> Name {
     let lock = INTERNER.lock();
 
     lock.intern(name)
@@ -17,8 +16,7 @@ pub fn intern(name: &str) -> Name
 
 /// Get string value from interned name
 #[inline]
-pub fn str(name: Name) -> ArcStr
-{
+pub fn str(name: Name) -> ArcStr {
     let lock = INTERNER.lock();
 
     lock.str(name)
@@ -29,77 +27,72 @@ pub fn str(name: Name) -> ArcStr
 #[repr(C)]
 pub struct Name(pub usize);
 
-impl fmt::Debug for Name
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result
-    {
+impl fmt::Debug for Name {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "Name({},{})", str(*self), self.0)
     }
 }
 
-impl fmt::Display for Name
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { write!(f, "{}", str(*self)) }
+impl fmt::Display for Name {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", str(*self))
+    }
 }
 
 /// ArcStr used to send string through threads safely
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub struct ArcStr(pub Arc<String>);
 
-impl fmt::Display for ArcStr
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error>
-    {
+impl fmt::Display for ArcStr {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         write!(f, "{}", &*self.0)
     }
 }
 
-impl fmt::Debug for ArcStr
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error>
-    {
+impl fmt::Debug for ArcStr {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         write!(f, "{}", &*self.0)
     }
 }
 
-impl ArcStr
-{
-    fn new(value: String) -> ArcStr { ArcStr(Arc::new(value)) }
+impl ArcStr {
+    fn new(value: String) -> ArcStr {
+        ArcStr(Arc::new(value))
+    }
 }
 
-impl Borrow<str> for ArcStr
-{
-    fn borrow(&self) -> &str { &self.0[..] }
+impl Borrow<str> for ArcStr {
+    fn borrow(&self) -> &str {
+        &self.0[..]
+    }
 }
 
-impl Deref for ArcStr
-{
+impl Deref for ArcStr {
     type Target = String;
 
-    fn deref(&self) -> &String { &self.0 }
+    fn deref(&self) -> &String {
+        &self.0
+    }
 }
 
-pub struct Interner
-{
+pub struct Interner {
     data: Mutex<Internal>,
 }
 
-impl Default for Interner
-{
-    fn default() -> Self { Self::new() }
+impl Default for Interner {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
-struct Internal
-{
+struct Internal {
     map: HashMap<ArcStr, Name>,
     vec: Vec<ArcStr>,
 }
 
-impl Interner
-{
+impl Interner {
     /// Create new interner
-    pub fn new() -> Interner
-    {
+    pub fn new() -> Interner {
         Interner {
             data: Mutex::new(Internal {
                 map: HashMap::new(),
@@ -108,12 +101,10 @@ impl Interner
         }
     }
     /// Intern string
-    pub fn intern(&self, name: &str) -> Name
-    {
+    pub fn intern(&self, name: &str) -> Name {
         let mut data = self.data.lock();
 
-        if let Some(&val) = data.map.get(name)
-        {
+        if let Some(&val) = data.map.get(name) {
             return val;
         }
 
@@ -126,8 +117,7 @@ impl Interner
         value
     }
     /// Get string from interned name
-    pub fn str(&self, name: Name) -> ArcStr
-    {
+    pub fn str(&self, name: Name) -> ArcStr {
         let data = self.data.lock();
         data.vec[name.0].clone()
     }

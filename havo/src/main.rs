@@ -16,8 +16,7 @@ use structopt::StructOpt;
 use std::path::PathBuf;
 
 #[derive(Debug, StructOpt)]
-pub enum Backend
-{
+pub enum Backend {
     #[structopt(help = "Default backend, allows JIT and AOT compilation")]
     GccJIT,
     #[structopt(help = "C++ backend,still W.I.P")]
@@ -26,25 +25,27 @@ pub enum Backend
     CraneLift,
 }
 
-impl Backend
-{
-    pub const fn gccjit() -> &'static str { "gccjit" }
+impl Backend {
+    pub const fn gccjit() -> &'static str {
+        "gccjit"
+    }
 
-    pub const fn cpp() -> &'static str { "cpp" }
+    pub const fn cpp() -> &'static str {
+        "cpp"
+    }
 
-    pub const fn cranelift() -> &'static str { "cranelift" }
+    pub const fn cranelift() -> &'static str {
+        "cranelift"
+    }
 }
 
 use std::str::FromStr;
 
-impl FromStr for Backend
-{
+impl FromStr for Backend {
     type Err = &'static str;
-    fn from_str(s: &str) -> Result<Backend, &'static str>
-    {
+    fn from_str(s: &str) -> Result<Backend, &'static str> {
         let s: &str = &s.to_lowercase();
-        match s
-        {
+        match s {
             "gccjit" => Ok(Backend::GccJIT),
             "cranelift" => Ok(Backend::CraneLift),
             "cpp" | "c++" => Ok(Backend::CPP),
@@ -55,8 +56,7 @@ impl FromStr for Backend
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "havo", about = "Havo kompilyatori")]
-pub struct Options
-{
+pub struct Options {
     #[structopt(parse(from_os_str))]
     pub file: PathBuf,
     #[structopt(
@@ -114,8 +114,7 @@ pub struct Options
     pub aggressive_eval: bool,
 }
 
-fn main() -> Result<(), MsgWithPos>
-{
+fn main() -> Result<(), MsgWithPos> {
     let opts: Options = Options::from_args();
     let mut file = File {
         root: opts
@@ -135,8 +134,7 @@ fn main() -> Result<(), MsgWithPos>
     let mut parser = Parser::new(reader, &mut file);
 
     let err = parser.parse();
-    if err.is_err()
-    {
+    if err.is_err() {
         println!("{}", err.clone().err().unwrap());
         std::process::exit(-1);
     }
@@ -162,33 +160,26 @@ fn main() -> Result<(), MsgWithPos>
     use havo::eval::EvalCtx;
     /*let mut eval = EvalCtx::new(&mut ctx);
     eval.run();*/
-    if opts.print_ast
-    {
-        for elem in ctx.file.elems.iter()
-        {
+    if opts.print_ast {
+        for elem in ctx.file.elems.iter() {
             println!("{}", elem);
         }
     }
 
-    match opts.backend
-    {
-        Backend::CPP =>
-        {
+    match opts.backend {
+        Backend::CPP => {
             use havo::ast2cpp::Translator;
             let mut translator = Translator::new(ctx);
             translator.run();
         }
-        Backend::GccJIT =>
-        {
+        Backend::GccJIT => {
             let mut cgen = Codegen::new(&mut ctx, "HavoModule");
-            for opt in opts.gcc_opts.iter()
-            {
+            for opt in opts.gcc_opts.iter() {
                 cgen.ctx.add_command_line_option(opt);
             }
             cgen.compile();
         }
-        Backend::CraneLift =>
-        {
+        Backend::CraneLift => {
             eprintln!("Cranelift backend still unimplemented");
         }
     }

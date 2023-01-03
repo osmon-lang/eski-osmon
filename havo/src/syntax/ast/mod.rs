@@ -4,23 +4,18 @@ pub mod display;
 
 use super::lexer::token::{FloatSuffix, IntBase, IntSuffix};
 
-pub struct File
-{
+pub struct File {
     pub root: String,
     pub src: String,
     pub path: String,
     pub elems: Vec<Elem>,
 }
 
-impl File
-{
-    pub fn functions(&self) -> Vec<&Function>
-    {
+impl File {
+    pub fn functions(&self) -> Vec<&Function> {
         let mut funs = vec![];
-        for elem in self.elems.iter()
-        {
-            if let Elem::Func(f) = elem
-            {
+        for elem in self.elems.iter() {
+            if let Elem::Func(f) = elem {
                 funs.push(f);
             }
         }
@@ -32,13 +27,13 @@ impl File
 #[derive(PartialEq, Eq, Copy, Clone, Debug, Hash, PartialOrd)]
 pub struct NodeId(pub usize);
 
-impl fmt::Display for NodeId
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { write!(f, "#{}", self.0) }
+impl fmt::Display for NodeId {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "#{}", self.0)
+    }
 }
 #[derive(Clone, Debug)]
-pub enum Elem
-{
+pub enum Elem {
     Func(Function),
     Struct(Struct),
     Const(Const),
@@ -47,8 +42,7 @@ pub enum Elem
     Global(Global),
     Link(Name),
     Import(String),
-    ConstExpr
-    {
+    ConstExpr {
         id: NodeId,
         pos: Position,
         name: Name,
@@ -57,12 +51,9 @@ pub enum Elem
     Alias(Name, Type),
 }
 
-impl PartialEq for Elem
-{
-    fn eq(&self, other: &Self) -> bool
-    {
-        match (self, other)
-        {
+impl PartialEq for Elem {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
             (Elem::Func(f), Elem::Func(f2)) => f == f2,
             (Elem::Struct(s), Elem::Struct(s2)) => s.name == s2.name,
             (Elem::ConstExpr { name, .. }, Elem::ConstExpr { name: name2, .. }) => name == name2,
@@ -81,16 +72,14 @@ impl PartialEq for Elem
 use crate::syntax::lexer::token::Token;
 
 #[derive(Clone, Debug)]
-pub enum MacroToken
-{
+pub enum MacroToken {
     Token(Token),
     Var(Name),
     VarArgs,
 }
 
 #[derive(Debug, Clone)]
-pub struct Macro
-{
+pub struct Macro {
     pub id: NodeId,
     pub pos: Position,
     pub name: Name,
@@ -99,8 +88,7 @@ pub struct Macro
 }
 
 #[derive(Clone, Debug)]
-pub struct Global
-{
+pub struct Global {
     pub id: NodeId,
     pub pos: Position,
     pub name: Name,
@@ -112,14 +100,14 @@ pub struct Global
     pub expr: Option<Box<Expr>>,
 }
 
-impl PartialEq for Global
-{
-    fn eq(&self, other: &Self) -> bool { self.name == other.name }
+impl PartialEq for Global {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name
+    }
 }
 
 #[derive(Clone, Debug)]
-pub struct Const
-{
+pub struct Const {
     pub id: NodeId,
     pub pos: Position,
     pub public: bool,
@@ -128,14 +116,14 @@ pub struct Const
     pub expr: Box<Expr>,
 }
 
-impl PartialEq for Const
-{
-    fn eq(&self, other: &Self) -> bool { self.name == other.name }
+impl PartialEq for Const {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name
+    }
 }
 
 #[derive(Clone, Debug)]
-pub struct Struct
-{
+pub struct Struct {
     pub union: bool,
     pub id: NodeId,
     pub pos: Position,
@@ -144,10 +132,8 @@ pub struct Struct
     pub fields: Vec<StructField>,
 }
 
-impl Struct
-{
-    pub fn to_type(&self) -> TypeStruct
-    {
+impl Struct {
+    pub fn to_type(&self) -> TypeStruct {
         TypeStruct {
             union: self.union,
             fields: self.fields.clone(),
@@ -158,14 +144,14 @@ impl Struct
     }
 }
 
-impl PartialEq for Struct
-{
-    fn eq(&self, other: &Self) -> bool { self.name == other.name }
+impl PartialEq for Struct {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name
+    }
 }
 
 #[derive(Clone, Debug)]
-pub struct StructField
-{
+pub struct StructField {
     pub id: NodeId,
     pub name: Name,
     pub pos: Position,
@@ -175,26 +161,21 @@ impl Eq for StructField {}
 
 use std::hash::{Hash, Hasher};
 
-impl Hash for StructField
-{
-    fn hash<H: Hasher>(&self, h: &mut H)
-    {
+impl Hash for StructField {
+    fn hash<H: Hasher>(&self, h: &mut H) {
         self.name.hash(h);
         self.data_type.hash(h);
     }
 }
 
-impl PartialEq for StructField
-{
-    fn eq(&self, other: &Self) -> bool
-    {
+impl PartialEq for StructField {
+    fn eq(&self, other: &Self) -> bool {
         (self.name == other.name) && (self.data_type == other.data_type)
     }
 }
 
 #[derive(Clone, Debug)]
-pub struct StructArg
-{
+pub struct StructArg {
     pub id: NodeId,
     pub name: Name,
     pub pos: Position,
@@ -205,8 +186,7 @@ use super::interner::*;
 use crate::syntax::position::Position;
 
 #[derive(Clone, Debug)]
-pub enum Type
-{
+pub enum Type {
     Basic(TypeBasic),
     Ptr(TypePtr),
     Array(TypeArray),
@@ -216,32 +196,25 @@ pub enum Type
     Vector(TypeVector),
 }
 
-impl Hash for Type
-{
-    fn hash<H: Hasher>(&self, h: &mut H)
-    {
-        match self
-        {
+impl Hash for Type {
+    fn hash<H: Hasher>(&self, h: &mut H) {
+        match self {
             Type::Basic(b) => b.name.hash(h),
-            Type::Array(a1) =>
-            {
+            Type::Array(a1) => {
                 a1.subtype.hash(h);
                 a1.len.hash(h)
             }
             Type::Ptr(p) => p.subtype.hash(h),
             Type::Void(_) => 0.hash(h),
-            Type::Func(f) =>
-            {
+            Type::Func(f) => {
                 f.params.hash(h);
                 f.ret.hash(h)
             }
-            Type::Struct(s) =>
-            {
+            Type::Struct(s) => {
                 s.fields.hash(h);
                 s.name.hash(h);
             }
-            Type::Vector(v) =>
-            {
+            Type::Vector(v) => {
                 v.subtype.hash(h);
                 v.size.hash(h);
             }
@@ -251,12 +224,9 @@ impl Hash for Type
 
 use std::cmp::{Eq, PartialEq};
 impl Eq for Type {}
-impl PartialEq for Type
-{
-    fn eq(&self, other: &Type) -> bool
-    {
-        match (self, other)
-        {
+impl PartialEq for Type {
+    fn eq(&self, other: &Type) -> bool {
+        match (self, other) {
             (Type::Basic(basic), Type::Basic(basic2)) => basic.name == basic2.name,
             (Type::Array(a1), Type::Array(a2)) => (a1.subtype == a2.subtype) && (a1.len == a2.len),
             (Type::Ptr(ptr), Type::Ptr(ptr2)) => ptr.subtype == ptr2.subtype,
@@ -271,8 +241,7 @@ impl PartialEq for Type
     }
 }
 #[derive(Clone, Debug)]
-pub struct TypeVector
-{
+pub struct TypeVector {
     pub id: NodeId,
     pub pos: Position,
     pub subtype: Box<Type>,
@@ -280,31 +249,27 @@ pub struct TypeVector
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-pub struct TypePtr
-{
+pub struct TypePtr {
     pub id: NodeId,
     pub pos: Position,
     pub subtype: Box<Type>,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-pub struct TypeBasic
-{
+pub struct TypeBasic {
     pub id: NodeId,
     pub pos: Position,
     pub name: Name,
 }
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-pub struct TypeArray
-{
+pub struct TypeArray {
     pub id: NodeId,
     pub pos: Position,
     pub subtype: Box<Type>,
     pub len: Option<usize>,
 }
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-pub struct TypeStruct
-{
+pub struct TypeStruct {
     pub id: NodeId,
     pub pos: Position,
     pub name: Name,
@@ -312,10 +277,8 @@ pub struct TypeStruct
     pub union: bool,
 }
 
-impl TypeStruct
-{
-    pub fn to_struct(&self) -> Struct
-    {
+impl TypeStruct {
+    pub fn to_struct(&self) -> Struct {
         Struct {
             union: self.union,
             public: true,
@@ -328,20 +291,16 @@ impl TypeStruct
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-pub struct TypeFunc
-{
+pub struct TypeFunc {
     pub id: NodeId,
     pub pos: Position,
     pub params: Vec<Box<Type>>,
     pub ret: Box<Type>,
 }
 
-impl Type
-{
-    pub fn make_ptr(&self) -> Type
-    {
-        match self
-        {
+impl Type {
+    pub fn make_ptr(&self) -> Type {
+        match self {
             Type::Basic(b) => Type::create_ptr(b.id, b.pos, box self.clone()),
             Type::Ptr(p) => Type::create_ptr(p.id, p.pos, box self.clone()),
             Type::Struct(s) => Type::create_ptr(s.id, s.pos, box self.clone()),
@@ -352,8 +311,7 @@ impl Type
         }
     }
 
-    pub const fn create_basic(id: NodeId, pos: Position, name: Name) -> Type
-    {
+    pub const fn create_basic(id: NodeId, pos: Position, name: Name) -> Type {
         Type::Basic(TypeBasic { id, pos, name })
     }
 
@@ -363,8 +321,7 @@ impl Type
         name: Name,
         fields: Vec<StructField>,
         union: bool,
-    ) -> Type
-    {
+    ) -> Type {
         Type::Struct(TypeStruct {
             union,
             id,
@@ -374,17 +331,19 @@ impl Type
         })
     }
 
-    pub const fn create_ptr(id: NodeId, pos: Position, sub: Box<Type>) -> Type
-    {
+    pub const fn create_ptr(id: NodeId, pos: Position, sub: Box<Type>) -> Type {
         Type::Ptr(TypePtr {
             id,
             pos,
             subtype: sub,
         })
     }
-    pub const fn create_array(id: NodeId, pos: Position, ty: Box<Type>, len: Option<usize>)
-        -> Type
-    {
+    pub const fn create_array(
+        id: NodeId,
+        pos: Position,
+        ty: Box<Type>,
+        len: Option<usize>,
+    ) -> Type {
         Type::Array(TypeArray {
             id,
             pos,
@@ -398,8 +357,7 @@ impl Type
         pos: Position,
         params: Vec<Box<Type>>,
         ret: Box<Type>,
-    ) -> Type
-    {
+    ) -> Type {
         Type::Func(TypeFunc {
             id,
             pos,
@@ -408,119 +366,93 @@ impl Type
         })
     }
 
-    pub fn to_basic(&self) -> Option<&TypeBasic>
-    {
-        match self
-        {
+    pub fn to_basic(&self) -> Option<&TypeBasic> {
+        match self {
             Type::Basic(b) => Some(b),
             _ => None,
         }
     }
 
-    pub fn is_vec(&self) -> bool
-    {
-        match self
-        {
+    pub fn is_vec(&self) -> bool {
+        match self {
             Type::Vector(_) => true,
             _ => false,
         }
     }
 
-    pub fn is_ptr(&self) -> bool
-    {
-        match self
-        {
+    pub fn is_ptr(&self) -> bool {
+        match self {
             Type::Ptr(_) => true,
             _ => false,
         }
     }
 
-    pub fn to_ptr(&self) -> Option<&TypePtr>
-    {
-        match self
-        {
+    pub fn to_ptr(&self) -> Option<&TypePtr> {
+        match self {
             Type::Ptr(p) => Some(p),
             _ => None,
         }
     }
-    pub fn to_func(&self) -> Option<&TypeFunc>
-    {
-        match self
-        {
+    pub fn to_func(&self) -> Option<&TypeFunc> {
+        match self {
             Type::Func(f) => Some(f),
             _ => None,
         }
     }
 
-    pub fn to_struct(&self) -> Option<&TypeStruct>
-    {
-        match self
-        {
+    pub fn to_struct(&self) -> Option<&TypeStruct> {
+        match self {
             Type::Struct(s) => Some(s),
             Type::Ptr(s) => s.subtype.to_struct(),
             _ => None,
         }
     }
 
-    pub fn is_struct(&self) -> bool
-    {
-        match self
-        {
+    pub fn is_struct(&self) -> bool {
+        match self {
             Type::Struct(_) => true,
             Type::Ptr(ptr) => ptr.subtype.is_struct(),
             _ => false,
         }
     }
 
-    pub fn to_vec(&self) -> Option<&TypeVector>
-    {
-        match self
-        {
+    pub fn to_vec(&self) -> Option<&TypeVector> {
+        match self {
             Type::Vector(v) => Some(v),
             _ => None,
         }
     }
 
-    pub fn to_array(&self) -> Option<&TypeArray>
-    {
-        match self
-        {
+    pub fn to_array(&self) -> Option<&TypeArray> {
+        match self {
             Type::Array(arr) => Some(arr),
             _ => None,
         }
     }
 
-    pub fn is_void(&self) -> bool
-    {
-        match self
-        {
+    pub fn is_void(&self) -> bool {
+        match self {
             Type::Void(_) => true,
             _ => false,
         }
     }
 
-    pub fn is_array(&self) -> bool
-    {
-        match self
-        {
+    pub fn is_array(&self) -> bool {
+        match self {
             Type::Array(_) => true,
             _ => false,
         }
     }
 
-    pub fn is_basic(&self) -> bool
-    {
-        match self
-        {
+    pub fn is_basic(&self) -> bool {
+        match self {
             Type::Basic(_) => true,
             _ => false,
         }
     }
 
-    pub fn pos(&self) -> Position
-    {
-        match self
-        {
+    pub fn pos(&self) -> Position {
+        match self {
             Type::Vector(v) => v.pos,
             Type::Array(arr) => arr.pos,
             Type::Basic(b) => b.pos,
@@ -531,10 +463,8 @@ impl Type
         }
     }
 
-    pub fn id(&self) -> NodeId
-    {
-        match self
-        {
+    pub fn id(&self) -> NodeId {
+        match self {
             Type::Array(arr) => arr.id,
             Type::Basic(b) => b.id,
             Type::Ptr(p) => p.id,
@@ -545,12 +475,9 @@ impl Type
     }
 }
 
-impl fmt::Display for Type
-{
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result
-    {
-        match self
-        {
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
             Type::Vector(v) => write!(f, "<{};{}>", v.subtype, v.size),
             Type::Void(_) => write!(f, "void"),
             Type::Ptr(ptr) => write!(f, "*{}", ptr.subtype),
@@ -558,37 +485,28 @@ impl fmt::Display for Type
                 f,
                 "{}[{}]",
                 arr.subtype,
-                if arr.len.is_some()
-                {
+                if arr.len.is_some() {
                     arr.len.unwrap().to_string()
-                }
-                else
-                {
+                } else {
                     "".to_owned()
                 }
             ),
             Type::Basic(basic) => write!(f, "{}", str(basic.name)),
-            Type::Struct(struc) =>
-            {
+            Type::Struct(struc) => {
                 write!(f, "{}(", str(struc.name))?;
-                for (i, field) in struc.fields.iter().enumerate()
-                {
+                for (i, field) in struc.fields.iter().enumerate() {
                     write!(f, "{}", field.data_type)?;
-                    if i != struc.fields.len() - 1
-                    {
+                    if i != struc.fields.len() - 1 {
                         write!(f, ",")?;
                     }
                 }
                 write!(f, ")")
             }
-            Type::Func(fun) =>
-            {
+            Type::Func(fun) => {
                 write!(f, "(")?;
-                for (i, p) in fun.params.iter().enumerate()
-                {
+                for (i, p) in fun.params.iter().enumerate() {
                     write!(f, "{}", p)?;
-                    if i != fun.params.len() - 1
-                    {
+                    if i != fun.params.len() - 1 {
                         write!(f, ",")?;
                     }
                 }
@@ -609,8 +527,7 @@ impl fmt::Display for Type
 /// ```
 
 #[derive(Clone, Debug)]
-pub struct Function
-{
+pub struct Function {
     pub id: NodeId,
     pub pos: Position,
     pub name: Name,
@@ -631,122 +548,90 @@ pub struct Function
     pub ir_temp_id: usize,
 }
 
-impl Function
-{
-    pub fn replace_expr_to(&mut self, id: NodeId, to: Expr)
-    {
-        fn replace_stmt(s: &mut Stmt, id: NodeId, to: Expr) -> bool
-        {
-            match &mut s.kind
-            {
+impl Function {
+    pub fn replace_expr_to(&mut self, id: NodeId, to: Expr) {
+        fn replace_stmt(s: &mut Stmt, id: NodeId, to: Expr) -> bool {
+            match &mut s.kind {
                 StmtKind::CompTime(s) => replace_stmt(s, id, to),
-                StmtKind::CFor(var, cond, then, body) =>
-                {
-                    if replace_stmt(var, id, to.clone()) == true
-                    {
+                StmtKind::CFor(var, cond, then, body) => {
+                    if replace_stmt(var, id, to.clone()) == true {
                         return true;
                     }
-                    if cond.id == id
-                    {
+                    if cond.id == id {
                         cond.kind = to.kind.clone();
                         return true;
                     }
-                    if then.id == id
-                    {
+                    if then.id == id {
                         then.kind = to.kind.clone();
                         return true;
                     }
-                    if replace_stmt(body, id, to.clone()) == true
-                    {
+                    if replace_stmt(body, id, to.clone()) == true {
                         return true;
                     }
                     false
                 }
                 StmtKind::Continue => false,
                 StmtKind::Break => false,
-                StmtKind::Return(expr) =>
-                {
-                    if expr.is_some()
-                    {
+                StmtKind::Return(expr) => {
+                    if expr.is_some() {
                         let expr = expr.as_mut().unwrap();
-                        if expr.id == id
-                        {
+                        if expr.id == id {
                             expr.kind = to.kind.clone();
                             return true;
                         }
                     }
                     return false;
                 }
-                StmtKind::Block(block) =>
-                {
-                    for stmt in block.iter_mut()
-                    {
-                        if replace_stmt(stmt, id, to.clone())
-                        {
+                StmtKind::Block(block) => {
+                    for stmt in block.iter_mut() {
+                        if replace_stmt(stmt, id, to.clone()) {
                             return true;
                         }
                     }
 
                     return false;
                 }
-                StmtKind::Expr(expr) =>
-                {
-                    if expr.id == id
-                    {
+                StmtKind::Expr(expr) => {
+                    if expr.id == id {
                         *expr = box to;
                         return true;
                     }
                     return false;
                 }
-                StmtKind::If(e, then, other) =>
-                {
-                    if e.id == id
-                    {
+                StmtKind::If(e, then, other) => {
+                    if e.id == id {
                         *e = box to;
                         return true;
                     }
-                    if replace_stmt(then, id, to.clone())
-                    {
+                    if replace_stmt(then, id, to.clone()) {
                         return true;
                     }
-                    if other.is_some()
-                    {
+                    if other.is_some() {
                         let other = other.as_mut().unwrap();
-                        if replace_stmt(other, id, to.clone())
-                        {
+                        if replace_stmt(other, id, to.clone()) {
                             return true;
-                        }
-                        else
-                        {
+                        } else {
                             return false;
                         }
                     }
                     return false;
                 }
-                StmtKind::While(expr, then) =>
-                {
-                    if expr.id == id
-                    {
+                StmtKind::While(expr, then) => {
+                    if expr.id == id {
                         *expr = box to;
                         return true;
                     }
-                    if replace_stmt(then, id, to.clone())
-                    {
+                    if replace_stmt(then, id, to.clone()) {
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         return false;
                     }
                 }
                 StmtKind::Loop(body) => replace_stmt(body, id, to.clone()),
-                StmtKind::Var(_, _, _, expr) =>
-                {
-                    if expr.is_some()
-                    {
+                StmtKind::Var(_, _, _, expr) => {
+                    if expr.is_some() {
                         let expr = expr.as_mut().unwrap();
-                        if expr.id == id
-                        {
+                        if expr.id == id {
                             *expr = box to;
                             return true;
                         }
@@ -755,21 +640,17 @@ impl Function
                 }
             }
         }
-        if self.body.is_some()
-        {
+        if self.body.is_some() {
             let body = self.body.as_mut().unwrap();
             replace_stmt(body, id, to);
         }
     }
 }
 
-impl PartialEq for Function
-{
-    fn eq(&self, other: &Self) -> bool
-    {
+impl PartialEq for Function {
+    fn eq(&self, other: &Self) -> bool {
         let mut params_match = false;
-        for (p1, p2) in self.params.iter().zip(&other.params)
-        {
+        for (p1, p2) in self.params.iter().zip(&other.params) {
             params_match = p1.1 == p2.1;
         }
 
@@ -782,49 +663,38 @@ impl PartialEq for Function
 }
 
 #[derive(Clone, Debug)]
-pub struct Expr
-{
+pub struct Expr {
     pub id: NodeId,
     pub pos: Position,
     pub kind: ExprKind,
 }
 
-impl Expr
-{
-    pub fn is_deref(&self) -> bool
-    {
-        match &self.kind
-        {
+impl Expr {
+    pub fn is_deref(&self) -> bool {
+        match &self.kind {
             ExprKind::Deref(_) => true,
             _ => false,
         }
     }
 
-    pub fn is_bool(&self, val: bool) -> bool
-    {
-        match &self.kind
-        {
+    pub fn is_bool(&self, val: bool) -> bool {
+        match &self.kind {
             ExprKind::Bool(b) => *b == val,
             _ => false,
         }
     }
 }
 
-impl Expr
-{
-    pub fn map<U>(&self, mut f: impl FnMut(&Self) -> U, or_: U) -> Vec<U>
-    {
-        match &self.kind
-        {
+impl Expr {
+    pub fn map<U>(&self, mut f: impl FnMut(&Self) -> U, or_: U) -> Vec<U> {
+        match &self.kind {
             ExprKind::Unary(_, expr) => return vec![f(expr)],
             ExprKind::Binary(_, e1, e2) => return vec![f(e1), f(e2)],
             ExprKind::ArrayIdx(e1, e2) => return vec![f(e1), f(e2)],
             ExprKind::Array(_, exprs) => exprs.iter().map(|e| f(e)).collect(),
-            ExprKind::Call(_, e1, e2) =>
-            {
+            ExprKind::Call(_, e1, e2) => {
                 let mut v = vec![];
-                if e1.is_some()
-                {
+                if e1.is_some() {
                     v.push(f(&e1.clone().unwrap()));
                 }
                 let _ = e2.iter().map(|e| v.push(f(e)));
@@ -841,8 +711,7 @@ impl Expr
 }
 
 #[derive(Clone, Debug)]
-pub enum ExprKind
-{
+pub enum ExprKind {
     MacroCall(Name, Vec<Vec<Token>>),
     CompTime(Box<Expr>),
     Unary(String, Box<Expr>),
@@ -868,20 +737,19 @@ pub enum ExprKind
     SizeOf(Box<Type>),
 }
 #[derive(Clone, Debug)]
-pub struct Stmt
-{
+pub struct Stmt {
     pub id: NodeId,
     pub pos: Position,
     pub kind: StmtKind,
 }
-impl Stmt
-{
-    pub fn is_if(&self) -> bool { self.kind.is_if() }
+impl Stmt {
+    pub fn is_if(&self) -> bool {
+        self.kind.is_if()
+    }
 }
 
 #[derive(Clone, Debug)]
-pub enum StmtKind
-{
+pub enum StmtKind {
     CompTime(Box<Stmt>),
     Return(Option<Box<Expr>>),
     Block(Vec<Box<Stmt>>),
@@ -895,12 +763,9 @@ pub enum StmtKind
     Break,
 }
 
-impl StmtKind
-{
-    pub fn is_if(&self) -> bool
-    {
-        match self
-        {
+impl StmtKind {
+    pub fn is_if(&self) -> bool {
+        match self {
             StmtKind::If(_, _, _) => true,
             _ => false,
         }
@@ -908,30 +773,34 @@ impl StmtKind
 }
 
 #[derive(Clone, Debug)]
-pub struct Path
-{
+pub struct Path {
     pub path: Vec<Name>,
 }
 
-impl Path
-{
-    pub fn new(name: Name) -> Path { Path { path: vec![name] } }
+impl Path {
+    pub fn new(name: Name) -> Path {
+        Path { path: vec![name] }
+    }
 
-    pub fn name(&self) -> Name
-    {
+    pub fn name(&self) -> Name {
         assert_eq!(1, self.path.len());
 
         self.path[0]
     }
 
-    pub fn len(&self) -> usize { self.path.len() }
+    pub fn len(&self) -> usize {
+        self.path.len()
+    }
 
-    pub fn is_empty(&self) -> bool { self.len() == 0 }
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
 }
 
-impl Index<usize> for Path
-{
+impl Index<usize> for Path {
     type Output = Name;
 
-    fn index(&self, idx: usize) -> &Name { &self.path[idx] }
+    fn index(&self, idx: usize) -> &Name {
+        &self.path[idx]
+    }
 }

@@ -28,8 +28,7 @@ lazy_static::lazy_static! (
 );
 
 #[inline]
-pub fn gen_id() -> NodeId
-{
+pub fn gen_id() -> NodeId {
     let lock = IDGEN.lock();
     let read = lock.read();
 
@@ -38,8 +37,7 @@ pub fn gen_id() -> NodeId
 
 use std::cell::RefCell;
 #[derive(Debug, Default)]
-pub struct NodeIdGenerator
-{
+pub struct NodeIdGenerator {
     value: RefCell<usize>,
 }
 
@@ -48,17 +46,14 @@ use syntax::ast::NodeId;
 unsafe impl Sync for NodeIdGenerator {}
 unsafe impl Send for NodeIdGenerator {}
 
-impl NodeIdGenerator
-{
-    pub fn new() -> NodeIdGenerator
-    {
+impl NodeIdGenerator {
+    pub fn new() -> NodeIdGenerator {
         NodeIdGenerator {
             value: RefCell::new(1),
         }
     }
 
-    pub fn next(&self) -> NodeId
-    {
+    pub fn next(&self) -> NodeId {
         let value = *self.value.borrow();
         *self.value.borrow_mut() += 1;
 
@@ -72,8 +67,7 @@ use std::collections::{HashMap, HashSet};
 use syntax::ast::File;
 
 /// Context stores ifnromation about program
-pub struct Context
-{
+pub struct Context {
     pub file: File,
     pub types: HashMap<NodeId, Type>,
     pub gced: HashSet<NodeId>,
@@ -86,10 +80,8 @@ pub struct Context
     pub gimple: bool,
 }
 
-impl Context
-{
-    pub fn new(file: File) -> Context
-    {
+impl Context {
+    pub fn new(file: File) -> Context {
         Context {
             file,
             types: HashMap::new(),
@@ -104,14 +96,10 @@ impl Context
         }
     }
 
-    pub fn import(&mut self, path: &str)
-    {
-        let import = if self.file.root.is_empty()
-        {
+    pub fn import(&mut self, path: &str) {
+        let import = if self.file.root.is_empty() {
             path.to_owned()
-        }
-        else
-        {
+        } else {
             format!("{}/{}", self.file.root, path)
         };
         let mut file = File {
@@ -130,28 +118,20 @@ impl Context
         let mut ctx = Context::new(file);
         ctx.imports();
 
-        for elem in ctx.file.elems
-        {
-            match elem
-            {
-                Elem::Func(f) =>
-                {
-                    if f.public && !f.static_
-                    {
+        for elem in ctx.file.elems {
+            match elem {
+                Elem::Func(f) => {
+                    if f.public && !f.static_ {
                         self.file.elems.push(Elem::Func(f.clone()));
                     }
                 }
-                Elem::Struct(s) =>
-                {
-                    if s.public
-                    {
+                Elem::Struct(s) => {
+                    if s.public {
                         self.file.elems.push(Elem::Struct(s.clone()));
                     }
                 }
-                Elem::Const(s) =>
-                {
-                    if s.public
-                    {
+                Elem::Const(s) => {
+                    if s.public {
                         self.file.elems.push(Elem::Const(s.clone()));
                     }
                 }
@@ -161,25 +141,19 @@ impl Context
         }
     }
 
-    pub fn get_func_mut(&mut self, id: NodeId) -> Option<&mut Function>
-    {
-        for elem in self.file.elems.iter_mut()
-        {
-            if let syntax::ast::Elem::Func(f) = elem
-            {
+    pub fn get_func_mut(&mut self, id: NodeId) -> Option<&mut Function> {
+        for elem in self.file.elems.iter_mut() {
+            if let syntax::ast::Elem::Func(f) = elem {
                 return Some(f);
             }
         }
         None
     }
 
-    pub fn imports(&mut self)
-    {
+    pub fn imports(&mut self) {
         use syntax::ast::Elem;
-        for elem in self.file.elems.clone().iter()
-        {
-            if let Elem::Import(path) = elem
-            {
+        for elem in self.file.elems.clone().iter() {
+            if let Elem::Import(path) = elem {
                 self.import(&path);
             }
         }

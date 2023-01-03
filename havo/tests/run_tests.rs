@@ -3,8 +3,7 @@ use std::process::Command;
 use lang_tester::LangTester;
 
 #[test]
-fn run_tests()
-{
+fn run_tests() {
     LangTester::new()
         .test_dir("tests/code_tests")
         .test_file_filter(|p| p.extension().unwrap().to_str().unwrap() == "osmx")
