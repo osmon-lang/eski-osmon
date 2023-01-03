@@ -17,6 +17,9 @@ jobs:
       - name: Install required libs
         run: brew install gcc libgccjit llvm
 
+      - name: Change rust channel
+        run: rustup default nightly
+
       - name: Build
         run: cargo build --release --verbose
 
