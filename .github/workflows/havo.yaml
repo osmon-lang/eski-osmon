@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install required libs
-        run: sudo apt install libgccjit-9-dev
+        run: sudo apt install libgccjit-12-dev
 
       - name: Build
         run: cargo build --release --verbose
