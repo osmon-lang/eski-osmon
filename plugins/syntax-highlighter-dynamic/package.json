@@ -1,5 +1,5 @@
 {
-    "name": "osmon",
+    "name": "osmon-dynamic",
     "displayName": "Osmon Lang",
     "description": "Osmon Dasturlash Tili uchun VSCode kengaytma",
     "version": "0.2.2",

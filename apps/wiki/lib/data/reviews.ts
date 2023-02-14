@@ -19,6 +19,6 @@ const reviews = [
   },
 ];
 
-export type Review = typeof reviews[0];
+export type Review = (typeof reviews)[0];
 
 export default reviews;
