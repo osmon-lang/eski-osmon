@@ -9,7 +9,6 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "lint-staged": "lint-staged",
     "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
     "format": "prettier --write --check \"**/*.{ts,tsx,md}\""
   },
@@ -21,11 +20,5 @@
     "node": ">=14.0.0"
   },
   "dependencies": {},
-  "packageManager": "pnpm@7.14.0",
-  "git": {
-    "pre-commit": "lint-staged"
-  },
-  "lint-staged": {
-    "*": "prettier --write --ignore-unknown"
-  }
+  "packageManager": "pnpm@7.14.0"
 }

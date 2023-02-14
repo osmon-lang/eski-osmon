@@ -2,7 +2,7 @@
 
 **Bir qatorlik buyruq satrlari o'rnatuvchilari.**
 
-[![Test [Shell Scripts]](https://github.com/uwussimo/osmon/actions/workflows/shell.yaml/badge.svg)](https://github.com/uwussimo/osmon/actions/workflows/shell.yaml)
+[![Test [Shell Scripts]](https://github.com/uzinfocom-org/osmon/actions/workflows/shell.yaml/badge.svg)](https://github.com/uwussimo/osmon/actions/workflows/shell.yaml)
 
 ## Eng oxirgi versiyani o'rnatish
 
