@@ -25,7 +25,7 @@ $Target = 'x86_64-pc-windows-msvc'
 $OsmonUri = if (!$Version) {
   "https://github.com/uzinfocom-org/osmon/releases/latest/download/osmon-${Target}.zip"
 } else {
-  "https://github.com/uzinfocom-org/osmon/releases/download/${Version}/osmon-${Target}.zip"
+  "https://github.com/uzinfocom-org/osmon/releases/download/v${Version}/osmon-${Target}.zip"
 }
 
 if (!(Test-Path $BinDir)) {
