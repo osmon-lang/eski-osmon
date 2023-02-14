@@ -11,7 +11,7 @@ $v = $null; .\install.ps1
 # Test that we can install a specific version at a custom location.
 Remove-Item "~\osmon-0.4.0" -Recurse -Force -ErrorAction SilentlyContinue
 $env:OSMON_INSTALL = "$Home\osmon-0.4.0"
-$v = "0.4.0"; .\install.ps1
+$v = "v0.4.0"; .\install.ps1
 $OsmonVersion = ~\osmon-0.4.0\bin\osmon.exe --version
 if (!($OsmonVersion -like '*0.4.0*')) {
   throw $OsmonVersion
@@ -20,7 +20,7 @@ if (!($OsmonVersion -like '*0.4.0*')) {
 # Test that we can install at a relative custom location.
 Remove-Item "bin" -Recurse -Force -ErrorAction SilentlyContinue
 $env:OSMON_INSTALL = "."
-$v = "0.4.0"; .\install.ps1
+$v = "v0.4.0"; .\install.ps1
 $OsmonVersion = bin\osmon.exe --version
 if (!($OsmonVersion -like '*0.4.0*')) {
   throw $OsmonVersion
