@@ -1,9 +1,0 @@
-funksiya asosiy() {
-    joy son = 0;
-
-    toki (joy i = 0; i < 184467440; i += 1) {
-        son += i    
-    }
-
-    yoz(son);
-}

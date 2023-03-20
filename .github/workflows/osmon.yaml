@@ -8,9 +8,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./osmon
+
     steps:
       - uses: actions/checkout@v3
 
