@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://osmon.dev/
-
-# Sitemaps
-Sitemap: https://osmon.dev/sitemap.xml

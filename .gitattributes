@@ -1,8 +1,0 @@
-*          text=auto
-
-*.rs       text diff=rust
-*.toml     text diff=toml
-Cargo.lock text
-
-*.ts       linguist-detectable=false
-*.tsx      linguist-detectable=false
