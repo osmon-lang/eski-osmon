@@ -6,7 +6,7 @@ homepage = "https://osmon.dev"
 documentation = "https://wiki.osmon.dev"
 repository = "https://github.com/osmon-lang/osmon"
 description = "A programming language for Uzbeks"
-authors = ["UwUssimo Robinson <uwussimo@icloud.com> (https://uwussi.moe)"]
+authors = ["Yuri Katsuki <yuri@katsuki.moe>"]
 keywords = ["programming-language", "interpreter", "uzbek"]
 readme = "readme.md"
 categories = ["localization"]
@@ -26,6 +26,6 @@ float_duration = "0.3.3"
 
 [package.metadata.winres]
 OriginalFilename = "osmon.exe"
-LegalCopyright = "© Osmon & UwUssimo. Apache-2.0"
+LegalCopyright = "© Osmon & Yuri. Apache-2.0"
 ProductName = "Osmon"
-FileDescription = "Osmon: O'zbek tilidagi birinchi dinamik til"
+FileDescription = "Osmon: O'zbek tilidagi birinchi dinamik & statik til"
