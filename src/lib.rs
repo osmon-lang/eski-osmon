@@ -1,4 +1,3 @@
-#![warn(rust_2018_idioms)]
 #![allow(deprecated)]
 pub mod builtins;
 pub mod class;

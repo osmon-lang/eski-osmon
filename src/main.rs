@@ -1,6 +1,3 @@
-extern crate bulut;
-extern crate osmon;
-
 use bulut::machine::Machine;
 use osmon::{
     parser::{lex, parse},
