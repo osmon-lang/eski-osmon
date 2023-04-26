@@ -1,6 +1,6 @@
 [package]
 name = "osmon"
-version = "0.6.0"
+version = "0.7.0"
 authors = ["Yuri Katsuki <yuri@katsuki.moe> (https://katsuki.moe)"]
 edition = "2021"
 homepage = "https://osmon.dev"
