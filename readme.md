@@ -6,22 +6,23 @@
 </picture>
 <h1 style="display: inline">Osmon</h1>
 
-Programming language made from Uzbek developers for Uzbek developers.
+Programming language made by Uzbek developers.
 
 </header>
 
 [![GitHub top language](https://img.shields.io/github/languages/top/osmon-lang/osmon?color=232323&logo=github&labelColor=232323)](https://github.com/osmon-lang/osmon)
 [![Channel](https://img.shields.io/badge/telegram-grey?color=232323&label=chat&logo=telegram&labelColor=232323)](https://t.me/osmonlang)
-[![Tests CI](https://img.shields.io/github/actions/workflow/status/osmon-lang/osmon/release.yaml?color=232323&label=release&logo=github-actions&labelColor=232323)](https://github.com/osmon-lang/osmon/actions/workflows/release.yaml)
-[![Tests CI](https://img.shields.io/github/actions/workflow/status/osmon-lang/osmon/osmon.yaml?color=232323&label=test&logo=github-actions&labelColor=232323)](https://github.com/osmon-lang/osmon/actions/workflows/osmon.yaml)
+[![Release CI](https://img.shields.io/github/actions/workflow/status/osmon-lang/osmon/release.yaml?color=232323&label=release&logo=github-actions&labelColor=232323)](https://github.com/osmon-lang/osmon/actions/workflows/release.yaml)
+[![Tests CI](https://img.shields.io/github/actions/workflow/status/osmon-lang/osmon/test.yaml?color=232323&label=test&logo=github-actions&labelColor=232323)](https://github.com/osmon-lang/osmon/actions/workflows/test.yaml)
  
 ## About
 
-Programming language that adopts uzbek dialect for its keywords and delivers a new experience for developers.
+Programming language that adopts uzbek dialect for its keywords and delivers a new experience for developers. This project is heavily 
+inspired from [Sukhrob Khakimov's](https://github.com/sukhrobkhakimov) open source projects.
 
 ## Features
 
-- Has virtual machine that is written in Rust
+- Has a virtual machine that is written in Rust
 - Uses libgccjit for static compilation
 - Has a simple syntax adopted from C family languages
 
@@ -55,8 +56,8 @@ klass Faktorial {
 }
 
 funksiya asosiy() {
-    yoz("Klasslik faktorial(5) = ",Faktorial(5).qiymat());
-    yoz("Rekursiv faktorial(5) = ",faktorial(5));
+    yoz("Klasslik faktorial(5) = ", Faktorial(5).qiymat());
+    yoz("Rekursiv faktorial(5) = ", faktorial(5));
 }
 ```
 

@@ -27,6 +27,6 @@ float_duration = "0.3.3"
 
 [package.metadata.winres]
 OriginalFilename = "osmon.exe"
-LegalCopyright = "© Osmon & UwUssimo. Apache-2.0"
+LegalCopyright = "© Osmon & Yuri. Apache-2.0"
 ProductName = "Osmon"
-FileDescription = "Osmon: O'zbek tilidagi birinchi dinamik til"
+FileDescription = "Osmon: O'zbek tilidagi birinchi dinamik & statik til"
