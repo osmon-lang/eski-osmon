@@ -55,6 +55,9 @@ jobs:
           export LIBRARY_PATH="$(brew --prefix)/lib"
           export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib/gcc/current"
 
+      - name: Set complete profile
+        run: rustup set profile complete
+
       - name: Change rust channel
         run: rustup default nightly
 
