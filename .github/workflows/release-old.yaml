@@ -1,0 +1,32 @@
+name: Release [Osmon]
+
+on:
+  push:
+    tags:
+      - v[0-9]+.*
+
+jobs:
+  create-release-osmon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: taiki-e/create-gh-release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  upload-assets-osmon:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          bin: osmon
+          tar: none
+          zip: all
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

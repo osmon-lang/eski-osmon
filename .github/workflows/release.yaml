@@ -1,4 +1,7 @@
-name: Release [Osmon]
+name: Release
+
+permissions:
+  contents: write
 
 on:
   push:
@@ -6,34 +9,59 @@ on:
       - v[0-9]+.*
 
 jobs:
-  create-release-osmon:
+  create-release:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./osmon
-    steps:
-      - uses: actions/checkout@v2
-      - uses: taiki-e/create-gh-release-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  upload-assets-osmon:
+    steps:
+      - uses: actions/checkout@v3
+      - uses: taiki-e/create-gh-release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  upload-assets:
     strategy:
       matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
+        include:
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-latest
+          - target: aarch64-apple-darwin
+            os: macos-latest
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+          - target: x86_64-apple-darwin
+            os: macos-latest
+
     runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        working-directory: ./osmon
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Install cross-compilation tools
+        uses: taiki-e/setup-cross-toolchain-action@v1
+
+      - name: Install required libraries (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get install build-essential llvm clang libgccjit-12-dev
+          sudo ln -s /usr/lib/gcc/x86_64-linux-gnu/12/libgccjit.so /usr/lib/libgccjit.so
+          sudo ln -s /usr/lib/gcc/x86_64-linux-gnu/12/include/libgccjit.h /usr/include/libgccjit.h
+          sudo ln -s /usr/lib/gcc/x86_64-linux-gnu/12/include/libgccjit++.h /usr/include/libgccjit++.h
+
+      - name: Install required libraries (MacOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew install llvm gcc libgccjit cmake autoconf automake
+          export PATH="$(brew --prefix)/opt/llvm/bin:$PATH"
+          export CPATH="$(brew --prefix)/include"
+          export LIBRARY_PATH="$(brew --prefix)/lib"
+          export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib/gcc/current"
+
+      - name: Change rust channel
+        run: rustup default nightly
+
       - uses: taiki-e/upload-rust-binary-action@v1
         with:
           bin: osmon
           tar: none
           zip: all
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          target: ${{ matrix.target }}
+          token: ${{ secrets.GITHUB_TOKEN }}
