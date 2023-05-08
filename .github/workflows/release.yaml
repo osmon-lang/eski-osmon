@@ -50,11 +50,16 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: |
           brew install llvm gcc libgccjit cmake autoconf automake
-          ls -la "$(brew --prefix gcc)/lib/gcc/current/"
           export PATH="$(brew --prefix)/opt/llvm/bin:$PATH"
           export CPATH="$(brew --prefix)/include"
           export LIBRARY_PATH="$(brew --prefix)/lib"
           export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib/gcc/current"
+
+      - name: List action files
+        if: matrix.os == 'macos-latest'
+        run: | 
+          ls -la "$(brew --prefix gcc)/lib/gcc/current/"
+          ls -la "$(brew --prefix gcc)/lib/gcc/current/"
 
       - name: Set complete profile
         run: rustup set profile complete
