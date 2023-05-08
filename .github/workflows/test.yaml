@@ -38,7 +38,7 @@ jobs:
           brew install llvm gcc libgccjit cmake autoconf automake
           export PATH="$(brew --prefix)/opt/llvm/bin:$PATH"
           export CPATH="$(brew --prefix)/include"
-          export LIBRARY_PATH="$(brew --prefix)/lib"
+          export LIBRARY_PATH="$(brew --prefix)/lib:$LIBRARY_PATH"
           export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib/gcc/current"
 
       - name: Set complete profile
