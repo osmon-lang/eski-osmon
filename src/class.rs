@@ -23,7 +23,8 @@ impl Clone for Class {
     }
 }
 
-impl Class {
+impl Class {string.push_str(&format!("guruh {} {{ \n", self.name));
+        for (k, v) in fields.iter() {
     pub fn new() -> Class {
         Class {
             name: String::from("<uninitialized>"),
@@ -46,8 +47,7 @@ impl ObjectAddon for Class {
     fn to_String(&self, _m: &mut Machine) -> String {
         let fields: &HashMap<String, Value> = unsafe { &*self.fields.get() };
         let mut string = String::new();
-        string.push_str(&format!("guruh {} {{ \n", self.name));
-        for (k, v) in fields.iter() {
+
             string.push_str(&format!(
                 "\tjoy {} = {};\n",
                 k.to_String(_m),
