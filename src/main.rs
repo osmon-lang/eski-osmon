@@ -1,19 +1,19 @@
 #![allow(clippy::result_large_err)]
 
 use bulut::machine::Machine;
-use osmon::{
-    parser::{lex, parse},
-    Compiler,
-};
+use clap::{Args, Parser, Subcommand, ValueEnum};
 use havo::{
+    ast::File as ASTFile,
     err::MsgWithPos,
     gccjit::Codegen,
-    ast::File as ASTFile,
     semantic::*,
     syntax::{ast::*, lexer::reader::Reader},
     Context,
 };
-use clap::{Parser, Subcommand, Args, ValueEnum};
+use osmon::{
+    parser::{lex, parse},
+    Compiler,
+};
 use std::{fs::File, io::prelude::*, path::PathBuf, process::exit};
 
 /// Hybrid programming language
@@ -28,7 +28,7 @@ struct Cli {
 #[derive(Debug, Subcommand)]
 enum Commands {
     Compile(Compile),
-    Run(Run)
+    Run(Run),
 }
 
 #[derive(Args, Debug)]
@@ -47,11 +47,7 @@ pub struct Compile {
     pub emit_obj: bool,
     #[arg(long = "emit-asm", help = "Print assembly to stdout")]
     pub emit_asm: bool,
-    #[arg(
-        short,
-        long = "output",
-        help = "Set output filename"
-    )]
+    #[arg(short, long = "output", help = "Set output filename")]
     pub output: Option<PathBuf>,
     #[arg(long = "shared", help = "output shared library (.dll or .so)")]
     pub shared: bool,
@@ -86,7 +82,6 @@ pub struct Compile {
     )]
     pub aggressive_eval: bool,
 }
-
 
 #[derive(Debug, ValueEnum, Copy, Clone, PartialEq, Eq)]
 pub enum Backend {
@@ -157,17 +152,17 @@ fn main() -> Result<(), MsgWithPos> {
                 path: opts.file.to_str().unwrap().to_owned(),
                 elems: vec![],
             };
-        
+
             let reader = Reader::from_file(opts.file.to_str().unwrap()).unwrap();
-        
+
             let mut parser = havo::syntax::parser::Parser::new(reader, &mut file);
-        
+
             let err = parser.parse();
             if err.is_err() {
                 println!("{}", err.err().unwrap());
                 exit(-1);
             }
-        
+
             let mut ctx = Context::new(file);
             ctx.shared = opts.shared;
             ctx.emit_asm = opts.emit_asm;
@@ -184,15 +179,15 @@ fn main() -> Result<(), MsgWithPos> {
                     .map(|name| Elem::Link(havo::intern(name))),
             );
             let mut semantic = SemCheck::new(&mut ctx);
-        
+
             semantic.run();
-        
+
             if opts.print_ast {
                 for elem in ctx.file.elems.iter() {
                     println!("{}", elem);
                 }
             }
-        
+
             match opts.backend {
                 Backend::CPP => {
                     use havo::ast2cpp::Translator;
@@ -207,9 +202,9 @@ fn main() -> Result<(), MsgWithPos> {
                     cgen.compile();
                 }
             }
-        
+
             Ok(())
-        },
+        }
         Commands::Run(ops) => {
             if let Some(path) = ops.file {
                 File::open(path).unwrap().read_to_string(&mut src).unwrap();
@@ -217,13 +212,13 @@ fn main() -> Result<(), MsgWithPos> {
                 println!("\x1b[93mDastur turgan fayl joyini ko'rsating!\x1b[0m\nKo'proq ma'lumot uchun \"osmon -h\" yozing...");
                 exit(1);
             }
-        
+
             let lex = lex(&src);
             let parsed = parse(&mut lex.peekable()).unwrap();
             let mut machine = Machine::new();
             let mut compiler = Compiler::new(&mut machine, 0, ops.debug);
             compiler.compile(parsed);
-            
+
             Ok(())
         }
     }
