@@ -46,7 +46,7 @@ jobs:
 
       - name: Check global links
         if: matrix.os == 'macos-latest'
-        run: ls -la "$(brew --prefix)/lib" | grep gccjit
+        run: ls -la "$(brew --prefix)/lib"
 
       - name: Set complete profile
         run: rustup set profile complete
