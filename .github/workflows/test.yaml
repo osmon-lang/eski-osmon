@@ -45,6 +45,7 @@ jobs:
           export LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/current:$LIBRARY_PATH"
 
       - name: Check global links
+        if: matrix.os == 'macos-latest'
         run: ls -la "$(brew --prefix)/lib" | grep gccjit
 
       - name: Set complete profile
