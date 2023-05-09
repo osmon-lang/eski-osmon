@@ -37,6 +37,7 @@ jobs:
         run: brew install llvm gcc libgccjit cmake autoconf automake
 
       - name: Export required PATHes
+        if: matrix.os == 'macos-latest'
         run: |
           export PATH="$(brew --prefix)/opt/llvm/bin:$PATH"
           export CPATH="$(brew --prefix)/include"
@@ -44,6 +45,7 @@ jobs:
           export LIBRARY_PATH="$(brew --prefix libgccjit)/lib:$LIBRARY_PATH"
 
       - name: Check if everything is ok
+        if: matrix.os == 'macos-latest'
         run: |
           brew info libgccjit
           brew --prefix libgccjit
