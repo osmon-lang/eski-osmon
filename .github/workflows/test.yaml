@@ -36,13 +36,19 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: brew install llvm gcc libgccjit cmake autoconf automake
 
+      - name: Link libgccjit at global path
+        if: matrix.os == 'macos-latest'
+        run: |
+          ln -s "$(brew --prefix)/lib/gcc/current/libgccjit.0.dylib" "$(brew --prefix)/lib/libgccjit.0.dylib"
+          ln -s "$(brew --prefix)/lib/gcc/current/libgccjit.dylib" "$(brew --prefix)/lib/libgccjit.dylib"
+
       - name: Export required PATHes
         if: matrix.os == 'macos-latest'
         run: |
           export PATH="$(brew --prefix)/opt/llvm/bin:$PATH"
           export CPATH="$(brew --prefix)/include"
-          export LD_LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/current"
-          export LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/current:$LIBRARY_PATH"
+          export LIBRARY_PATH="$(brew --prefix)/lib"
+          export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib/gcc/current"
 
       - name: Check global links
         if: matrix.os == 'macos-latest'
