@@ -41,8 +41,8 @@ jobs:
         run: |
           export PATH="$(brew --prefix)/opt/llvm/bin:$PATH"
           export CPATH="$(brew --prefix)/include"
-          export LD_LIBRARY_PATH="$(brew --prefix libgccjit)/lib"
-          export LIBRARY_PATH="$(brew --prefix libgccjit)/lib:$LIBRARY_PATH"
+          export LD_LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/current"
+          export LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/current:$LIBRARY_PATH"
 
       - name: Check if everything is ok
         if: matrix.os == 'macos-latest'
