@@ -44,17 +44,6 @@ jobs:
           export LD_LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/current"
           export LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/current:$LIBRARY_PATH"
 
-      - name: Check if everything is ok
-        if: matrix.os == 'macos-latest'
-        run: |
-          brew info libgccjit
-          brew --prefix libgccjit
-          ls "$(brew --prefix libgccjit)/lib"
-          echo $PATH
-          echo $CPATH
-          echo $LD_LIBRARY_PATH
-          echo $LIBRARY_PATH
-
       - name: Set complete profile
         run: rustup set profile complete
 
