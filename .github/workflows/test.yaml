@@ -50,10 +50,6 @@ jobs:
           export LIBRARY_PATH="$(brew --prefix)/lib"
           export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib/gcc/current"
 
-      - name: Check global links
-        if: matrix.os == 'macos-latest'
-        run: ls -la "$(brew --prefix)/lib"
-
       - name: Set complete profile
         run: rustup set profile complete
 
