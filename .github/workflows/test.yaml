@@ -41,7 +41,17 @@ jobs:
           export PATH="$(brew --prefix)/opt/llvm/bin:$PATH"
           export CPATH="$(brew --prefix)/include"
           export LD_LIBRARY_PATH="$(brew --prefix libgccjit)/lib"
-          export LIBRARY_PATH=$(brew --prefix libgccjit)/lib:$LIBRARY_PATH
+          export LIBRARY_PATH="$(brew --prefix libgccjit)/lib:$LIBRARY_PATH"
+
+      - name: Check if everything is ok
+        run: |
+          brew info libgccjit
+          brew --prefix libgccjit
+          ls "$(brew --prefix libgccjit)/lib"
+          echo $PATH
+          echo $CPATH
+          echo $LD_LIBRARY_PATH
+          echo $LIBRARY_PATH
 
       - name: Set complete profile
         run: rustup set profile complete
