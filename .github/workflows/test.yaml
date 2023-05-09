@@ -36,9 +36,16 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: |
           brew install llvm gcc libgccjit cmake autoconf automake
+
+          # Checking library path
           echo $LIBRARY_PATH
+
+          # Checking compiler path
           echo $CPATH
+
+          # Checking path
           echo $PATH
+
           export PATH="$(brew --prefix)/opt/llvm/bin:$PATH"
           export CPATH="$(brew --prefix)/include"
           export LDFLAGS="-L$(brew --prefix)/lib"
