@@ -576,8 +576,8 @@ impl<'a> TokenIterator<'a> {
                         "tur" => Some(Token::Enum),       // enum // true
                         "shu" => Some(Token::This),       // this // shu
                         "guruh" => Some(Token::Class),    // class // guruh
-                        "label" => Some(Token::Label),    // label // WIP
-                        "goto" => Some(Token::Goto),      // goto // WIP
+                        "belgi" => Some(Token::Label),    // label // belgi
+                        "yur" => Some(Token::Goto),      // goto // yur
                         x => Some(Token::Identifier(x.into())),
                     };
                 }
