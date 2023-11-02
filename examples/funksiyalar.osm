@@ -1,0 +1,8 @@
+funksiya oddiy(a,b) {
+    qaytar a + b;
+}
+
+
+funksiya asosiy() {
+    Tizim.yoz(oddiy.disassemble());
+}
